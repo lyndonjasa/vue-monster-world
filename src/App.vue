@@ -1,16 +1,15 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <app-battle-field></app-battle-field>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import BattleField from './components/battle/BattleField.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    appBattleField: BattleField
   }
 });
 </script>
