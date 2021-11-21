@@ -77,19 +77,18 @@ const SpriteCanvas = defineComponent({
     }
 
     onMounted(() => {
+      console.log(props.spriteState);
+      currentState.value = props.spriteState;
       canvas.value = document.getElementById(canvasId.value) as HTMLCanvasElement;
       canvasContext.value = canvas.value.getContext('2d');
       canvas.value.width = width.value;
       canvas.value.height = height.value;
       spriteSheet.value.src = spriteSrc.value;
-      currentState.value = props.spriteState;
       resetState();
       animationFrame();
-      
-      console.log('mounted');
     })
 
-    watch(props.spriteState, () => {
+    watch(() => props.spriteState, () => {
       resetState();
     })
 
