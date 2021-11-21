@@ -1,8 +1,17 @@
 <template>
   <div class="sprites">
-    <app-sprite v-for="sprite in spriteRef" :key="sprite.name"
-      :sprite="sprite"
-    ></app-sprite>
+    <div class="left-team">
+      <app-sprite v-for="sprite in spriteRef" :key="sprite.name"
+        :sprite="sprite"
+        :isEnemy="false"
+      ></app-sprite>
+    </div>
+    <div class="right-team">
+      <app-sprite v-for="sprite in spriteRef" :key="sprite.name"
+        :sprite="sprite"
+        :isEnemy="true"
+      ></app-sprite>
+    </div>
   </div>
 </template>
 
@@ -29,3 +38,9 @@ const BattleField = defineComponent({
 
 export default BattleField;
 </script>
+
+<style lang="scss" scoped>
+.sprites {
+  display: flex
+}
+</style>

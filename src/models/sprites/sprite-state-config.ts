@@ -4,4 +4,5 @@ export class SpriteStateConfig {
   startIndex: number;
   endIndex: number;
   animationSpeed: number;
+  resetAfterAnimation: boolean;
 }

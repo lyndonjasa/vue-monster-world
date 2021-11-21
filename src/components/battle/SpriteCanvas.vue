@@ -1,28 +1,36 @@
 <template>
   <div class="sprite-canvas-container">
-    <canvas :id="canvasId" class="canvas"></canvas>
+    <canvas :id="canvasId" 
+      class="canvas"
+      :class="{ enemy: isEnemy }"
+    >
+    </canvas>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, Prop, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
 
 interface Props {
   sprite: Sprite;
-  spriteState: SpriteStateConfig
+  spriteState: SpriteStateConfig,
+  isEnemy: boolean
 }
 
 const SpriteCanvas = defineComponent({
   props: {
-    sprite: { required: true } as Prop<Sprite>,
-    spriteState: { required: true } as Prop<SpriteStateConfig>
+    sprite: { required: true, type: Sprite },
+    spriteState: { required: true, type: SpriteStateConfig },
+    isEnemy: { required: true, type: Boolean }
   },
-  setup(props: Props) {
+  setup(props: Props, context) {
 
     const canvasId = computed((): string => {
-      return `canvas-${props.sprite.name}`
+      const position = props.isEnemy ? 'right' : 'left'
+
+      return `canvas-${position}-${props.sprite.name}`
     })
     const width = computed((): number => {
       return props.sprite.width * props.sprite.scale
@@ -62,6 +70,10 @@ const SpriteCanvas = defineComponent({
 
       if (currentState.value.frameIndex > currentState.value.endIndex) {
         currentState.value.frameIndex = currentState.value.startIndex;
+
+        if (currentState.value.resetAfterAnimation) {
+          context.emit('reset-to-idle');
+        }
       }
     }
 
@@ -100,14 +112,14 @@ const SpriteCanvas = defineComponent({
 export default SpriteCanvas;
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .sprite-canvas-container {
   width: 300px;
   margin: auto;
-  text-align: left;
-}
+  text-align: center;
 
-.sprite-command {
-  display: inline;
+  .enemy {
+    transform: scaleX(-1);
+  }
 }
 </style>

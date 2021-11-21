@@ -18,37 +18,43 @@ const useSpriteFactory = (): SpriteFactory => {
       d.idle.layer,
       d.idle.start,
       d.idle.end,
-      d.idle.speed)
+      d.idle.speed,
+      false)
 
     sprite.createState(SpriteStateEnum.ATTACK, 
       d.attack.layer,
       d.attack.start,
       d.attack.end,
-      d.attack.speed)
+      d.attack.speed,
+      true)
 
     sprite.createState(SpriteStateEnum.ULTIMATE, 
       d.ultimate.layer,
       d.ultimate.start,
       d.ultimate.end,
-      d.ultimate.speed)
+      d.ultimate.speed,
+      true)
 
     sprite.createState(SpriteStateEnum.HIT, 
       d.hit.layer,
       d.hit.start,
       d.hit.end,
-      d.hit.speed)
+      d.hit.speed,
+      false)
 
     sprite.createState(SpriteStateEnum.DEAD, 
       d.dead.layer,
       d.dead.start,
       d.dead.end,
-      d.dead.speed)
+      d.dead.speed,
+      false)
 
     sprite.createState(SpriteStateEnum.WIN, 
       d.win.layer,
       d.win.start,
       d.win.end,
-      d.win.speed)
+      d.win.speed,
+      false)
 
     sprites.push(sprite);
   });

@@ -4,6 +4,8 @@
       v-if="currentState"
       :sprite="sprite"
       :spriteState="currentState"
+      :isEnemy="isEnemy"
+      @reset-to-idle="resetToIdle"
     >
     </app-sprite-canvas>
     <app-sprite-command
@@ -24,7 +26,8 @@ import SpriteCanvas from './SpriteCanvas.vue';
 import SpriteCommand from './SpriteCommand.vue';
 
 interface Props {
-  sprite: SpriteModel
+  sprite: SpriteModel,
+  isEnemy: boolean
 }
 
 const Sprite = defineComponent({
@@ -33,7 +36,8 @@ const Sprite = defineComponent({
     appSpriteCommand: SpriteCommand
   },
   props: {
-    sprite: { required: true } as Prop<SpriteModel>
+    sprite: { required: true } as Prop<SpriteModel>,
+    isEnemy: Boolean
   },
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);
@@ -43,12 +47,17 @@ const Sprite = defineComponent({
     }
 
     onMounted(() => {
-      currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
+      resetToIdle();
     })
+
+    const resetToIdle = () => {
+      currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
+    }
 
     return {
       currentState,
-      changeState
+      changeState,
+      resetToIdle
     }
   },
 })

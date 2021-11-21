@@ -16,14 +16,20 @@ export class Sprite {
     this.states = new SpriteState();
   }
 
-  createState(name: SpriteStateEnum, spriteLayer: number, startIndex: number, endIndex: number, animationSpeed: number): void {
+  createState(name: SpriteStateEnum, 
+    spriteLayer: number, 
+    startIndex: number, 
+    endIndex: number, 
+    animationSpeed: number,
+    resetAfterAnimation: boolean): void {
     if (!this.states[name]) {
       this.states[name] = {
         layer: spriteLayer,
         frameIndex: startIndex,
         startIndex,
         endIndex,
-        animationSpeed 
+        animationSpeed,
+        resetAfterAnimation
       }
     }
   }
