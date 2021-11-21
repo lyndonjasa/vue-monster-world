@@ -77,7 +77,6 @@ const SpriteCanvas = defineComponent({
     }
 
     onMounted(() => {
-      console.log(props.spriteState);
       currentState.value = props.spriteState;
       canvas.value = document.getElementById(canvasId.value) as HTMLCanvasElement;
       canvasContext.value = canvas.value.getContext('2d');

@@ -1,8 +1,12 @@
 import { Sprite } from "@/models/sprites/sprite";
-import { SpriteState, SpriteStateEnum } from "@/models/sprites/sprite-state";
+import { SpriteStateEnum } from "@/models/sprites/sprite-state";
 import { spriteData } from "./test-sprite-data";
 
-const useSpriteFactory = () => {
+interface SpriteFactory {
+  sprites: Sprite[]
+}
+
+const useSpriteFactory = (): SpriteFactory => {
   const data = spriteData;
 
   const sprites: Sprite[] = [];
