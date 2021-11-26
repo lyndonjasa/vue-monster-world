@@ -8,11 +8,11 @@
 
 <script lang="ts">
 import { SpriteState } from '@/models/sprites/sprite-state';
-import { defineComponent, Prop } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 const SpriteCommand = defineComponent({
   props: {
-    states: { required: true } as Prop<SpriteState>
+    states: { required: true, type: Object as PropType<SpriteState> }
   },
   emits: {
     'change-state': (state: string) => state !== undefined

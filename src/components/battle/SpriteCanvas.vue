@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
 
@@ -21,8 +21,8 @@ interface Props {
 
 const SpriteCanvas = defineComponent({
   props: {
-    sprite: { required: true, type: Sprite },
-    spriteState: { required: true, type: SpriteStateConfig },
+    sprite: { required: true, type: Object as PropType<Sprite> },
+    spriteState: { required: true, type: Object as PropType<SpriteStateConfig> },
     isEnemy: { required: true, type: Boolean }
   },
   setup(props: Props, context) {

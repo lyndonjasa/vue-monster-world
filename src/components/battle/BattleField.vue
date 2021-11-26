@@ -18,8 +18,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import useSpriteFactory from '@/hooks/useSpriteFactory';
+import useMonsterFactory from '@/hooks/useMonsterFactory';
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
 import Sprite from './Sprite.vue';
+import { testMonsterData } from '../../hooks/test-monster-data';
+import { Monster } from '@/models/monster/monster';
 
 const BattleField = defineComponent({
   components: {
@@ -27,6 +30,18 @@ const BattleField = defineComponent({
   },
   setup() {
     const { sprites } = useSpriteFactory();
+    const { createMonster } = useMonsterFactory();
+
+    const monsters = ref<Monster[]>([]);
+    testMonsterData.forEach(m => {
+      const monster = createMonster(m.name, 
+        m.stats,
+        sprites.find(s => s.name === m.name));
+
+      monsters.value.push(monster);
+    });
+
+    console.log(monsters.value);
 
     const spriteRef = ref<SpriteModel[]>(sprites);
 

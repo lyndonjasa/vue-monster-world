@@ -21,7 +21,7 @@
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
-import { defineComponent, onMounted, Prop, ref } from 'vue'
+import { defineComponent, onMounted, PropType, ref } from 'vue'
 import SpriteCanvas from './SpriteCanvas.vue';
 import SpriteCommand from './SpriteCommand.vue';
 
@@ -36,7 +36,7 @@ const Sprite = defineComponent({
     appSpriteCommand: SpriteCommand
   },
   props: {
-    sprite: { required: true } as Prop<SpriteModel>,
+    sprite: { required: true, type: Object as PropType<SpriteModel> },
     isEnemy: Boolean
   },
   setup(props: Props) {
