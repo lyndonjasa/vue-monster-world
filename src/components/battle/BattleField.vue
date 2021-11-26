@@ -1,16 +1,20 @@
 <template>
   <div class="sprites">
-    <div class="left-team">
-      <app-sprite v-for="sprite in spriteRef" :key="sprite.name"
-        :sprite="sprite"
+    <div class="team left-team">
+      <app-monster v-for="monster in monsters" 
+        :key="monster.name" 
+        :monster="monster"
         :isEnemy="false"
-      ></app-sprite>
+      >
+      </app-monster>
     </div>
-    <div class="right-team">
-      <app-sprite v-for="sprite in spriteRef" :key="sprite.name"
-        :sprite="sprite"
+    <div class="team right-team">
+      <app-monster v-for="monster in enemyMonsters" 
+        :key="monster.name" 
+        :monster="monster"
         :isEnemy="true"
-      ></app-sprite>
+      >
+      </app-monster>
     </div>
   </div>
 </template>
@@ -19,34 +23,37 @@
 import { defineComponent, ref } from 'vue'
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import useMonsterFactory from '@/hooks/useMonsterFactory';
-import { Sprite as SpriteModel } from '@/models/sprites/sprite';
-import Sprite from './Sprite.vue';
 import { testMonsterData } from '../../hooks/test-monster-data';
 import { Monster } from '@/models/monster/monster';
+import MonsterView from './MonsterView.vue';
+import _ from 'lodash'
 
 const BattleField = defineComponent({
   components: {
-    appSprite: Sprite
+    appMonster: MonsterView
   },
   setup() {
     const { sprites } = useSpriteFactory();
     const { createMonster } = useMonsterFactory();
 
-    const monsters = ref<Monster[]>([]);
+    const monsterData: Monster[] = [];
+
     testMonsterData.forEach(m => {
       const monster = createMonster(m.name, 
         m.stats,
         sprites.find(s => s.name === m.name));
 
-      monsters.value.push(monster);
+      monsterData.push({ ...monster });
     });
 
-    console.log(monsters.value);
+    const enemyMonsterData = _.cloneDeep(monsterData);
 
-    const spriteRef = ref<SpriteModel[]>(sprites);
+    const monsters = ref<Monster[]>(monsterData);
+    const enemyMonsters = ref<Monster[]>(enemyMonsterData);
 
     return {
-      spriteRef
+      monsters,
+      enemyMonsters
     }
   },
 })
@@ -56,6 +63,11 @@ export default BattleField;
 
 <style lang="scss" scoped>
 .sprites {
-  display: flex
+  display: flex;
+  justify-content: center;
+
+  .team {
+    margin: 0 25px;
+  }
 }
 </style>

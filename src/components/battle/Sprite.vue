@@ -12,8 +12,7 @@
       :states="sprite.states"
       @change-state="changeState"
     >
-    </app-sprite-command> 
-    Test
+    </app-sprite-command>
   </div>
 </template>
 

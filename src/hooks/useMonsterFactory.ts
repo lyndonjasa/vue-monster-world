@@ -13,7 +13,11 @@ const useMonsterFactory = (): Factory => {
   const createMonster = (name: string,
     stats: Stats,
     sprite: Sprite): Monster => {
-    const monster = new Monster(name, stats, sprite);
+    const monster: Monster = {
+      name,
+      stats,
+      sprite
+    };
 
     return monster
   }
