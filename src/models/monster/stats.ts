@@ -1,6 +1,8 @@
 export class Stats {
   health: number;
+  maxHealth: number;
   mana: number;
+  maxMana: number;
   offense: number;
   defense: number;
   speed: number;

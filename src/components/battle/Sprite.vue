@@ -26,7 +26,8 @@ import SpriteCommand from './SpriteCommand.vue';
 
 interface Props {
   sprite: SpriteModel,
-  isEnemy: boolean
+  isEnemy: boolean,
+  monsterId: number
 }
 
 const Sprite = defineComponent({
@@ -36,7 +37,8 @@ const Sprite = defineComponent({
   },
   props: {
     sprite: { required: true, type: Object as PropType<SpriteModel> },
-    isEnemy: Boolean
+    isEnemy: Boolean,
+    monsterId: Number
   },
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);

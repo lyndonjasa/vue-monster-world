@@ -1,8 +1,8 @@
 import useSpriteFactory from "@/hooks/useSpriteFactory";
-import { OwnedMonster } from "@/models/monster/owned-monster";
+import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { v4 as uuidv4 } from 'uuid';
 
-const getMonsterParty = async (characterId: string): Promise<OwnedMonster[]> => {
+const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> => {
   // character id will be supplied in the future
 
   console.log(characterId);
@@ -14,7 +14,7 @@ const getMonsterParty = async (characterId: string): Promise<OwnedMonster[]> => 
   return await Promise.resolve(monsterData);
 }
 
-const getEnemyParty  = async (): Promise<OwnedMonster[]> => {
+const getEnemyParty  = async (): Promise<DetailedMonster[]> => {
   // temporary code for getting enemy team
 
   const { sprites } = useSpriteFactory();
@@ -30,12 +30,14 @@ export default {
   getEnemyParty
 }
 
-const monsterData: OwnedMonster[] = [
+const monsterData: DetailedMonster[] = [
   {
     name: 'Alphamon',
     stats: {
       health: 900,
+      maxHealth: 900,
       mana: 79,
+      maxMana: 79,
       offense: 105,
       defense: 120,
       speed: 91,
@@ -54,7 +56,9 @@ const monsterData: OwnedMonster[] = [
     name: 'Agumon',
     stats: {
       health: 450,
+      maxHealth: 450,
       mana: 20,
+      maxMana: 20,
       offense: 68,
       defense: 45,
       speed: 37,
@@ -73,7 +77,9 @@ const monsterData: OwnedMonster[] = [
     name: 'AeroVeedramon',
     stats: {
       health: 850,
+      maxHealth: 850,
       mana: 50,
+      maxMana: 50,
       offense: 100,
       defense: 55,
       speed: 95,

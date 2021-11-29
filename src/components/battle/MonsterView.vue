@@ -22,13 +22,14 @@
     <app-sprite
       :sprite="monster.sprite" 
       :isEnemy="isEnemy"
+      :monsterId="monster._id"
     >
     </app-sprite>
   </div>
 </template>
 
 <script lang="ts">
-import { Monster as MonsterModel } from '@/models/monster/monster';
+import { DetailedMonster as MonsterModel } from '@/models/monster/detailed-monster';
 import { defineComponent, PropType, ref } from 'vue'
 import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
@@ -49,8 +50,8 @@ const MonsterView = defineComponent({
   },
   setup(props: Props) {
     const monsterRef = ref(props.monster);
-    const maxHealth = monsterRef.value.stats.health;
-    const maxMana = monsterRef.value.stats.mana;
+    const maxHealth = monsterRef.value.stats.maxHealth;
+    const maxMana = monsterRef.value.stats.maxMana;
 
     if (props.isEnemy) {
       monsterRef.value.stats.health = 200

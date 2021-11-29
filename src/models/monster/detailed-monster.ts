@@ -1,6 +1,6 @@
 import { Monster } from "./monster";
 
-export class OwnedMonster extends Monster {
+export class DetailedMonster extends Monster {
   _id: string;
   level: number;
   currentExp: number;

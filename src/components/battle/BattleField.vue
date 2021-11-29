@@ -20,11 +20,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, provide, ref } from 'vue'
 import useMonsterFactory from '@/hooks/useMonsterFactory';
-import { Monster } from '@/models/monster/monster';
 import MonsterView from './MonsterView.vue';
 import _ from 'lodash'
+import { DetailedMonster } from '@/models/monster/detailed-monster';
+import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
+import { OnSkillActivationKey } from '@/injections/battle.injection';
 
 const BattleField = defineComponent({
   components: {
@@ -33,8 +35,8 @@ const BattleField = defineComponent({
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     
-    const monsters = ref<Monster[]>([]);
-    const enemyMonsters = ref<Monster[]>([]);
+    const monsters = ref<DetailedMonster[]>([]);
+    const enemyMonsters = ref<DetailedMonster[]>([]);
 
     getMonsterParty().then(mp => {
       monsters.value = mp
@@ -43,6 +45,30 @@ const BattleField = defineComponent({
     getEnemyParty().then(emp => {
       enemyMonsters.value = _.cloneDeep(emp)
     })
+
+    // TODO: add target and activited skill on the future
+    const onSkillActivation = (actorId: string, team: MonsterTeamEnum) => {
+      let actor: DetailedMonster;
+      let target: DetailedMonster;
+
+      if (team == MonsterTeamEnum.LEFT) {
+        actor = monsters.value.find(m => m._id === actorId);
+        target = enemyMonsters.value[0]; // place holder target
+      } else {
+        actor = enemyMonsters.value.find(m => m._id === actorId);
+        target = monsters.value[0]; // place holder target
+      }
+
+      // simulate attack
+      // TODO: add defense penetration in the future
+      const baseDamage = actor.stats.offense * 45;
+      const damageReduction = target.stats.defense * 0.75;
+
+      const overallDamage = Math.ceil(baseDamage / damageReduction);
+      console.log(overallDamage);
+    }
+
+    provide(OnSkillActivationKey, onSkillActivation);
 
     return {
       monsters,
