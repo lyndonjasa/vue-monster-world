@@ -67,11 +67,14 @@ const Sprite = defineComponent({
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {
       if (newValue < oldValue) {
         changeState(SpriteStateEnum.HIT)
-        if (newValue > 0) {
-          setTimeout(() => changeState(SpriteStateEnum.IDLE), 2000)
-        } else {
-          setTimeout(() => changeState(SpriteStateEnum.DEAD), 2000)
-        }
+      } else {
+        changeState(SpriteStateEnum.WIN) // animation for HEAL / MISS
+      }
+
+      if (newValue > 0) {
+        setTimeout(() => changeState(SpriteStateEnum.IDLE), 2000)
+      } else {
+        setTimeout(() => changeState(SpriteStateEnum.DEAD), 2000)
       }
     })
 
