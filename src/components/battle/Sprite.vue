@@ -17,17 +17,19 @@
 </template>
 
 <script lang="ts">
+import { OnSkillActivationKey } from '@/injections/battle.injection';
+import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
-import { defineComponent, onMounted, PropType, ref } from 'vue'
+import { defineComponent, inject, onMounted, PropType, ref } from 'vue'
 import SpriteCanvas from './SpriteCanvas.vue';
 import SpriteCommand from './SpriteCommand.vue';
 
 interface Props {
   sprite: SpriteModel,
   isEnemy: boolean,
-  monsterId: number
+  monsterId: string
 }
 
 const Sprite = defineComponent({
@@ -38,20 +40,25 @@ const Sprite = defineComponent({
   props: {
     sprite: { required: true, type: Object as PropType<SpriteModel> },
     isEnemy: Boolean,
-    monsterId: Number
+    monsterId: String
   },
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);
+    const onSkillActivation = inject(OnSkillActivationKey);
 
     const changeState = (stateName: SpriteStateEnum) => {
       currentState.value = props.sprite.getState(stateName);
     }
 
     onMounted(() => {
-      resetToIdle();
+      resetToIdle(false);
     })
 
-    const resetToIdle = () => {
+    const resetToIdle = (triggerSkill: boolean) => {
+      if (triggerSkill) {
+        onSkillActivation(props.monsterId, !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT);
+      }
+
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
     }
 

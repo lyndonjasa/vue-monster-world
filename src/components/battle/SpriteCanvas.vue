@@ -72,7 +72,7 @@ const SpriteCanvas = defineComponent({
         currentState.value.frameIndex = currentState.value.startIndex;
 
         if (currentState.value.resetAfterAnimation) {
-          context.emit('reset-to-idle');
+          context.emit('reset-to-idle', true);
         }
       }
     }
