@@ -5,5 +5,6 @@ export class Monster {
   name: string;
   stats: Stats;
   sprite: Sprite;
+  talents?: string[];
   // TODO: add skills
 }
