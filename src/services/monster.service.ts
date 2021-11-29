@@ -14,7 +14,21 @@ const getMonsterParty = async (characterId: string): Promise<OwnedMonster[]> => 
   return await Promise.resolve(monsterData);
 }
 
-export default { getMonsterParty }
+const getEnemyParty  = async (): Promise<OwnedMonster[]> => {
+  // temporary code for getting enemy team
+
+  const { sprites } = useSpriteFactory();
+  monsterData.forEach(m => {
+    m.sprite = sprites.find(s => s.name === m.name);
+  })
+
+  return await Promise.resolve(monsterData);
+} 
+
+export default { 
+  getMonsterParty,
+  getEnemyParty
+}
 
 const monsterData: OwnedMonster[] = [
   {

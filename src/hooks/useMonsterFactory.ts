@@ -2,7 +2,8 @@ import { OwnedMonster } from "@/models/monster/owned-monster"
 import MonsterService from "@/services/monster.service"
 
 interface Factory {
-  getMonsterParty(): Promise<OwnedMonster[]>
+  getMonsterParty(): Promise<OwnedMonster[]>,
+  getEnemyParty(): Promise<OwnedMonster[]>
 }
 
 const useMonsterFactory = (): Factory => {
@@ -11,8 +12,13 @@ const useMonsterFactory = (): Factory => {
     return MonsterService.getMonsterParty('test id');
   }
 
+  const getEnemyParty = (): Promise<OwnedMonster[]> => {
+    return MonsterService.getEnemyParty();
+  }
+
   return {
-    getMonsterParty
+    getMonsterParty,
+    getEnemyParty
   }
 }
 

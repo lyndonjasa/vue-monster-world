@@ -1,17 +1,20 @@
 <template>
   <div class="monster-container" v-if="monster">
-    <app-status-bar
-      :currentValue="monsterRef.stats.health"
-      :maxValue="maxHealth"
-      color="green"
-    >
-    </app-status-bar>
-    <app-status-bar
-      :currentValue="monsterRef.stats.mana"
-      :maxValue="maxMana"
-      color="blue"
-    >
-    </app-status-bar>
+    <div class="status-bars" :class="{ 'enemy': isEnemy }">
+      <app-status-bar
+        :currentValue="monsterRef.stats.health"
+        :maxValue="maxHealth"
+        color="green"
+      >
+      </app-status-bar>
+      <app-status-bar
+        :currentValue="monsterRef.stats.mana"
+        :maxValue="maxMana"
+        color="blue"
+      >
+      </app-status-bar>
+    </div>
+
     <div class="monster-name" :class="{ 'enemy': isEnemy }">
       <span>{{ monster.name }}</span>
     </div>
@@ -74,6 +77,15 @@ export default MonsterView;
 
     &.enemy {
       text-align: right;
+    }
+  }
+
+  .status-bars {
+    width: 35%;
+
+    &.enemy {
+      margin-left: 65%;
+      transform: scaleX(-1);
     }
   }
 }

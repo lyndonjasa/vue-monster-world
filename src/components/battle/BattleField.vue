@@ -31,17 +31,18 @@ const BattleField = defineComponent({
     appMonster: MonsterView
   },
   setup() {
-    const { getMonsterParty } = useMonsterFactory();
+    const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     
     const monsters = ref<Monster[]>([]);
     const enemyMonsters = ref<Monster[]>([]);
 
     getMonsterParty().then(mp => {
       monsters.value = mp
-      enemyMonsters.value = _.cloneDeep(mp);
-
-      console.log(mp);
     });
+
+    getEnemyParty().then(emp => {
+      enemyMonsters.value = _.cloneDeep(emp)
+    })
 
     return {
       monsters,

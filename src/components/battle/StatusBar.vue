@@ -43,7 +43,7 @@ export default StatusBar;
   margin: 1px 0;
 
   .status-bar-value {
-    height: 10px;
+    height: 5px;
   }
 }
 </style>
