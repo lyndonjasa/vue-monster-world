@@ -21,9 +21,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import useSpriteFactory from '@/hooks/useSpriteFactory';
 import useMonsterFactory from '@/hooks/useMonsterFactory';
-import { testMonsterData } from '../../hooks/test-monster-data';
 import { Monster } from '@/models/monster/monster';
 import MonsterView from './MonsterView.vue';
 import _ from 'lodash'
@@ -33,23 +31,17 @@ const BattleField = defineComponent({
     appMonster: MonsterView
   },
   setup() {
-    const { sprites } = useSpriteFactory();
-    const { createMonster } = useMonsterFactory();
+    const { getMonsterParty } = useMonsterFactory();
+    
+    const monsters = ref<Monster[]>([]);
+    const enemyMonsters = ref<Monster[]>([]);
 
-    const monsterData: Monster[] = [];
+    getMonsterParty().then(mp => {
+      monsters.value = mp
+      enemyMonsters.value = _.cloneDeep(mp);
 
-    testMonsterData.forEach(m => {
-      const monster = createMonster(m.name, 
-        m.stats,
-        sprites.find(s => s.name === m.name));
-
-      monsterData.push({ ...monster });
+      console.log(mp);
     });
-
-    const enemyMonsterData = _.cloneDeep(monsterData);
-
-    const monsters = ref<Monster[]>(monsterData);
-    const enemyMonsters = ref<Monster[]>(enemyMonsterData);
 
     return {
       monsters,

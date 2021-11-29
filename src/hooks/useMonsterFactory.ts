@@ -1,29 +1,18 @@
-import { Monster } from "@/models/monster/monster"
-import { Stats } from "@/models/monster/stats"
-import { Sprite } from "@/models/sprites/sprite"
+import { OwnedMonster } from "@/models/monster/owned-monster"
+import MonsterService from "@/services/monster.service"
 
 interface Factory {
-  createMonster(name: string,
-    stats: Stats,
-    sprite: Sprite): Monster
+  getMonsterParty(): Promise<OwnedMonster[]>
 }
 
 const useMonsterFactory = (): Factory => {
 
-  const createMonster = (name: string,
-    stats: Stats,
-    sprite: Sprite): Monster => {
-    const monster: Monster = {
-      name,
-      stats,
-      sprite
-    };
-
-    return monster
+  const getMonsterParty = (): Promise<OwnedMonster[]> => {
+    return MonsterService.getMonsterParty('test id');
   }
 
   return {
-    createMonster
+    getMonsterParty
   }
 }
 
