@@ -41,7 +41,8 @@ const BattleField = defineComponent({
     testMonsterData.forEach(m => {
       const monster = createMonster(m.name, 
         m.stats,
-        sprites.find(s => s.name === m.name));
+        sprites.find(s => s.name === m.name),
+        m.skills);
 
       monsterData.push({ ...monster });
     });

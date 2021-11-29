@@ -1,4 +1,4 @@
-export enum Element {
+export enum ElementEnum {
   NON_ELEMENTAL = 1,
   FIRE = 2,
   WIND = 3,

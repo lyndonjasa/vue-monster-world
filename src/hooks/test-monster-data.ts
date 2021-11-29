@@ -1,6 +1,10 @@
+import { ElementEnum } from "@/models/element/element.enum";
 import { Stats } from "@/models/monster/stats";
+import { SkillDetail } from "@/models/skills/skill-detail";
+import { SkillTargetEnum } from "@/models/skills/skill-target.enum";
+import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 
-export const testMonsterData: { name: string, stats: Stats }[] = [
+export const testMonsterData: { name: string, stats: Stats, skills?: SkillDetail[] }[] = [
   {
     name: 'Alphamon',
     stats: {
@@ -13,7 +17,23 @@ export const testMonsterData: { name: string, stats: Stats }[] = [
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
-    }
+    },
+    skills: [
+      {
+        skill: {
+          element: ElementEnum.NON_ELEMENTAL,
+          cost: 0,
+          description: "Basic attack",
+          ignoreDefense: false,
+          name: "Attack",
+          power: 45,
+          target: SkillTargetEnum.ENEMY,
+          type: SkillTypeEnum.DAMAGE
+        },
+        status: undefined,
+        penalty: undefined
+      }
+    ]
   },
   {
     name: 'Agumon',
@@ -27,7 +47,23 @@ export const testMonsterData: { name: string, stats: Stats }[] = [
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
-    }
+    },
+    skills: [
+      {
+        skill: {
+          element: ElementEnum.NON_ELEMENTAL,
+          cost: 0,
+          description: "Basic attack",
+          ignoreDefense: false,
+          name: "Attack",
+          power: 45,
+          target: SkillTargetEnum.ENEMY,
+          type: SkillTypeEnum.DAMAGE
+        },
+        status: undefined,
+        penalty: undefined
+      }
+    ]
   },
   {
     name: 'AeroVeedramon',
@@ -41,6 +77,22 @@ export const testMonsterData: { name: string, stats: Stats }[] = [
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
-    }
+    },
+    skills: [
+      {
+        skill: {
+          element: ElementEnum.NON_ELEMENTAL,
+          cost: 0,
+          description: "Basic attack",
+          ignoreDefense: false,
+          name: "Attack",
+          power: 45,
+          target: SkillTargetEnum.ENEMY,
+          type: SkillTypeEnum.DAMAGE
+        },
+        status: undefined,
+        penalty: undefined
+      }
+    ]
   }
 ]

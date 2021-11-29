@@ -10,14 +10,15 @@
 import { SpriteState } from '@/models/sprites/sprite-state';
 import { defineComponent, PropType } from 'vue'
 
+interface Props {
+  states: SpriteState
+}
+
 const SpriteCommand = defineComponent({
   props: {
     states: { required: true, type: Object as PropType<SpriteState> }
   },
-  emits: {
-    'change-state': (state: string) => state !== undefined
-  },
-  setup(props, context) {
+  setup(props: Props, context) {
     const changeState = (state: string): void => {
       context.emit('change-state', state);
     }
