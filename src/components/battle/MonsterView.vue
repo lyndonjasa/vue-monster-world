@@ -23,6 +23,7 @@
       :sprite="monster.sprite" 
       :isEnemy="isEnemy"
       :monsterId="monster._id"
+      :currentHP="monsterRef.stats.health"
     >
     </app-sprite>
   </div>
@@ -52,6 +53,10 @@ const MonsterView = defineComponent({
     const monsterRef = ref(props.monster);
     const maxHealth = monsterRef.value.stats.maxHealth;
     const maxMana = monsterRef.value.stats.maxMana;
+
+    if (props.isEnemy) {
+      monsterRef.value.stats.health = 100;
+    }
 
     return {
       maxHealth,

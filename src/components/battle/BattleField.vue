@@ -65,7 +65,11 @@ const BattleField = defineComponent({
       const damageReduction = target.stats.defense * 0.75;
 
       const overallDamage = Math.ceil(baseDamage / damageReduction);
-      target.stats.health -= overallDamage;
+      if (overallDamage > target.stats.health) {
+        target.stats.health = 0
+      } else {
+        target.stats.health -= overallDamage;
+      }
     }
 
     provide(OnSkillActivationKey, onSkillActivation);
