@@ -27,7 +27,6 @@ import useMonsterFactory from '@/hooks/useMonsterFactory';
 import useBattleCalculator from '@/hooks/useBattleCalculator';
 import useRandomizer from '@/hooks/useRandomizer';
 import MonsterView from './MonsterView.vue';
-import _ from 'lodash'
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { OnSkillActivationKey } from '@/injections/battle.injection';
@@ -50,7 +49,7 @@ const BattleField = defineComponent({
     });
 
     getEnemyParty().then(emp => {
-      enemyMonsters.value = _.cloneDeep(emp)
+      enemyMonsters.value = emp
     })
 
     // TODO: add target and activited skill on the future
