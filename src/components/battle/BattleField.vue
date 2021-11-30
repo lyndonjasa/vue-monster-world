@@ -22,6 +22,8 @@
 <script lang="ts">
 import { defineComponent, provide, ref } from 'vue'
 import useMonsterFactory from '@/hooks/useMonsterFactory';
+import useBattleCalculator from '@/hooks/useBattleCalculator';
+import useRandomizer from '@/hooks/useRandomizer';
 import MonsterView from './MonsterView.vue';
 import _ from 'lodash'
 import { DetailedMonster } from '@/models/monster/detailed-monster';
@@ -34,6 +36,8 @@ const BattleField = defineComponent({
   },
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
+    const { calculateSkillDamage, calculateCriticalStrike } = useBattleCalculator();
+    const { procCrit } = useRandomizer();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -60,11 +64,12 @@ const BattleField = defineComponent({
       }
 
       // simulate attack
-      // TODO: add defense penetration in the future
-      const baseDamage = actor.stats.offense * 45;
-      const damageReduction = target.stats.defense * 0.75;
+      // TODO: replace with actual skill instead of 45
+      let overallDamage = calculateSkillDamage(actor, target, 45);
+      if (procCrit(actor.stats.critRate)) {
+        overallDamage = calculateCriticalStrike(actor, overallDamage);
+      }
 
-      const overallDamage = Math.ceil(baseDamage / damageReduction);
       if (overallDamage > target.stats.health) {
         target.stats.health = 0
       } else {
