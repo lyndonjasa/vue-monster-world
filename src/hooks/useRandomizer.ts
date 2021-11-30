@@ -1,6 +1,7 @@
 interface Hook {
   randomize(min: number, max: number): number,
-  procCrit(critRate: number): boolean
+  procCrit(critRate: number): boolean,
+  procMiss(actorSpeed: number, targetSpeed: number): boolean
 }
 
 const useRandomizer = (): Hook => {
@@ -14,9 +15,17 @@ const useRandomizer = (): Hook => {
     return critRate >= randomValue;
   }
 
+  const procMiss = (actorSpeed: number, targetSpeed: number): boolean => {
+    const totalSpeed = actorSpeed + targetSpeed;
+    const randomValue = randomize(0, totalSpeed);
+    
+    return Math.ceil(targetSpeed * 0.7) >= randomValue;
+  }
+
   return {
     randomize,
-    procCrit
+    procCrit,
+    procMiss
   }
 }
 

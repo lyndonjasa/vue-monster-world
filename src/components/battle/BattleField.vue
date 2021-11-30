@@ -6,6 +6,7 @@
         :monster="monster"
         :isEnemy="false"
       >
+        <span v-if="isTarget(monster._id)" class="damage-output">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
     <div class="team right-team">
@@ -38,11 +39,11 @@ const BattleField = defineComponent({
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike } = useBattleCalculator();
-    const { procCrit } = useRandomizer();
+    const { procCrit, procMiss } = useRandomizer();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
-    const targets = ref<{ targetId: string, damageReceived: number }[]>([]);
+    const targets = ref<{ targetId: string, damageReceived: string }[]>([]);
 
     getMonsterParty().then(mp => {
       monsters.value = mp
@@ -72,9 +73,13 @@ const BattleField = defineComponent({
         overallDamage = calculateCriticalStrike(actor, overallDamage);
       }
 
+      if (procMiss(actor.stats.speed, target.stats.speed)) {
+        overallDamage = 0;
+      }
+
       targets.value.push({
         targetId: target._id,
-        damageReceived: overallDamage
+        damageReceived: overallDamage > 0 ? overallDamage.toString() : 'Miss'
       });
 
       if (overallDamage > target.stats.health) {
@@ -94,7 +99,7 @@ const BattleField = defineComponent({
       return targets.value.find(t => t.targetId === targetId) !== undefined;
     }
 
-    const fetchDamage = (targetId: string): number => {
+    const fetchDamage = (targetId: string): string => {
       return targets.value.find(t => t.targetId === targetId).damageReceived;
     }
 
