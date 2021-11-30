@@ -14,6 +14,7 @@
         :monster="monster"
         :isEnemy="true"
       >
+        <span v-if="isTarget(monster._id)" class="damage-output">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
   </div>
@@ -41,6 +42,7 @@ const BattleField = defineComponent({
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
+    const targets = ref<{ targetId: string, damageReceived: number }[]>([]);
 
     getMonsterParty().then(mp => {
       monsters.value = mp
@@ -70,18 +72,38 @@ const BattleField = defineComponent({
         overallDamage = calculateCriticalStrike(actor, overallDamage);
       }
 
+      targets.value.push({
+        targetId: target._id,
+        damageReceived: overallDamage
+      });
+
       if (overallDamage > target.stats.health) {
         target.stats.health = 0
       } else {
         target.stats.health -= overallDamage;
       }
+
+      setTimeout(() => {
+        targets.value = [];
+      }, 2000)
     }
 
     provide(OnSkillActivationKey, onSkillActivation);
 
+    const isTarget = (targetId: string): boolean => {
+      return targets.value.find(t => t.targetId === targetId) !== undefined;
+    }
+
+    const fetchDamage = (targetId: string): number => {
+      return targets.value.find(t => t.targetId === targetId).damageReceived;
+    }
+
     return {
       monsters,
-      enemyMonsters
+      enemyMonsters,
+      targets,
+      isTarget,
+      fetchDamage
     }
   },
 })
@@ -96,6 +118,13 @@ export default BattleField;
 
   .team {
     margin: 0 25px;
+  }
+
+  .damage-output {
+    color: #fff;
+    text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
+    font-size: 12px;
+    background-color: rbga(0, 0, 0, 0.5);
   }
 }
 </style>

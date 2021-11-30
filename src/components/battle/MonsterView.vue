@@ -19,6 +19,10 @@
       <span>{{ monster.name }}</span>
     </div>
 
+    <div class="damage-output-slot">
+      <slot></slot>
+    </div>
+
     <app-sprite
       :sprite="monster.sprite" 
       :isEnemy="isEnemy"
@@ -71,6 +75,7 @@ export default MonsterView;
 
 <style lang="scss" scoped>
 .monster-container {
+  position: relative;
   width: 300px;
 
   .monster-name {
@@ -89,6 +94,14 @@ export default MonsterView;
       margin-left: 65%;
       transform: scaleX(-1);
     }
+  }
+
+  .damage-output-slot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>

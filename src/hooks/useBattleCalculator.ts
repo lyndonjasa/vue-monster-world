@@ -18,7 +18,7 @@ const useBattleCalculator = (): Hook => {
 
       const grossDamage = Math.ceil(baseDamage / damageReduction);
 
-      return grossDamage;
+      return grossDamage > 0 ? grossDamage : 1;
   }
 
   const calculateCriticalStrike = (actor: DetailedMonster, damage: number): number => {
