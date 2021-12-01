@@ -10,6 +10,7 @@ const useBattleCalculator = (): Hook => {
   // TODO: replace skillDamage w/ actual skill model in the future
   // take into account defense penetration
   // add margin of error
+  // add elemental strength / weakness
   const calculateSkillDamage = (actor: DetailedMonster, 
     target: DetailedMonster,
     skillDamage: number): number => {

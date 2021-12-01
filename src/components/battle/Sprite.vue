@@ -9,6 +9,7 @@
     >
     </app-sprite-canvas>
     <app-sprite-command
+      v-if="isCurrentTurn"
       :states="sprite.states"
       @change-state="changeState"
     >
@@ -17,12 +18,12 @@
 </template>
 
 <script lang="ts">
-import { OnSkillActivationKey } from '@/injections/battle.injection';
+import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
-import { defineComponent, inject, onMounted, PropType, ref, watch } from 'vue'
+import { computed, defineComponent, inject, onMounted, PropType, ref, watch } from 'vue'
 import SpriteCanvas from './SpriteCanvas.vue';
 import SpriteCommand from './SpriteCommand.vue';
 
@@ -64,6 +65,11 @@ const Sprite = defineComponent({
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
     }
 
+    const currentActorKey = inject(CurrentActorKey);
+    const isCurrentTurn = computed((): boolean => {
+      return currentActorKey.value === props.monsterId;
+    })
+
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {
       if (newValue < oldValue) {
         changeState(SpriteStateEnum.HIT)
@@ -81,7 +87,8 @@ const Sprite = defineComponent({
     return {
       currentState,
       changeState,
-      resetToIdle
+      resetToIdle,
+      isCurrentTurn
     }
   },
 })

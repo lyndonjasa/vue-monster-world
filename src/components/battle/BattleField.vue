@@ -22,14 +22,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref } from 'vue'
+import { computed, defineComponent, onMounted, provide, ref, watch } from 'vue'
 import useMonsterFactory from '@/hooks/useMonsterFactory';
 import useBattleCalculator from '@/hooks/useBattleCalculator';
 import useRandomizer from '@/hooks/useRandomizer';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { OnSkillActivationKey } from '@/injections/battle.injection';
+import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
+import _ from 'lodash';
 
 const BattleField = defineComponent({
   components: {
@@ -51,6 +52,21 @@ const BattleField = defineComponent({
     getEnemyParty().then(emp => {
       enemyMonsters.value = emp
     })
+
+    const orderOfActors = computed((): DetailedMonster[] => {
+      const actors = [...monsters.value, ...enemyMonsters.value];
+
+      const sortedActors = _.orderBy(actors, ['stats.speed', '_id'], ['desc', 'asc']);
+
+      return sortedActors;
+    })
+
+    const currentActor = ref<string>('');
+    let actorIndex = 0; // initial value
+
+    watch(orderOfActors, (value: DetailedMonster[]) => {
+      currentActor.value = orderOfActors.value[actorIndex]._id;
+    });
 
     // TODO: add target and activited skill on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum) => {
@@ -87,12 +103,31 @@ const BattleField = defineComponent({
         target.stats.health -= overallDamage;
       }
 
+      for (let index = 0; index < orderOfActors.value.length; index++) {
+        if (actorIndex === orderOfActors.value.length - 1) {
+          actorIndex = 0; // reset to 0
+        } else {
+          actorIndex++;
+        }
+
+        // if next actor is dead, skip to next actor
+        if (orderOfActors.value[actorIndex].stats.health <= 0) {
+          continue;
+        } else {
+          break;
+        }
+      }
+
+      currentActor.value = undefined;
+
       setTimeout(() => {
         targets.value = [];
+        currentActor.value = orderOfActors.value[actorIndex]._id;
       }, 2000)
     }
 
     provide(OnSkillActivationKey, onSkillActivation);
+    provide(CurrentActorKey, currentActor);
 
     const isTarget = (targetId: string): boolean => {
       return targets.value.find(t => t.targetId === targetId) !== undefined;
