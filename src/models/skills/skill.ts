@@ -5,4 +5,5 @@ export class Skill {
   cost: number;
   power: number;
   skillType: SkillTypeEnum;
+  ignoreDefense: boolean;
 }

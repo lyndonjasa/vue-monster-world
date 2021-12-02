@@ -36,7 +36,8 @@ const attackSkill: Skill = {
   cost: 0,
   name: 'Attack',
   power: 45,
-  skillType: SkillTypeEnum.DAMAGE
+  skillType: SkillTypeEnum.DAMAGE,
+  ignoreDefense: false
 }
 
 const monsterData: DetailedMonster[] = [
@@ -66,7 +67,8 @@ const monsterData: DetailedMonster[] = [
         name: 'Ultimate Ouryuken',
         cost: 50,
         power: 4,
-        skillType: SkillTypeEnum.SIGNATURE
+        skillType: SkillTypeEnum.SIGNATURE,
+        ignoreDefense: true
       }
     ]
   },

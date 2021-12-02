@@ -33,6 +33,7 @@ import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injec
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
+import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 
 const BattleField = defineComponent({
   components: {
@@ -80,7 +81,7 @@ const BattleField = defineComponent({
 
       if (team == MonsterTeamEnum.LEFT) {
         actor = monsters.value.find(m => m._id === actorId);
-        target = enemyMonsters.value[0]; // place holder target
+        target = enemyMonsters.value[2]; // place holder target
       } else {
         actor = enemyMonsters.value.find(m => m._id === actorId);
         target = monsters.value[0]; // place holder target
@@ -89,27 +90,41 @@ const BattleField = defineComponent({
       // reduce mana based on skill cost
       actor.stats.mana -= skill.cost;
 
-      // simulate attack
-      // TODO: replace with actual skill instead of 45
-      let overallDamage = calculateSkillDamage(actor, target, skill.power);
-      if (procCrit(actor.stats.critRate)) {
-        overallDamage = calculateCriticalStrike(actor, overallDamage);
+      let overallDamage = calculateSkillDamage(actor, target, skill);
+
+      // if skill type is not heal, check for procs
+      if (skill.skillType !== SkillTypeEnum.HEAL) {
+        if (procCrit(actor.stats.critRate)) {
+          overallDamage = calculateCriticalStrike(actor, overallDamage);
+        }
+
+        if (procMiss(actor.stats.speed, target.stats.speed)) {
+          overallDamage = 0;
+        }
       }
 
-      if (procMiss(actor.stats.speed, target.stats.speed)) {
-        overallDamage = 0;
+      if (overallDamage < 0) { // heal
+        // if heal exceeds max health, set health to max
+        // otherwise calculate
+        if ((target.stats.health - overallDamage) > target.stats.maxHealth) {
+          target.stats.health = target.stats.maxHealth;
+        } else {
+          target.stats.health -= overallDamage;
+        }
+      } else { // damage
+        if (overallDamage > target.stats.health) {
+          target.stats.health = 0
+        } else {
+          target.stats.health -= overallDamage;
+        }
       }
 
       targets.value.push({
         targetId: target._id,
-        damageReceived: overallDamage > 0 ? overallDamage.toString() : 'Miss'
+        damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss'
       });
 
-      if (overallDamage > target.stats.health) {
-        target.stats.health = 0
-      } else {
-        target.stats.health -= overallDamage;
-      }
+      
 
       for (let index = 0; index < orderOfActors.value.length; index++) {
         if (actorIndex === orderOfActors.value.length - 1) {
