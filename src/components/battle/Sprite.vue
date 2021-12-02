@@ -13,6 +13,7 @@
       :states="sprite.states"
       :commands="currentActor.actorSkills"
       @change-state="changeState"
+      @execute-command="selectedSkill = $event"
     >
     </app-sprite-command>
   </div>
@@ -21,6 +22,7 @@
 <script lang="ts">
 import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
+import { Skill } from '@/models/skills/skill';
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
@@ -48,6 +50,7 @@ const Sprite = defineComponent({
   },
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);
+    const selectedSkill = ref<Skill>(undefined);
     const onSkillActivation = inject(OnSkillActivationKey);
 
     const changeState = (stateName: SpriteStateEnum) => {
@@ -60,7 +63,7 @@ const Sprite = defineComponent({
 
     const resetToIdle = (triggerSkill: boolean) => {
       if (triggerSkill) {
-        onSkillActivation(props.monsterId, !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT);
+        onSkillActivation(props.monsterId, !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT, selectedSkill.value);
       }
 
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
@@ -90,7 +93,8 @@ const Sprite = defineComponent({
       changeState,
       resetToIdle,
       isCurrentTurn,
-      currentActor
+      currentActor,
+      selectedSkill
     }
   },
 })

@@ -32,6 +32,7 @@ import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
+import { Skill } from '@/models/skills/skill';
 
 const BattleField = defineComponent({
   components: {
@@ -73,7 +74,7 @@ const BattleField = defineComponent({
     });
 
     // TODO: add target and activited skill on the future
-    const onSkillActivation = (actorId: string, team: MonsterTeamEnum) => {
+    const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill) => {
       let actor: DetailedMonster;
       let target: DetailedMonster;
 
@@ -85,9 +86,12 @@ const BattleField = defineComponent({
         target = monsters.value[0]; // place holder target
       }
 
+      // reduce mana based on skill cost
+      actor.stats.mana -= skill.cost;
+
       // simulate attack
       // TODO: replace with actual skill instead of 45
-      let overallDamage = calculateSkillDamage(actor, target, 45);
+      let overallDamage = calculateSkillDamage(actor, target, skill.power);
       if (procCrit(actor.stats.critRate)) {
         overallDamage = calculateCriticalStrike(actor, overallDamage);
       }

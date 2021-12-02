@@ -48,6 +48,7 @@ const SpriteCommand = defineComponent({
       const state = getCommandState(command);
 
       context.emit('change-state', state);
+      context.emit('execute-command', command);
     }
 
     return {
