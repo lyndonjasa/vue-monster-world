@@ -31,6 +31,7 @@ import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
 import _ from 'lodash';
+import { Actor } from '@/models/battle/actor';
 
 const BattleField = defineComponent({
   components: {
@@ -61,11 +62,14 @@ const BattleField = defineComponent({
       return sortedActors;
     })
 
-    const currentActor = ref<string>('');
+    const currentActor = ref<Actor>(undefined);
     let actorIndex = 0; // initial value
 
     watch(orderOfActors, () => {
-      currentActor.value = orderOfActors.value[actorIndex]._id;
+      currentActor.value = {
+        monsterId: orderOfActors.value[actorIndex]._id,
+        actorSkills: orderOfActors.value[actorIndex].skills
+      };
     });
 
     // TODO: add target and activited skill on the future
@@ -118,11 +122,15 @@ const BattleField = defineComponent({
         }
       }
 
+      // reset currentActor after action
       currentActor.value = undefined;
 
       setTimeout(() => {
         targets.value = [];
-        currentActor.value = orderOfActors.value[actorIndex]._id;
+        currentActor.value = {
+          monsterId: orderOfActors.value[actorIndex]._id,
+          actorSkills: orderOfActors.value[actorIndex].skills
+        };
       }, 2000)
     }
 

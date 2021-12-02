@@ -11,6 +11,7 @@
     <app-sprite-command
       v-if="isCurrentTurn"
       :states="sprite.states"
+      :commands="currentActor.actorSkills"
       @change-state="changeState"
     >
     </app-sprite-command>
@@ -65,9 +66,9 @@ const Sprite = defineComponent({
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
     }
 
-    const currentActorKey = inject(CurrentActorKey);
+    const currentActor = inject(CurrentActorKey);
     const isCurrentTurn = computed((): boolean => {
-      return currentActorKey.value === props.monsterId;
+      return currentActor.value?.monsterId === props.monsterId;
     })
 
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {
@@ -88,7 +89,8 @@ const Sprite = defineComponent({
       currentState,
       changeState,
       resetToIdle,
-      isCurrentTurn
+      isCurrentTurn,
+      currentActor
     }
   },
 })

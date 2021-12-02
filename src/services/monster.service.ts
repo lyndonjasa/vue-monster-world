@@ -1,5 +1,7 @@
 import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { Skill } from "@/models/skills/skill";
+import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { v4 as uuidv4 } from 'uuid';
 
 const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> => {
@@ -30,6 +32,13 @@ export default {
   getEnemyParty
 }
 
+const attackSkill: Skill = {
+  cost: 0,
+  name: 'Attack',
+  power: 45,
+  skillType: SkillTypeEnum.DAMAGE
+}
+
 const monsterData: DetailedMonster[] = [
   {
     name: 'Alphamon',
@@ -50,7 +59,16 @@ const monsterData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill },
+      {
+        name: 'Ultimate Ouryuken',
+        cost: 50,
+        power: 4,
+        skillType: SkillTypeEnum.SIGNATURE
+      }
+    ]
   },
   {
     name: 'Agumon',
@@ -71,7 +89,10 @@ const monsterData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill }
+    ]
   },
   {
     name: 'AeroVeedramon',
@@ -92,7 +113,10 @@ const monsterData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill }
+    ]
   }
 ]
 
@@ -116,7 +140,10 @@ const enemyData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill }
+    ]
   },
   {
     name: 'Agumon',
@@ -137,7 +164,10 @@ const enemyData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill }
+    ]
   },
   {
     name: 'AeroVeedramon',
@@ -158,6 +188,9 @@ const enemyData: DetailedMonster[] = [
     currentExp: 0,
     expToLevel: 100,
     level: 1,
-    sprite: undefined
+    sprite: undefined,
+    skills: [
+      { ...attackSkill }
+    ]
   }
 ]

@@ -1,29 +1,58 @@
 <template>
   <div class="sprite-command-container">
-    <div class="sprite-command" v-for="state in Object.keys(states)" :key="state">
+    <!-- <div class="sprite-command" v-for="state in Object.keys(states)" :key="state">
       <button @click="changeState(state)">{{state}}</button>
+    </div> -->
+    <div class="sprite-command" v-for="command in commands" :key="command.name">
+      <button @click="initiateCommand(command)">{{ command.name }}</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { SpriteState } from '@/models/sprites/sprite-state';
+import { Skill } from '@/models/skills/skill';
+import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
+import { SpriteState, SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { defineComponent, PropType } from 'vue'
+
+interface Props {
+  states: SpriteState,
+  commands: Skill[]
+}
 
 const SpriteCommand = defineComponent({
   props: {
-    states: { required: true, type: Object as PropType<SpriteState> }
+    states: { required: true, type: Object as PropType<SpriteState> },
+    commands: { required: true, type: Object as PropType<Skill[]> }
   },
-  emits: {
-    'change-state': (state: string) => state !== undefined
-  },
-  setup(props, context) {
+  setup(props: Props, context) {
     const changeState = (state: string): void => {
       context.emit('change-state', state);
     }
 
+    const getCommandState = (command: Skill): SpriteStateEnum => {
+      switch (command.skillType) {
+        case SkillTypeEnum.DAMAGE:
+          return SpriteStateEnum.ATTACK;
+        case SkillTypeEnum.BUFF:
+        case SkillTypeEnum.HEAL:
+          return SpriteStateEnum.WIN;
+        case SkillTypeEnum.SIGNATURE:
+          return SpriteStateEnum.ULTIMATE;
+        default:
+          return SpriteStateEnum.IDLE;
+      }
+    }
+
+    const initiateCommand = (command: Skill) => {
+      const state = getCommandState(command);
+
+      context.emit('change-state', state);
+    }
+
     return {
-      changeState
+      changeState,
+      initiateCommand
     }
   },
 })
