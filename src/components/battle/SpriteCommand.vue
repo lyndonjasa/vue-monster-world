@@ -1,11 +1,6 @@
 <template>
-  <div class="sprite-command-container">
-    <!-- <div class="sprite-command" v-for="state in Object.keys(states)" :key="state">
-      <button @click="changeState(state)">{{state}}</button>
-    </div> -->
-    <div class="sprite-command" v-for="command in commands" :key="command.name">
-      <button @click="initiateCommand(command)">{{ command.name }}</button>
-    </div>
+  <div class="sprite-command" v-for="command in commands" :key="command.name">
+    <button @click="initiateCommand(command)">{{ command.name }}</button>
   </div>
 </template>
 

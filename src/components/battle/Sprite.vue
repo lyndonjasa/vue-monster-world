@@ -8,14 +8,16 @@
       @reset-to-idle="resetToIdle"
     >
     </app-sprite-canvas>
-    <app-sprite-command
-      v-if="isCurrentTurn"
-      :states="sprite.states"
-      :commands="currentActor.actorSkills"
-      @change-state="changeState"
-      @execute-command="selectedSkill = $event"
-    >
-    </app-sprite-command>
+    <div class="sprite-command-container">
+      <app-sprite-command
+        v-if="isCurrentTurn"
+        :states="sprite.states"
+        :commands="currentActor.actorSkills"
+        @change-state="changeState"
+        @execute-command="selectedSkill = $event"
+      >
+      </app-sprite-command>
+    </div>
   </div>
 </template>
 
@@ -101,3 +103,9 @@ const Sprite = defineComponent({
 
 export default Sprite;
 </script>
+
+<style lang="scss" scoped>
+.sprite-command-container {
+  height: 30px;
+}
+</style>

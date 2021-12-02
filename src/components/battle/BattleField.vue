@@ -84,7 +84,7 @@ const BattleField = defineComponent({
         target = enemyMonsters.value[2]; // place holder target
       } else {
         actor = enemyMonsters.value.find(m => m._id === actorId);
-        target = monsters.value[0]; // place holder target
+        target = monsters.value[1]; // place holder target
       }
 
       // reduce mana based on skill cost
