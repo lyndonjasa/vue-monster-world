@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, provide, ref, watch } from 'vue'
+import { computed, defineComponent, provide, ref, watch } from 'vue'
 import useMonsterFactory from '@/hooks/useMonsterFactory';
 import useBattleCalculator from '@/hooks/useBattleCalculator';
 import useRandomizer from '@/hooks/useRandomizer';
@@ -64,7 +64,7 @@ const BattleField = defineComponent({
     const currentActor = ref<string>('');
     let actorIndex = 0; // initial value
 
-    watch(orderOfActors, (value: DetailedMonster[]) => {
+    watch(orderOfActors, () => {
       currentActor.value = orderOfActors.value[actorIndex]._id;
     });
 
