@@ -80,7 +80,7 @@ const Sprite = defineComponent({
       if (newValue < oldValue) {
         changeState(SpriteStateEnum.HIT)
       } else {
-        changeState(SpriteStateEnum.WIN) // animation for HEAL / MISS
+        changeState(SpriteStateEnum.WIN) // animation for HEAL
       }
 
       if (newValue > 0) {

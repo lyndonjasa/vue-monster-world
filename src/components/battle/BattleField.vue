@@ -26,6 +26,7 @@ import { computed, defineComponent, provide, ref, watch } from 'vue'
 import useMonsterFactory from '@/hooks/useMonsterFactory';
 import useBattleCalculator from '@/hooks/useBattleCalculator';
 import useRandomizer from '@/hooks/useRandomizer';
+import useBattleEvents from '@/hooks/useBattleEvents';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
@@ -43,6 +44,7 @@ const BattleField = defineComponent({
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike } = useBattleCalculator();
     const { procCrit, procMiss } = useRandomizer();
+    const { regenerateHealth, regenerateMana } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -72,6 +74,23 @@ const BattleField = defineComponent({
         monsterId: orderOfActors.value[actorIndex]._id,
         actorSkills: orderOfActors.value[actorIndex].skills
       };
+    });
+
+    watch(currentActor, (value: Actor) => {
+      if (value) {
+        const actor = orderOfActors.value.find(a => a._id === value.monsterId);
+        const prevHealth = actor.stats.health;
+        regenerateHealth(actor);
+        regenerateMana(actor);
+        
+        // if regen persisted, force delay for 2 seconds for the animation
+        if (prevHealth < actor.stats.health) {
+          value.monsterId = '';
+          setTimeout(() => {
+            value.monsterId = actor._id;
+          }, 2000)
+        }
+      }
     });
 
     // TODO: add target and activited skill on the future
