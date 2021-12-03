@@ -6,7 +6,7 @@
         :monster="monster"
         :isEnemy="false"
       >
-        <span v-if="isTarget(monster._id)" class="damage-output">{{ fetchDamage(monster._id) }}</span>
+        <span v-if="isTarget(monster._id)" class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
     <div class="team right-team">
@@ -15,7 +15,7 @@
         :monster="monster"
         :isEnemy="true"
       >
-        <span v-if="isTarget(monster._id)" class="damage-output">{{ fetchDamage(monster._id) }}</span>
+        <span v-if="isTarget(monster._id)" class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
   </div>
@@ -44,11 +44,11 @@ const BattleField = defineComponent({
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike } = useBattleCalculator();
     const { procCrit, procMiss } = useRandomizer();
-    const { regenerateHealth, regenerateMana } = useBattleEvents();
+    const { regenerateHealth, regenerateMana, willRegen } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
-    const targets = ref<{ targetId: string, damageReceived: string }[]>([]);
+    const targets = ref<{ targetId: string, damageReceived: string, isCrit: boolean }[]>([]);
 
     getMonsterParty().then(mp => {
       monsters.value = mp
@@ -79,16 +79,13 @@ const BattleField = defineComponent({
     watch(currentActor, (value: Actor) => {
       if (value) {
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
-        const prevHealth = actor.stats.health;
-        regenerateHealth(actor);
-        regenerateMana(actor);
-        
-        // if regen persisted, force delay for 2 seconds for the animation
-        if (prevHealth < actor.stats.health) {
+        if (willRegen(actor)) {
+          regenerateHealth(actor);
+          regenerateMana(actor);
+
+          // force delay of 2 seconds for regen animation
           value.monsterId = '';
-          setTimeout(() => {
-            value.monsterId = actor._id;
-          }, 2000)
+          setTimeout(() => value.monsterId = actor._id, 2000)
         }
       }
     });
@@ -110,10 +107,12 @@ const BattleField = defineComponent({
       actor.stats.mana -= skill.cost;
 
       let overallDamage = calculateSkillDamage(actor, target, skill);
+      let critProced = false
 
       // if skill type is not heal, check for procs
       if (skill.skillType !== SkillTypeEnum.HEAL) {
-        if (procCrit(actor.stats.critRate)) {
+        critProced = procCrit(actor.stats.critRate);
+        if (critProced) {
           overallDamage = calculateCriticalStrike(actor, overallDamage);
         }
 
@@ -140,7 +139,8 @@ const BattleField = defineComponent({
 
       targets.value.push({
         targetId: target._id,
-        damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss'
+        damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
+        isCrit: critProced
       });
 
       
@@ -183,12 +183,17 @@ const BattleField = defineComponent({
       return targets.value.find(t => t.targetId === targetId).damageReceived;
     }
 
+    const critProced = (targetId: string): boolean => {
+      return targets.value.find(t => t.targetId === targetId).isCrit;
+    }
+
     return {
       monsters,
       enemyMonsters,
       targets,
       isTarget,
-      fetchDamage
+      fetchDamage,
+      critProced
     }
   },
 })
@@ -210,6 +215,10 @@ export default BattleField;
     text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
     font-size: 12px;
     background-color: rbga(0, 0, 0, 0.5);
+
+    &.crit {
+      color: red;
+    }
   }
 }
 </style>

@@ -3,11 +3,18 @@ import useBattleCalculator from "./useBattleCalculator";
 
 interface Hook {
   regenerateHealth(actor: DetailedMonster): void,
+  willRegen(actor: DetailedMonster): boolean,
   regenerateMana(actor: DetailedMonster): void
 }
 
 const useBattleEvents = (): Hook => {
   const { calculateHealthRegen, calculateManaRegen } = useBattleCalculator();
+
+  const willRegen = (actor: DetailedMonster): boolean => {
+    // TODO: add check for Static status
+
+    return actor.stats.health < actor.stats.maxHealth || actor.stats.mana < actor.stats.maxMana;
+  }
 
   const regenerateHealth = (actor: DetailedMonster): void => {
     const regenRate = calculateHealthRegen(actor);
@@ -34,6 +41,7 @@ const useBattleEvents = (): Hook => {
   }
 
   return {
+    willRegen,
     regenerateHealth,
     regenerateMana
   }
