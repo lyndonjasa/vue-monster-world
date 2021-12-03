@@ -10,16 +10,26 @@ import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { SpriteState, SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { defineComponent, PropType } from 'vue'
 
+interface Emits {
+  'onChange-state': any,
+  'onExecute-command': any
+}
+
+interface Props extends Emits {
+  states: SpriteState,
+  commands: Skill[]
+}
+
 const SpriteCommand = defineComponent({
   props: {
     states: { required: true, type: Object as PropType<SpriteState> },
-    commands: { required: true, type: Object as PropType<Skill[]> }
+    commands: { required: true, type: Array as PropType<Skill[]> }
   },
   emits: [
     'change-state',
     'execute-command'
   ],
-  setup(props, context) {
+  setup(props: Props, context) {
     const changeState = (state: string): void => {
       context.emit('change-state', state);
     }

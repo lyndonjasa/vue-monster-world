@@ -39,7 +39,12 @@ import { defineComponent, PropType, ref } from 'vue'
 import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
 
-interface Props {
+interface Emits {
+  // eslint-disable-next-line
+  'onTest': any
+}
+
+interface Props extends Emits {
   monster: MonsterModel,
   isEnemy: boolean
 }
@@ -53,6 +58,7 @@ const MonsterView = defineComponent({
     monster: { required: true, type: Object as PropType<MonsterModel> },
     isEnemy: Boolean
   },
+  emits: ['test'],
   setup(props: Props) {
     const monsterRef = ref(props.monster);
     const maxHealth = monsterRef.value.stats.maxHealth;
