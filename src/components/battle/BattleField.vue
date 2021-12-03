@@ -85,7 +85,9 @@ const BattleField = defineComponent({
 
           // force delay of 2 seconds for regen animation
           value.monsterId = '';
-          setTimeout(() => value.monsterId = actor._id, 2000)
+          setTimeout(() => { 
+            value.monsterId = actor._id 
+          }, 2000)
         }
       }
     });
