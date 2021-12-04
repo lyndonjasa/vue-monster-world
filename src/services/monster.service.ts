@@ -1,5 +1,6 @@
 import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { ElementEnum } from "@/models/skills/element.enum";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { TargetEnum } from "@/models/skills/target.enum";
@@ -39,7 +40,8 @@ const attackSkill: Skill = {
   power: 45,
   skillType: SkillTypeEnum.DAMAGE,
   ignoreDefense: false,
-  skillTarget: TargetEnum.ENEMY
+  skillTarget: TargetEnum.ENEMY,
+  skillElement: ElementEnum.NON_ELEMENTAL
 }
 
 const monsterData: DetailedMonster[] = [
@@ -58,6 +60,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.ROCK,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
@@ -71,7 +74,8 @@ const monsterData: DetailedMonster[] = [
         power: 4,
         skillType: SkillTypeEnum.SIGNATURE,
         ignoreDefense: true,
-        skillTarget: TargetEnum.ENEMY
+        skillTarget: TargetEnum.ENEMY,
+        skillElement: ElementEnum.NON_ELEMENTAL
       }
     ]
   },
@@ -90,6 +94,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.FIRE,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
@@ -114,6 +119,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.WIND,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
@@ -141,13 +147,23 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.ROCK,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill }
+      { ...attackSkill },
+      {
+        name: 'Ultimate Ouryuken',
+        cost: 50,
+        power: 4,
+        skillType: SkillTypeEnum.SIGNATURE,
+        ignoreDefense: true,
+        skillTarget: TargetEnum.ENEMY,
+        skillElement: ElementEnum.NON_ELEMENTAL
+      }
     ]
   },
   {
@@ -165,6 +181,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.FIRE,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
@@ -189,21 +206,14 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    element: ElementEnum.WIND,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill },
-      {
-        cost: 10,
-        ignoreDefense: false,
-        name: 'Gale Storm III',
-        power: 75,
-        skillTarget: TargetEnum.ALL_ENEMIES,
-        skillType: SkillTypeEnum.DAMAGE
-      }
+      { ...attackSkill }
     ]
   }
 ]
