@@ -106,15 +106,37 @@ const SpriteCommand = defineComponent({
         case TargetEnum.ALLY:
           showAllies.value = true;
           break;
+        case TargetEnum.ALL_ENEMIES:
+          onMultipleTargets(false);
+          break;
+        case TargetEnum.ALL_ALLIES:
+          onMultipleTargets(true);
+          break;
+        case TargetEnum.SELF:
+          onTargetSelect('self');
+          break;
         default:
           throw 'unknown target'
       }
     }
 
     const onTargetSelect = (monsterId: string) => {
+      emitAnimation();
+      context.emit('target-select', [monsterId])
+    }
+
+    const onMultipleTargets = (allyTargets: boolean) => {
+      emitAnimation();
+      if (allyTargets) {
+        context.emit('target-select', props.allyTargets.map(t => t.monsterId))
+      } else {
+        context.emit('target-select', props.enemyTargets.map(t => t.monsterId))
+      }
+    }
+
+    const emitAnimation = () => {
       context.emit('change-state', state)
       context.emit('execute-command', selectedSkill);
-      context.emit('target-select', [monsterId])
     }
 
     const onTargetHover = (monsterId: string) => {

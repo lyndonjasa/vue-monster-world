@@ -84,10 +84,12 @@ const Sprite = defineComponent({
 
     const resetToIdle = (triggerSkill: boolean) => {
       if (triggerSkill) {
+        const isSelfTargeted = selectedTargets.value.includes('self');
+
         onSkillActivation(props.monsterId, 
           !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT, 
           selectedSkill.value,
-          selectedTargets.value);
+          isSelfTargeted ? [props.monsterId] : selectedTargets.value);
       }
 
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);

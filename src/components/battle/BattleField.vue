@@ -236,7 +236,6 @@ export default BattleField;
 
 <style lang="scss" scoped>
 .sprites {
-  background-color: yellow;
   display: flex;
   justify-content: center;
 
