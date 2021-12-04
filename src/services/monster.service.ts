@@ -2,6 +2,7 @@ import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
+import { TargetEnum } from "@/models/skills/target.enum";
 import { v4 as uuidv4 } from 'uuid';
 
 const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> => {
@@ -37,7 +38,8 @@ const attackSkill: Skill = {
   name: 'Attack',
   power: 45,
   skillType: SkillTypeEnum.DAMAGE,
-  ignoreDefense: false
+  ignoreDefense: false,
+  skillTarget: TargetEnum.ENEMY
 }
 
 const monsterData: DetailedMonster[] = [
@@ -68,7 +70,8 @@ const monsterData: DetailedMonster[] = [
         cost: 50,
         power: 4,
         skillType: SkillTypeEnum.SIGNATURE,
-        ignoreDefense: true
+        ignoreDefense: true,
+        skillTarget: TargetEnum.ENEMY
       }
     ]
   },

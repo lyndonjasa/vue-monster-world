@@ -1,4 +1,5 @@
 import { SkillTypeEnum } from "./skill-type.enum";
+import { TargetEnum } from "./target.enum";
 
 export class Skill {
   name: string;
@@ -6,4 +7,5 @@ export class Skill {
   power: number;
   skillType: SkillTypeEnum;
   ignoreDefense: boolean;
+  skillTarget: TargetEnum;
 }
