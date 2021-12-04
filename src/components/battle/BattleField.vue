@@ -115,9 +115,11 @@ const BattleField = defineComponent({
     });
 
     // TODO: add target on the future
-    const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill) => {
+    const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
       let target: DetailedMonster;
+
+      console.log(targetIds);
 
       if (team == MonsterTeamEnum.LEFT) {
         actor = monsters.value.find(m => m._id === actorId);
@@ -227,6 +229,7 @@ export default BattleField;
 
 <style lang="scss" scoped>
 .sprites {
+  background-color: yellow;
   display: flex;
   justify-content: center;
 

@@ -17,6 +17,7 @@
         :enemyTargets="enemies"
         @change-state="changeState"
         @execute-command="selectedSkill = $event"
+        @target-select="selectedTargets = $event"
       >
       </app-sprite-command>
     </div>
@@ -56,6 +57,7 @@ const Sprite = defineComponent({
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);
     const selectedSkill = ref<Skill>(undefined);
+    const selectedTargets = ref<string[]>([]);
     const onSkillActivation = inject(OnSkillActivationKey);
 
     const leftTeam = inject(LeftTeamTargets);
@@ -81,7 +83,8 @@ const Sprite = defineComponent({
       if (triggerSkill) {
         onSkillActivation(props.monsterId, 
           !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT, 
-          selectedSkill.value);
+          selectedSkill.value,
+          selectedTargets.value);
       }
 
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);
@@ -114,7 +117,8 @@ const Sprite = defineComponent({
       currentActor,
       selectedSkill,
       allies,
-      enemies
+      enemies,
+      selectedTargets
     }
   },
 })

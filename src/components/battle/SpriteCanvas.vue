@@ -1,5 +1,5 @@
 <template>
-  <div class="sprite-canvas-container">
+  <div class="sprite-canvas-container" :class="{ 'blink': blink }">
     <canvas :id="canvasId" 
       class="canvas"
       :class="{ enemy: isEnemy }"
@@ -16,14 +16,16 @@ import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
 interface Props {
   sprite: Sprite;
   spriteState: SpriteStateConfig,
-  isEnemy: boolean
+  isEnemy: boolean,
+  blink: boolean
 }
 
 const SpriteCanvas = defineComponent({
   props: {
     sprite: { required: true, type: Object as PropType<Sprite> },
     spriteState: { required: true, type: Object as PropType<SpriteStateConfig> },
-    isEnemy: { required: true, type: Boolean }
+    isEnemy: { required: true, type: Boolean },
+    blink: Boolean
   },
   setup(props: Props, context) {
 
@@ -120,6 +122,16 @@ export default SpriteCanvas;
 
   .enemy {
     transform: scaleX(-1);
+  }
+}
+
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }
 </style>
