@@ -30,7 +30,7 @@ import useBattleEvents from '@/hooks/useBattleEvents';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
@@ -85,6 +85,26 @@ const BattleField = defineComponent({
       })
     })
 
+    const winningTeam = ref<MonsterTeamEnum>(MonsterTeamEnum.NEUTRAL);
+    watch(leftTeamTargets, (value: Target[]) => {
+      if (value.length === 0) {
+        // stop further actions
+        clearTimeout(setNextActor);
+        targets.value = [];
+        winningTeam.value = MonsterTeamEnum.RIGHT; // enemy team
+      }
+    })
+
+    watch(rightTeamTargets, (value: Target[]) => {
+      if (value.length === 0) {
+        // stop further actions
+        clearTimeout(setNextActor);
+        targets.value = [];
+        winningTeam.value = MonsterTeamEnum.LEFT;
+      }
+    })
+
+    provide(WinningTeam, winningTeam);
     provide(LeftTeamTargets, leftTeamTargets);
     provide(RightTeamTargets, rightTeamTargets);
 
@@ -122,6 +142,8 @@ const BattleField = defineComponent({
       }
     });
 
+    let setNextActor = 0;
+
     // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
@@ -130,7 +152,7 @@ const BattleField = defineComponent({
 
       if (team == MonsterTeamEnum.LEFT) {
         actor = monsters.value.find(m => m._id === actorId);
-      } else {
+      } else if (MonsterTeamEnum.RIGHT) {
         actor = enemyMonsters.value.find(m => m._id === actorId);
       }
 
@@ -174,7 +196,7 @@ const BattleField = defineComponent({
         targets.value.push({
           targetId: target._id,
           damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
-          isCrit: critProced
+          isCrit: overallDamage !== 0 ? critProced : false
         });
       })
 
@@ -196,7 +218,7 @@ const BattleField = defineComponent({
       // reset currentActor after action
       currentActor.value = undefined;
 
-      setTimeout(() => {
+      setNextActor = setTimeout(() => {
         targets.value = [];
         currentActor.value = {
           monsterId: orderOfActors.value[actorIndex]._id,

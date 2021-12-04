@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Skill } from '@/models/skills/skill';
@@ -65,6 +65,16 @@ const Sprite = defineComponent({
 
     const leftTeam = inject(LeftTeamTargets);
     const rightTeam = inject(RightTeamTargets);
+    const winningTeam = inject(WinningTeam);
+
+    watch(winningTeam, (value: MonsterTeamEnum) => {
+      if ((value === MonsterTeamEnum.LEFT && !props.isEnemy) ||
+        value === MonsterTeamEnum.RIGHT && props.isEnemy) {
+          setTimeout(() => {
+            currentState.value = props.sprite.getState(SpriteStateEnum.WIN);
+          }, 2000)
+        }
+    })
 
     const allies = computed((): Target[] => {
       return !props.isEnemy ? leftTeam.value : rightTeam.value;

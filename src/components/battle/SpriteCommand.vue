@@ -95,6 +95,7 @@ const SpriteCommand = defineComponent({
 
     const initiateCommand = (command: Skill) => {
       showCommands.value = false;
+      selectBlinkingTarget('');
 
       state = getCommandState(command);
       selectedSkill = command;

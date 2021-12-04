@@ -10,3 +10,4 @@ export const LeftTeamTargets: InjectionKey<ComputedRef<Target[]>> = Symbol();
 export const RightTeamTargets: InjectionKey<ComputedRef<Target[]>> = Symbol();
 export const BlinkingTarget: InjectionKey<Ref<string>> = Symbol();
 export const SelectBlinkingTarget: InjectionKey<(monsterId: string) => void> = Symbol();
+export const WinningTeam: InjectionKey<Ref<MonsterTeamEnum>> = Symbol();
