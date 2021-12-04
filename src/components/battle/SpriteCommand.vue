@@ -26,12 +26,13 @@
 </template>
 
 <script lang="ts">
+import { SelectBlinkingTarget } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { TargetEnum } from '@/models/skills/target.enum';
 import { SpriteState, SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, inject, PropType, ref } from 'vue'
 
 interface Emits {
   'onChange-state'(state: SpriteStateEnum | string): boolean,
@@ -59,10 +60,6 @@ const SpriteCommand = defineComponent({
     'target-select': (targetIds: string[]) => targetIds != undefined
   },
   setup(props: Props, context) {
-    const changeState = (state: string): void => {
-      context.emit('change-state', state);
-    }
-
     const showAllies = ref<boolean>(false);
     const showEnemies = ref<boolean>(false);
     const showCommands = ref<boolean>(true);
@@ -94,6 +91,8 @@ const SpriteCommand = defineComponent({
       showAllies.value = false;
     }
 
+    const selectBlinkingTarget = inject(SelectBlinkingTarget);
+
     const initiateCommand = (command: Skill) => {
       showCommands.value = false;
 
@@ -119,11 +118,10 @@ const SpriteCommand = defineComponent({
     }
 
     const onTargetHover = (monsterId: string) => {
-      console.log(monsterId);
+      selectBlinkingTarget(monsterId);
     }
 
     return {
-      changeState,
       initiateCommand,
       onTargetHover,
       showAllies,

@@ -8,3 +8,5 @@ export const OnSkillActivationKey: InjectionKey<(actorId: string, team: MonsterT
 export const CurrentActorKey: InjectionKey<Ref<Actor>> = Symbol();
 export const LeftTeamTargets: InjectionKey<ComputedRef<Target[]>> = Symbol();
 export const RightTeamTargets: InjectionKey<ComputedRef<Target[]>> = Symbol();
+export const BlinkingTarget: InjectionKey<Ref<string>> = Symbol();
+export const SelectBlinkingTarget: InjectionKey<(monsterId: string) => void> = Symbol();

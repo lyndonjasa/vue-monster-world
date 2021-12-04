@@ -30,7 +30,7 @@ import useBattleEvents from '@/hooks/useBattleEvents';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
@@ -87,6 +87,14 @@ const BattleField = defineComponent({
 
     provide(LeftTeamTargets, leftTeamTargets);
     provide(RightTeamTargets, rightTeamTargets);
+
+    const blinkingTarget = ref<string>('');
+    const selectBlinkingTarget = (monsterId: string) => {
+      blinkingTarget.value = monsterId;
+    }
+
+    provide(BlinkingTarget, blinkingTarget);
+    provide(SelectBlinkingTarget, selectBlinkingTarget);
 
     const currentActor = ref<Actor>(undefined);
     let actorIndex = 0; // initial value

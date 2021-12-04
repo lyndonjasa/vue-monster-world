@@ -5,6 +5,7 @@
       :sprite="sprite"
       :spriteState="currentState"
       :isEnemy="isEnemy"
+      :blink="blinkingTarget == monsterId"
       @reset-to-idle="resetToIdle"
     >
     </app-sprite-canvas>
@@ -25,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Skill } from '@/models/skills/skill';
@@ -59,6 +60,8 @@ const Sprite = defineComponent({
     const selectedSkill = ref<Skill>(undefined);
     const selectedTargets = ref<string[]>([]);
     const onSkillActivation = inject(OnSkillActivationKey);
+
+    const blinkingTarget = inject(BlinkingTarget);
 
     const leftTeam = inject(LeftTeamTargets);
     const rightTeam = inject(RightTeamTargets);
@@ -116,7 +119,8 @@ const Sprite = defineComponent({
       selectedSkill,
       allies,
       enemies,
-      selectedTargets
+      selectedTargets,
+      blinkingTarget
     }
   },
 })
