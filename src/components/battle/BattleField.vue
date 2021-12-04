@@ -105,10 +105,10 @@ const BattleField = defineComponent({
           regenerateHealth(actor);
           regenerateMana(actor);
 
-          // force delay of 2 seconds for regen animation
+          // force delay of 2 seconds for regen
           value.monsterId = '';
           setTimeout(() => { 
-            value.monsterId = actor._id 
+            value.monsterId = actor._id;
           }, 2000)
         }
       }
@@ -117,59 +117,58 @@ const BattleField = defineComponent({
     // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
-      let target: DetailedMonster;
 
-      console.log(targetIds);
+      const selectedTargets = orderOfActors.value.filter(a => targetIds.includes(a._id));
 
       if (team == MonsterTeamEnum.LEFT) {
         actor = monsters.value.find(m => m._id === actorId);
-        target = enemyMonsters.value[2]; // place holder target
       } else {
         actor = enemyMonsters.value.find(m => m._id === actorId);
-        target = monsters.value[1]; // place holder target
       }
 
       // reduce mana based on skill cost
       actor.stats.mana -= skill.cost;
 
-      let overallDamage = calculateSkillDamage(actor, target, skill);
-      let critProced = false
+      // target loop
+      // core battle functionality
+      selectedTargets.forEach(target => {
+        let overallDamage = calculateSkillDamage(actor, target, skill);
+        let critProced = false
 
-      // if skill type is not heal, check for procs
-      if (skill.skillType !== SkillTypeEnum.HEAL) {
-        critProced = procCrit(actor.stats.critRate);
-        if (critProced) {
-          overallDamage = calculateCriticalStrike(actor, overallDamage);
+        // if skill type is not heal, check for procs
+        if (skill.skillType !== SkillTypeEnum.HEAL) {
+          critProced = procCrit(actor.stats.critRate);
+          if (critProced) {
+            overallDamage = calculateCriticalStrike(actor, overallDamage);
+          }
+
+          if (procMiss(actor.stats.speed, target.stats.speed)) {
+            overallDamage = 0;
+          }
         }
 
-        if (procMiss(actor.stats.speed, target.stats.speed)) {
-          overallDamage = 0;
+        if (overallDamage < 0) { // heal
+          // if heal exceeds max health, set health to max
+          // otherwise calculate
+          if ((target.stats.health - overallDamage) > target.stats.maxHealth) {
+            target.stats.health = target.stats.maxHealth;
+          } else {
+            target.stats.health -= overallDamage;
+          }
+        } else { // damage
+          if (overallDamage > target.stats.health) {
+            target.stats.health = 0
+          } else {
+            target.stats.health -= overallDamage;
+          }
         }
-      }
 
-      if (overallDamage < 0) { // heal
-        // if heal exceeds max health, set health to max
-        // otherwise calculate
-        if ((target.stats.health - overallDamage) > target.stats.maxHealth) {
-          target.stats.health = target.stats.maxHealth;
-        } else {
-          target.stats.health -= overallDamage;
-        }
-      } else { // damage
-        if (overallDamage > target.stats.health) {
-          target.stats.health = 0
-        } else {
-          target.stats.health -= overallDamage;
-        }
-      }
-
-      targets.value.push({
-        targetId: target._id,
-        damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
-        isCrit: critProced
-      });
-
-      
+        targets.value.push({
+          targetId: target._id,
+          damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
+          isCrit: critProced
+        });
+      })
 
       for (let index = 0; index < orderOfActors.value.length; index++) {
         if (actorIndex === orderOfActors.value.length - 1) {

@@ -98,8 +98,6 @@ const Sprite = defineComponent({
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {
       if (newValue < oldValue) {
         changeState(SpriteStateEnum.HIT)
-      } else {
-        changeState(SpriteStateEnum.WIN) // animation for HEAL
       }
 
       if (newValue > 0) {
