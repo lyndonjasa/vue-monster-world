@@ -28,6 +28,8 @@
       :isEnemy="isEnemy"
       :monsterId="monster._id"
       :currentHP="monsterRef.stats.health"
+      :currentMana="monsterRef.stats.mana"
+      :isAutomated="isAutomated"
     >
     </app-sprite>
   </div>
@@ -39,14 +41,10 @@ import { defineComponent, PropType, ref } from 'vue'
 import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
 
-interface Emits {
-  // eslint-disable-next-line
-  'onTest': any
-}
-
-interface Props extends Emits {
+interface Props {
   monster: MonsterModel,
-  isEnemy: boolean
+  isEnemy: boolean,
+  isAutomated: boolean
 }
 
 const MonsterView = defineComponent({
@@ -56,16 +54,16 @@ const MonsterView = defineComponent({
   },
   props: {
     monster: { required: true, type: Object as PropType<MonsterModel> },
-    isEnemy: Boolean
+    isEnemy: Boolean,
+    isAutomated: Boolean
   },
-  emits: ['test'],
   setup(props: Props) {
     const monsterRef = ref(props.monster);
     const maxHealth = monsterRef.value.stats.maxHealth;
     const maxMana = monsterRef.value.stats.maxMana;
 
-    if (props.isEnemy) {
-      monsterRef.value.stats.health = 50;
+    if (!props.isEnemy) {
+      monsterRef.value.stats.health = 50
     }
 
     return {

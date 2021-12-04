@@ -1,6 +1,7 @@
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
+import useElement from "./useElement";
 import useEnvironment from "./useEnvironment";
 import useRandomizer from "./useRandomizer";
 
@@ -15,6 +16,7 @@ const useBattleCalculator = (): Hook => {
 
   const { damageMargin } = useEnvironment();
   const { randomize } = useRandomizer();
+  const { getElementalMultiplier } = useElement();
 
   // TODO: 
   // add margin of error
@@ -32,7 +34,9 @@ const useBattleCalculator = (): Hook => {
         damageReduction = 1
       }
 
-      let grossDamage = Math.ceil(baseDamage / damageReduction);
+      const elemMultiplier = getElementalMultiplier(skill.skillElement, target.element);
+
+      let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier);
 
       // add margins if skill type is damage/signature
       if (skill.skillType === SkillTypeEnum.DAMAGE || skill.skillType === SkillTypeEnum.SIGNATURE) {

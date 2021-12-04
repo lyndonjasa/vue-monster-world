@@ -16,6 +16,8 @@
         :commands="currentActor.actorSkills"
         :allyTargets="allies"
         :enemyTargets="enemies"
+        :isAutomated="isAutomated"
+        :currentMana="currentMana"
         @change-state="changeState"
         @execute-command="selectedSkill = $event"
         @target-select="selectedTargets = $event"
@@ -41,7 +43,9 @@ interface Props {
   sprite: SpriteModel,
   isEnemy: boolean,
   monsterId: string,
-  currentHP: number
+  currentHP: number,
+  currentMana: number,
+  isAutomated: boolean
 }
 
 const Sprite = defineComponent({
@@ -53,7 +57,9 @@ const Sprite = defineComponent({
     sprite: { required: true, type: Object as PropType<SpriteModel> },
     isEnemy: Boolean,
     monsterId: String,
-    currentHP: Number
+    currentHP: Number,
+    currentMana: Number,
+    isAutomated: Boolean
   },
   setup(props: Props) {
     const currentState = ref<SpriteStateConfig>(undefined);

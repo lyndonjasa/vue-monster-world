@@ -1,11 +1,12 @@
 <template>
-  <div class="sprite-command" v-if="showCommands">
+  <div class="sprite-command" v-if="showCommands && !isAutomated">
     <button v-for="command in commands" :key="command.name"
+      :disabled="command.cost > currentMana"
       @click="initiateCommand(command)">
       {{ command.name }}
     </button>
   </div>
-  <div class="targets allies" v-if="showAllies">
+  <div class="targets allies" v-if="showAllies && !isAutomated">
     <button v-for="target in allyTargets" :key="target.monsterId" 
       @mouseover="onTargetHover(target.monsterId)"
       @mouseleave="onTargetHover('')"
@@ -14,7 +15,7 @@
     </button>
     <button @click="onBackClick">Back</button>
   </div>
-  <div class="targets enemies" v-if="showEnemies">
+  <div class="targets enemies" v-if="showEnemies && !isAutomated">
     <button v-for="target in enemyTargets" :key="target.monsterId" 
       @mouseover="onTargetHover(target.monsterId)"
       @mouseleave="onTargetHover('')"
@@ -32,7 +33,8 @@ import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { TargetEnum } from '@/models/skills/target.enum';
 import { SpriteState, SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { defineComponent, inject, PropType, ref } from 'vue'
+import { defineComponent, inject, onMounted, PropType, ref } from 'vue'
+import useAI from '@/hooks/useAI';
 
 interface Emits {
   'onChange-state'(state: SpriteStateEnum | string): boolean,
@@ -44,7 +46,9 @@ interface Props extends Emits {
   states: SpriteState,
   commands: Skill[],
   allyTargets: Target[],
-  enemyTargets: Target[]
+  enemyTargets: Target[],
+  currentMana: number,
+  isAutomated: boolean
 }
 
 const SpriteCommand = defineComponent({
@@ -52,7 +56,9 @@ const SpriteCommand = defineComponent({
     states: { required: true, type: Object as PropType<SpriteState> },
     commands: { required: true, type: Array as PropType<Skill[]> },
     allyTargets: { required: true, type: Array as PropType<Target[]> },
-    enemyTargets: { required: true, type: Array as PropType<Target[]> }
+    enemyTargets: { required: true, type: Array as PropType<Target[]> },
+    currentMana: Number,
+    isAutomated: Boolean
   },
   emits: {
     'change-state': (state: SpriteStateEnum | string) => state != undefined,
@@ -66,6 +72,22 @@ const SpriteCommand = defineComponent({
 
     let selectedSkill: Skill = undefined;
     let state: SpriteStateEnum = undefined;
+
+    const { getAction, getSelectedTarget } = useAI(props.commands, props.currentMana, props.allyTargets, props.enemyTargets);
+
+    onMounted(() => {
+      if (props.isAutomated) {
+        setTimeout(() => {
+          const selectedCommand = getAction();
+          initiateCommand(selectedCommand);
+          // if single target, call the method
+          if (selectedCommand.skillTarget === TargetEnum.ALLY || selectedCommand.skillTarget === TargetEnum.ENEMY) {
+            const target = getSelectedTarget(selectedCommand);
+            onTargetSelect(target.monsterId);
+          }
+        }, 1500)
+      }
+    })
 
     const getCommandState = (command: Skill): SpriteStateEnum => {
       switch (command.skillType) {

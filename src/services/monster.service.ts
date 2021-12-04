@@ -213,7 +213,16 @@ const enemyData: DetailedMonster[] = [
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill }
+      { ...attackSkill },
+      {
+        cost: 10,
+        ignoreDefense: false,
+        name: 'Gale Storm III',
+        power: 75,
+        skillElement: ElementEnum.WIND,
+        skillTarget: TargetEnum.ALL_ENEMIES,
+        skillType: SkillTypeEnum.DAMAGE
+      }
     ]
   }
 ]

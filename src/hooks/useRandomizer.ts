@@ -19,7 +19,7 @@ const useRandomizer = (): Hook => {
     const totalSpeed = actorSpeed + targetSpeed;
     const randomValue = randomize(0, totalSpeed);
     
-    return Math.ceil(targetSpeed * 0.7) >= randomValue;
+    return Math.ceil(targetSpeed * 0.5) >= randomValue;
   }
 
   return {
