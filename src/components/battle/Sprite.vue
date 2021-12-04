@@ -13,6 +13,8 @@
         v-if="isCurrentTurn"
         :states="sprite.states"
         :commands="currentActor.actorSkills"
+        :allyTargets="allies"
+        :enemyTargets="enemies"
         @change-state="changeState"
         @execute-command="selectedSkill = $event"
       >
@@ -22,7 +24,8 @@
 </template>
 
 <script lang="ts">
-import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
+import { CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
+import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Skill } from '@/models/skills/skill';
 import { Sprite as SpriteModel } from '@/models/sprites/sprite';
@@ -54,6 +57,17 @@ const Sprite = defineComponent({
     const currentState = ref<SpriteStateConfig>(undefined);
     const selectedSkill = ref<Skill>(undefined);
     const onSkillActivation = inject(OnSkillActivationKey);
+
+    const leftTeam = inject(LeftTeamTargets);
+    const rightTeam = inject(RightTeamTargets);
+
+    const allies = computed((): Target[] => {
+      return !props.isEnemy ? leftTeam.value : rightTeam.value;
+    })
+
+    const enemies = computed((): Target[] => {
+      return !props.isEnemy ? rightTeam.value : leftTeam.value;
+    })
 
     const changeState = (stateName: SpriteStateEnum) => {
       currentState.value = props.sprite.getState(stateName);
@@ -98,7 +112,9 @@ const Sprite = defineComponent({
       resetToIdle,
       isCurrentTurn,
       currentActor,
-      selectedSkill
+      selectedSkill,
+      allies,
+      enemies
     }
   },
 })

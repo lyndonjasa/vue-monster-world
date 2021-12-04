@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { Target } from '@/models/battle/target';
 import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { SpriteState, SpriteStateEnum } from '@/models/sprites/sprite-state';
@@ -17,13 +18,17 @@ interface Emits {
 
 interface Props extends Emits {
   states: SpriteState,
-  commands: Skill[]
+  commands: Skill[],
+  allyTargets: Target[],
+  enemyTargets: Target[]
 }
 
 const SpriteCommand = defineComponent({
   props: {
     states: { required: true, type: Object as PropType<SpriteState> },
-    commands: { required: true, type: Array as PropType<Skill[]> }
+    commands: { required: true, type: Array as PropType<Skill[]> },
+    allyTargets: { required: true, type: Array as PropType<Target[]> },
+    enemyTargets: { required: true, type: Array as PropType<Target[]> }
   },
   emits: [
     'change-state',
