@@ -65,7 +65,9 @@ const Sprite = defineComponent({
 
     const resetToIdle = (triggerSkill: boolean) => {
       if (triggerSkill) {
-        onSkillActivation(props.monsterId, !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT, selectedSkill.value);
+        onSkillActivation(props.monsterId, 
+          !props.isEnemy ? MonsterTeamEnum.LEFT : MonsterTeamEnum.RIGHT, 
+          selectedSkill.value);
       }
 
       currentState.value = props.sprite.getState(SpriteStateEnum.IDLE);

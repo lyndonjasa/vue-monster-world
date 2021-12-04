@@ -30,11 +30,12 @@ import useBattleEvents from '@/hooks/useBattleEvents';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { CurrentActorKey, OnSkillActivationKey } from '@/injections/battle.injection';
+import { CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
+import { Target } from '@/models/battle/target';
 
 const BattleField = defineComponent({
   components: {
@@ -66,6 +67,27 @@ const BattleField = defineComponent({
       return sortedActors;
     })
 
+    const leftTeamTargets = computed((): Target[] => {
+      return monsters.value.filter(m => m.stats.health > 0).map(m => {
+        return {
+          monsterId: m._id,
+          name: m.name
+        }
+      })
+    })
+
+    const rightTeamTargets = computed((): Target[] => {
+      return enemyMonsters.value.filter(m => m.stats.health > 0).map(m => {
+        return {
+          monsterId: m._id,
+          name: m.name
+        }
+      })
+    })
+
+    provide(LeftTeamTargets, leftTeamTargets);
+    provide(RightTeamTargets, rightTeamTargets);
+
     const currentActor = ref<Actor>(undefined);
     let actorIndex = 0; // initial value
 
@@ -92,7 +114,7 @@ const BattleField = defineComponent({
       }
     });
 
-    // TODO: add target and activited skill on the future
+    // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill) => {
       let actor: DetailedMonster;
       let target: DetailedMonster;
