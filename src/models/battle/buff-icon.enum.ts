@@ -6,8 +6,8 @@ export enum BuffIconEnum {
   STUN = 'stun',
   BOOST = 'boost',
   SHIELD = 'shield',
-  AGGRO = 'aggro',
-  COUNTER = 'reprisal',
+  AGGRO = 'target',
+  COUNTER = 'counter',
   SILENCE = 'silence',
   DECREASE = 'decrease'
 }

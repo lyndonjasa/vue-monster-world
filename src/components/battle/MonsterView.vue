@@ -19,9 +19,7 @@
       <span>{{ monster.name }}</span>
     </div>
 
-    <div class="status-buffs" :class="{ 'enemy': isEnemy }">
-      <app-buff-container></app-buff-container>
-    </div>
+    <app-buff-container :isEnemy="isEnemy"></app-buff-container>
 
     <div class="damage-output-slot">
       <slot></slot>
@@ -103,14 +101,6 @@ export default MonsterView;
     &.enemy {
       margin-left: 65%;
       transform: scaleX(-1);
-    }
-  }
-
-  .status-buffs {
-    text-align: left;
-
-    &.enemy {
-      text-align: right;
     }
   }
 
