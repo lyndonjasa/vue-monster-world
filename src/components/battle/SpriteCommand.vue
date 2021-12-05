@@ -117,7 +117,6 @@ const SpriteCommand = defineComponent({
 
     const initiateCommand = (command: Skill) => {
       showCommands.value = false;
-      selectBlinkingTarget('');
 
       state = getCommandState(command);
       selectedSkill = command;
@@ -146,6 +145,7 @@ const SpriteCommand = defineComponent({
     const onTargetSelect = (monsterId: string) => {
       context.emit('target-select', [monsterId])
       emitAnimation();
+      selectBlinkingTarget('');
     }
 
     const onMultipleTargets = (allyTargets: boolean) => {
