@@ -12,6 +12,7 @@
 import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
+import useEnvironment from '@/hooks/useEnvironment';
 
 interface Props {
   sprite: Sprite;
@@ -28,6 +29,7 @@ const SpriteCanvas = defineComponent({
     blink: Boolean
   },
   setup(props: Props, context) {
+    const { spriteScale } = useEnvironment();
 
     const canvasId = computed((): string => {
       const position = props.isEnemy ? 'right' : 'left'
@@ -35,10 +37,10 @@ const SpriteCanvas = defineComponent({
       return `canvas-${position}-${props.sprite.name}`
     })
     const width = computed((): number => {
-      return props.sprite.width * props.sprite.scale
+      return props.sprite.width * props.sprite.scale * spriteScale
     })
     const height = computed((): number => {
-      return props.sprite.height * props.sprite.scale
+      return props.sprite.height * props.sprite.scale * spriteScale
     })
     const spriteSrc = computed(() => {
       return require(`@/assets/digimon-sprites/${props.sprite.name}.png`)
