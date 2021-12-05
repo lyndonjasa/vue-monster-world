@@ -93,7 +93,7 @@ const BattleField = defineComponent({
       if (value.length === 0) {
         // stop further actions
         clearTimeout(setNextActor);
-        targets.value = [];
+        setTimeout(() => targets.value = [], 2000);
         winningTeam.value = MonsterTeamEnum.RIGHT; // enemy team
       }
     })
@@ -102,7 +102,7 @@ const BattleField = defineComponent({
       if (value.length === 0) {
         // stop further actions
         clearTimeout(setNextActor);
-        targets.value = [];
+        setTimeout(() => targets.value = [], 2000);
         winningTeam.value = MonsterTeamEnum.LEFT;
       }
     })
