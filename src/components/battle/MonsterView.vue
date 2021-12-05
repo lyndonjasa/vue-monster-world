@@ -19,7 +19,7 @@
       <span>{{ monster.name }}</span>
     </div>
 
-    <app-buff-container :isEnemy="isEnemy"></app-buff-container>
+    <app-buff-container :isEnemy="isEnemy" :buffs="buffs"></app-buff-container>
 
     <div class="damage-output-slot">
       <slot></slot>
@@ -39,7 +39,8 @@
 
 <script lang="ts">
 import { DetailedMonster as MonsterModel } from '@/models/monster/detailed-monster';
-import { defineComponent, PropType, ref } from 'vue'
+import { Status } from '@/models/skills/status';
+import { computed, defineComponent, PropType, ref } from 'vue'
 import BuffContainer from './BuffContainer.vue';
 import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
@@ -66,14 +67,18 @@ const MonsterView = defineComponent({
     const maxHealth = monsterRef.value.stats.maxHealth;
     const maxMana = monsterRef.value.stats.maxMana;
 
-    if (props.isEnemy) {
-      monsterRef.value.stats.health = 25;
-    }
+    const buffs = computed((): Status[] => {
+      return props.monster.appliedStatus;
+    })
+    // if (props.isEnemy) {
+    //   monsterRef.value.stats.health = 25;
+    // }
 
     return {
       maxHealth,
       maxMana,
-      monsterRef
+      monsterRef,
+      buffs
     }
   }
 })

@@ -64,6 +64,12 @@ const useBattleCalculator = () => {
     return Math.ceil(actor.stats.maxMana * (actor.stats.manaRegen / 100));
   }
 
+  const calculateBurnDamage = (damage: number): number => {
+    const burnDamage = Math.ceil(damage * 0.10)
+
+    return marginalizeOutput(burnDamage);
+  }
+
   const marginalizeOutput = (damage: number): number => {
     const marginValue = damage * (damageMargin / 100);
 
@@ -78,7 +84,8 @@ const useBattleCalculator = () => {
     calculateCriticalStrike,
     calculateHealthRegen,
     calculateManaRegen,
-    calculatePenaltyDamage
+    calculatePenaltyDamage,
+    calculateBurnDamage
   }
 }
 

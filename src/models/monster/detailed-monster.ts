@@ -1,3 +1,4 @@
+import { Status } from "../skills/status";
 import { Monster } from "./monster";
 
 export class DetailedMonster extends Monster {
@@ -5,4 +6,5 @@ export class DetailedMonster extends Monster {
   level: number;
   currentExp: number;
   expToLevel: number;
+  appliedStatus: Status[];
 }

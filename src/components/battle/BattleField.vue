@@ -15,7 +15,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="true"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -39,6 +39,7 @@ import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { Target } from '@/models/battle/target';
 import { TargetEnum } from '@/models/skills/target.enum';
+import { BuffEnum } from '@/models/battle/buff.enum';
 
 const BattleField = defineComponent({
   components: {
@@ -46,9 +47,9 @@ const BattleField = defineComponent({
   },
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
-    const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage } = useBattleCalculator();
-    const { procCrit, procMiss } = useRandomizer();
-    const { regenerateHealth, regenerateMana, willRegen } = useBattleEvents();
+    const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
+    const { procCrit, procMiss, procStatus } = useRandomizer();
+    const { regenerateHealth, regenerateMana, willRegen, applyStatus } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -203,10 +204,24 @@ const BattleField = defineComponent({
             target.stats.health -= overallDamage;
           }
         }
+
+        // apply status to target if status target is set to others and target is still alive
+        if (skill.statusEffect && skill.statusEffect.target === TargetEnum.OTHERS && target.stats.health > 0 && overallDamage !== 0) {
+          const { statusEffect } = skill;
+
+          if (procStatus(statusEffect.chance)) {
+            if (statusEffect.buff === BuffEnum.BURN) {
+              statusEffect.appliedDamage = calculateBurnDamage(overallDamage);
+            }
+
+            applyStatus(target, statusEffect);
+            console.log(target);
+          }
+        }
       })
 
       // if skill has penalty, apply damage penalty
-      if (skill.penalty && winningTeam.value) {
+      if (skill.penalty) {
         applyPenalties(skill, team, actor);
       }
 

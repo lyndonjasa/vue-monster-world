@@ -1,4 +1,6 @@
 import useSpriteFactory from "@/hooks/useSpriteFactory";
+import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
+import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { ElementEnum } from "@/models/skills/element.enum";
 import { Skill } from "@/models/skills/skill";
@@ -60,6 +62,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.ROCK,
     _id: uuidv4(),
     currentExp: 0,
@@ -88,12 +91,13 @@ const monsterData: DetailedMonster[] = [
       maxMana: 20,
       offense: 68,
       defense: 45,
-      speed: 37,
+      speed: 137,
       critRate: 1.5,
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.FIRE,
     _id: uuidv4(),
     currentExp: 0,
@@ -110,6 +114,22 @@ const monsterData: DetailedMonster[] = [
         skillElement: ElementEnum.FIRE,
         skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.SIGNATURE
+      },
+      {
+        cost: 3,
+        power: 55,
+        ignoreDefense: false,
+        name: 'Burst Flame',
+        skillElement: ElementEnum.FIRE,
+        skillTarget: TargetEnum.ENEMY,
+        skillType: SkillTypeEnum.DAMAGE,
+        statusEffect: {
+          duration: 2,
+          buff: BuffEnum.BURN,
+          target: TargetEnum.OTHERS, // status target is either self or other
+          statusInstance:BuffInstanceEnum.PER_TURN,
+          chance: 100
+        }
       }
     ]
   },
@@ -128,6 +148,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.WIND,
     _id: uuidv4(),
     currentExp: 0,
@@ -178,6 +199,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.ROCK,
     _id: uuidv4(),
     currentExp: 0,
@@ -212,6 +234,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.FIRE,
     _id: uuidv4(),
     currentExp: 0,
@@ -237,6 +260,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    appliedStatus: [],
     element: ElementEnum.WIND,
     _id: uuidv4(),
     currentExp: 0,

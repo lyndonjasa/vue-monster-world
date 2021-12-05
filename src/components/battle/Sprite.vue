@@ -93,7 +93,7 @@ const Sprite = defineComponent({
     const changeState = (stateName: SpriteStateEnum) => {
       currentState.value = props.sprite.getState(stateName);
 
-      // if win animation is associated with a skill type heal
+      // if win animation is associated with a skill type heal or buff
       if (selectedSkill.value && selectedTargets.value && stateName === SpriteStateEnum.WIN) {
         setTimeout(() => resetToIdle(true), 2000)
       }

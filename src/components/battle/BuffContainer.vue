@@ -6,21 +6,31 @@
 
 <script lang="ts">
 import { Buff } from '@/models/battle/buff';
-import { defineComponent, ref } from 'vue'
+import { BuffList } from '@/models/battle/buff-list';
+import { Status } from '@/models/skills/status';
+import { computed, defineComponent, PropType } from 'vue'
 import BuffIcon from './BuffIcon.vue';
+
+interface Props {
+  isEnemy: boolean,
+  buffs: Status[]
+}
 
 const BuffContainer = defineComponent({
   components: {
     appBuffIcon: BuffIcon
   },
   props: {
-    isEnemy: Boolean
+    isEnemy: Boolean,
+    buffs: { required: true, type: Array as PropType<Status[]> }
   },
-  setup() {
-    // const testIds: number[] = [1, 2, 3, 4, 5, 6, 12, 10, 11, 8, 17];
-    // const testBuff = BuffList.filter(b => testIds.includes(b.id));
+  setup(props: Props) {
 
-    const appliedBuffs = ref<Buff[]>([]);
+    const appliedBuffs = computed((): Buff[] => {
+      const buffIds = props.buffs.map(b => b.buff);
+
+      return BuffList.filter(bl => buffIds.includes(bl.id));
+    });
 
     return {
       appliedBuffs

@@ -1,13 +1,8 @@
 import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { Status } from "@/models/skills/status";
 import useBattleCalculator from "./useBattleCalculator";
 
-interface Hook {
-  regenerateHealth(actor: DetailedMonster): void,
-  willRegen(actor: DetailedMonster): boolean,
-  regenerateMana(actor: DetailedMonster): void
-}
-
-const useBattleEvents = (): Hook => {
+const useBattleEvents = () => {
   const { calculateHealthRegen, calculateManaRegen } = useBattleCalculator();
 
   const willRegen = (actor: DetailedMonster): boolean => {
@@ -40,10 +35,17 @@ const useBattleEvents = (): Hook => {
     }
   }
 
+  const applyStatus = (target: DetailedMonster, status: Status): void => {
+    // TODO: add reapplication of same buffs
+
+    target.appliedStatus.push(status);
+  }
+
   return {
     willRegen,
     regenerateHealth,
-    regenerateMana
+    regenerateMana,
+    applyStatus
   }
 }
 

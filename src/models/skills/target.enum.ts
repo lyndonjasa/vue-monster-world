@@ -3,5 +3,6 @@ export enum TargetEnum {
   ALL_ENEMIES = 2,
   ALLY = 3,
   ALL_ALLIES = 4,
-  SELF = 5
+  SELF = 5,
+  OTHERS = 6
 }
