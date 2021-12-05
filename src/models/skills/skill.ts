@@ -1,4 +1,5 @@
 import { ElementEnum } from "./element.enum";
+import { Penalty } from "./penalty";
 import { SkillTypeEnum } from "./skill-type.enum";
 import { TargetEnum } from "./target.enum";
 
@@ -10,4 +11,5 @@ export class Skill {
   ignoreDefense: boolean;
   skillTarget: TargetEnum;
   skillElement: ElementEnum;
+  penalty?: Penalty;
 }

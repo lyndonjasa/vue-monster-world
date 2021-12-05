@@ -5,14 +5,7 @@ import useElement from "./useElement";
 import useEnvironment from "./useEnvironment";
 import useRandomizer from "./useRandomizer";
 
-interface Hook {
-  calculateSkillDamage(actor: DetailedMonster, target: DetailedMonster, skill: Skill): number,
-  calculateCriticalStrike(actor: DetailedMonster, damage: number): number,
-  calculateHealthRegen(actor: DetailedMonster): number,
-  calculateManaRegen(actor: DetailedMonster): number,
-}
-
-const useBattleCalculator = (): Hook => {
+const useBattleCalculator = () => {
 
   const { damageMargin } = useEnvironment();
   const { randomize } = useRandomizer();
@@ -46,6 +39,15 @@ const useBattleCalculator = (): Hook => {
       return grossDamage !== 0 ? grossDamage : 1;
   }
 
+  const calculatePenaltyDamage = (actor: DetailedMonster, skill: Skill, target: DetailedMonster) => {
+    const baseDamage = (actor.stats.offense * skill.power);
+    const damageReduction = target.stats.defense * 0.75;
+
+    const penaltyDamage = Math.ceil((baseDamage / damageReduction) * (skill.penalty.damagePercentage / 100));
+
+    return marginalizeOutput(penaltyDamage);
+  }
+
   const calculateCriticalStrike = (actor: DetailedMonster, damage: number): number => {
     return damage * (actor.stats.critDamage / 100);
   }
@@ -75,7 +77,8 @@ const useBattleCalculator = (): Hook => {
     calculateSkillDamage,
     calculateCriticalStrike,
     calculateHealthRegen,
-    calculateManaRegen
+    calculateManaRegen,
+    calculatePenaltyDamage
   }
 }
 

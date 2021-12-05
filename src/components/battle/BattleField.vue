@@ -38,6 +38,7 @@ import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { Target } from '@/models/battle/target';
+import { TargetEnum } from '@/models/skills/target.enum';
 
 const BattleField = defineComponent({
   components: {
@@ -45,7 +46,7 @@ const BattleField = defineComponent({
   },
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
-    const { calculateSkillDamage, calculateCriticalStrike } = useBattleCalculator();
+    const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage } = useBattleCalculator();
     const { procCrit, procMiss } = useRandomizer();
     const { regenerateHealth, regenerateMana, willRegen } = useBattleEvents();
     
@@ -202,6 +203,11 @@ const BattleField = defineComponent({
         });
       })
 
+      // if skill has penalty, apply damage penalty
+      if (skill.penalty) {
+        applyPenalties(skill, team, actor);
+      }
+
       for (let index = 0; index < orderOfActors.value.length; index++) {
         if (actorIndex === orderOfActors.value.length - 1) {
           actorIndex = 0; // reset to 0
@@ -227,6 +233,38 @@ const BattleField = defineComponent({
           actorSkills: orderOfActors.value[actorIndex].skills
         };
       }, 2000)
+    }
+
+    const applyPenalties = (skill: Skill, team: MonsterTeamEnum, actor: DetailedMonster) => {
+      const penaltyTargets: DetailedMonster[] = [];
+      // penalty targets could only be self or all allies
+      if (skill.penalty.target === TargetEnum.SELF) {
+        penaltyTargets.push(actor);
+      } else {
+        if (team === MonsterTeamEnum.LEFT) {
+          penaltyTargets.push(...monsters.value);
+        } else {
+          penaltyTargets.push(...enemyMonsters.value);
+        }
+      }
+
+      penaltyTargets.forEach(pt => {
+        // penalty damage uses base damage
+        // status buffs/debuffs and elemental attrs are neglected
+        let appliedPenalty = calculatePenaltyDamage(actor, skill, pt);
+
+        // penalty damage cannot kill self or allies
+        if ((pt.stats.health - appliedPenalty) < 1) {
+          appliedPenalty = pt.stats.health - 1;
+        }
+
+        pt.stats.health -= appliedPenalty;
+        targets.value.push({
+          targetId: pt._id,
+          damageReceived: appliedPenalty.toString(),
+          isCrit: false
+        });
+      });
     }
 
     provide(OnSkillActivationKey, onSkillActivation);

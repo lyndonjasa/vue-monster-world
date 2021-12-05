@@ -101,7 +101,16 @@ const monsterData: DetailedMonster[] = [
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill }
+      { ...attackSkill },
+      {
+        cost: 5,
+        power: 70,
+        ignoreDefense: false,
+        name: 'Pepper Breath',
+        skillElement: ElementEnum.FIRE,
+        skillTarget: TargetEnum.ENEMY,
+        skillType: SkillTypeEnum.SIGNATURE
+      }
     ]
   },
   {
@@ -126,7 +135,20 @@ const monsterData: DetailedMonster[] = [
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill }
+      { ...attackSkill },
+      {
+        name: 'Dragon Impulse',
+        cost: 15,
+        power: 250,
+        ignoreDefense: false,
+        skillElement: ElementEnum.WIND,
+        skillTarget: TargetEnum.ENEMY,
+        skillType: SkillTypeEnum.DAMAGE,
+        penalty: {
+          damagePercentage: 50,
+          target: TargetEnum.SELF
+        }
+      }
     ]
   }
 ]

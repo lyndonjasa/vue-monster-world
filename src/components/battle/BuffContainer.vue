@@ -7,7 +7,6 @@
 <script lang="ts">
 import { Buff } from '@/models/battle/buff';
 import { defineComponent, ref } from 'vue'
-import { BuffList } from '@/models/battle/buff-list';
 import BuffIcon from './BuffIcon.vue';
 
 const BuffContainer = defineComponent({
@@ -18,10 +17,10 @@ const BuffContainer = defineComponent({
     isEnemy: Boolean
   },
   setup() {
-    const testIds: number[] = [1, 2, 3, 4, 5, 6, 12, 10, 11, 8, 17];
-    const testBuff = BuffList.filter(b => testIds.includes(b.id));
+    // const testIds: number[] = [1, 2, 3, 4, 5, 6, 12, 10, 11, 8, 17];
+    // const testBuff = BuffList.filter(b => testIds.includes(b.id));
 
-    const appliedBuffs = ref<Buff[]>(testBuff);
+    const appliedBuffs = ref<Buff[]>([]);
 
     return {
       appliedBuffs
