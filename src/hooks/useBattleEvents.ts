@@ -1,3 +1,4 @@
+import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Status } from "@/models/skills/status";
 import useBattleCalculator from "./useBattleCalculator";
@@ -41,11 +42,28 @@ const useBattleEvents = () => {
     target.appliedStatus.push(status);
   }
 
+  const hasBurnStatus = (actor: DetailedMonster): boolean => {
+    return actor.appliedStatus.find(s => s.buff === BuffEnum.BURN) !== undefined
+  }
+
+  const triggerBurn = (target: DetailedMonster): void => {
+    const burnDamage = target.appliedStatus.find(s => s.buff === BuffEnum.BURN).appliedDamage;
+
+    // burn damage cannot kill
+    if (target.stats.health - burnDamage < 1) {
+      target.stats.health = 1;
+    } else {
+      target.stats.health -= burnDamage;
+    }
+  }
+
   return {
     willRegen,
     regenerateHealth,
     regenerateMana,
-    applyStatus
+    applyStatus,
+    hasBurnStatus,
+    triggerBurn
   }
 }
 

@@ -49,7 +49,7 @@ const BattleField = defineComponent({
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
     const { procCrit, procMiss, procStatus } = useRandomizer();
-    const { regenerateHealth, regenerateMana, willRegen, applyStatus } = useBattleEvents();
+    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasBurnStatus, triggerBurn } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -130,19 +130,29 @@ const BattleField = defineComponent({
       };
     });
 
-    watch(currentActor, (value: Actor) => {
+    const delayAction = (ms: number) => {
+      return new Promise(res => setTimeout(res, ms));
+    }
+
+    watch(currentActor, async (value: Actor) => {
       if (value) {
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
+        value.monsterId = '';
+
         if (willRegen(actor)) {
           regenerateHealth(actor);
           regenerateMana(actor);
 
-          // force delay of 2 seconds for regen
-          value.monsterId = '';
-          setTimeout(() => { 
-            value.monsterId = actor._id;
-          }, 2000)
+          await delayAction(1000);
         }
+
+        if (hasBurnStatus(actor)) {
+          triggerBurn(actor);
+
+          await delayAction(2000);
+        }
+
+        value.monsterId = actor._id;
       }
     });
 
@@ -249,6 +259,7 @@ const BattleField = defineComponent({
           monsterId: orderOfActors.value[actorIndex]._id,
           actorSkills: orderOfActors.value[actorIndex].skills
         };
+        
       }, 2000)
     }
 
