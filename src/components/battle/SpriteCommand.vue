@@ -144,8 +144,8 @@ const SpriteCommand = defineComponent({
     }
 
     const onTargetSelect = (monsterId: string) => {
-      emitAnimation();
       context.emit('target-select', [monsterId])
+      emitAnimation();
     }
 
     const onMultipleTargets = (allyTargets: boolean) => {
@@ -158,8 +158,8 @@ const SpriteCommand = defineComponent({
     }
 
     const emitAnimation = () => {
-      context.emit('change-state', state)
       context.emit('execute-command', selectedSkill);
+      context.emit('change-state', state)
     }
 
     const onTargetHover = (monsterId: string) => {

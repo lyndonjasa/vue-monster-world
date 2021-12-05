@@ -148,6 +148,15 @@ const monsterData: DetailedMonster[] = [
           damagePercentage: 50,
           target: TargetEnum.SELF
         }
+      },
+      {
+        cost: 5,
+        ignoreDefense: false,
+        name: 'Test Heal',
+        power: 10,
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        skillTarget: TargetEnum.ALLY,
+        skillType: SkillTypeEnum.HEAL
       }
     ]
   }

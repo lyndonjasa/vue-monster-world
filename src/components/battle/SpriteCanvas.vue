@@ -49,7 +49,7 @@ const SpriteCanvas = defineComponent({
     const canvas = ref<HTMLCanvasElement>(undefined);
     const spriteSheet = ref<HTMLImageElement>(new Image());
     const fpsCount = ref<number>(0);
-    const currentState = ref<SpriteStateConfig>(undefined);
+    const currentState = ref<SpriteStateConfig>(props.spriteState);
     const canvasContext = ref<CanvasRenderingContext2D>(undefined);
     const fps = 60;
 
@@ -93,7 +93,6 @@ const SpriteCanvas = defineComponent({
     }
 
     onMounted(() => {
-      currentState.value = props.spriteState;
       canvas.value = document.getElementById(canvasId.value) as HTMLCanvasElement;
       canvasContext.value = canvas.value.getContext('2d');
       canvas.value.width = width.value;

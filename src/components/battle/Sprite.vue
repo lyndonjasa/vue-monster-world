@@ -78,7 +78,7 @@ const Sprite = defineComponent({
         value === MonsterTeamEnum.RIGHT && props.isEnemy) {
           setTimeout(() => {
             currentState.value = props.sprite.getState(SpriteStateEnum.WIN);
-          }, 2000)
+          }, 2500)
         }
     })
 
@@ -92,6 +92,11 @@ const Sprite = defineComponent({
 
     const changeState = (stateName: SpriteStateEnum) => {
       currentState.value = props.sprite.getState(stateName);
+
+      // if win animation is associated with a skill type heal
+      if (selectedSkill.value && selectedTargets.value && stateName === SpriteStateEnum.WIN) {
+        setTimeout(() => resetToIdle(true), 2000)
+      }
     }
 
     onMounted(() => {

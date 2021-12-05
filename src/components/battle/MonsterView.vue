@@ -66,6 +66,10 @@ const MonsterView = defineComponent({
     const maxHealth = monsterRef.value.stats.maxHealth;
     const maxMana = monsterRef.value.stats.maxMana;
 
+    if (props.isEnemy) {
+      monsterRef.value.stats.health = 25;
+    }
+
     return {
       maxHealth,
       maxMana,

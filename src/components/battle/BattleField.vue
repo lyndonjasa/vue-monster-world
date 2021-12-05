@@ -7,7 +7,7 @@
         :isEnemy="false"
         :isAutomated="false"
       >
-        <span v-if="isTarget(monster._id)" class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
+        <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
     <div class="team right-team">
@@ -17,7 +17,7 @@
         :isEnemy="true"
         :isAutomated="true"
       >
-        <span v-if="isTarget(monster._id)" class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
+        <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
     </div>
   </div>
@@ -178,7 +178,15 @@ const BattleField = defineComponent({
           if (procMiss(actor.stats.speed, target.stats.speed)) {
             overallDamage = 0;
           }
+        } else {
+          overallDamage *= -1;
         }
+
+        targets.value.push({
+          targetId: target._id,
+          damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
+          isCrit: overallDamage !== 0 ? critProced : false
+        });
 
         if (overallDamage < 0) { // heal
           // if heal exceeds max health, set health to max
@@ -195,16 +203,10 @@ const BattleField = defineComponent({
             target.stats.health -= overallDamage;
           }
         }
-
-        targets.value.push({
-          targetId: target._id,
-          damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
-          isCrit: overallDamage !== 0 ? critProced : false
-        });
       })
 
       // if skill has penalty, apply damage penalty
-      if (skill.penalty) {
+      if (skill.penalty && winningTeam.value) {
         applyPenalties(skill, team, actor);
       }
 
@@ -275,11 +277,11 @@ const BattleField = defineComponent({
     }
 
     const fetchDamage = (targetId: string): string => {
-      return targets.value.find(t => t.targetId === targetId).damageReceived;
+      return targets.value.find(t => t.targetId === targetId)?.damageReceived;
     }
 
     const critProced = (targetId: string): boolean => {
-      return targets.value.find(t => t.targetId === targetId).isCrit;
+      return targets.value.find(t => t.targetId === targetId)?.isCrit;
     }
 
     return {
