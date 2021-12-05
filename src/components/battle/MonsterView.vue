@@ -19,6 +19,10 @@
       <span>{{ monster.name }}</span>
     </div>
 
+    <div class="status-buffs" :class="{ 'enemy': isEnemy }">
+      <app-buff-container></app-buff-container>
+    </div>
+
     <div class="damage-output-slot">
       <slot></slot>
     </div>
@@ -38,6 +42,7 @@
 <script lang="ts">
 import { DetailedMonster as MonsterModel } from '@/models/monster/detailed-monster';
 import { defineComponent, PropType, ref } from 'vue'
+import BuffContainer from './BuffContainer.vue';
 import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
 
@@ -50,7 +55,8 @@ interface Props {
 const MonsterView = defineComponent({
   components: {
     appStatusBar: StatusBar,
-    appSprite: Sprite
+    appSprite: Sprite,
+    appBuffContainer: BuffContainer
   },
   props: {
     monster: { required: true, type: Object as PropType<MonsterModel> },
@@ -97,6 +103,14 @@ export default MonsterView;
     &.enemy {
       margin-left: 65%;
       transform: scaleX(-1);
+    }
+  }
+
+  .status-buffs {
+    text-align: left;
+
+    &.enemy {
+      text-align: right;
     }
   }
 
