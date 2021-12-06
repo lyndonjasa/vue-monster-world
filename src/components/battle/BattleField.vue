@@ -148,6 +148,7 @@ const BattleField = defineComponent({
           if (hasStatus(actor, BuffEnum.STATIC)) {
             writeMessage(`${actor.name} is unable to regenerate due to staticity`, 2000);
             await delayAction(3000);
+            writeMessage('', 0);
           } else {
             regenerateHealth(actor);
             regenerateMana(actor);
