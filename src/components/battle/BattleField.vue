@@ -139,8 +139,12 @@ const BattleField = defineComponent({
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
 
         if (willRegen(actor)) {
-          regenerateHealth(actor);
-          regenerateMana(actor);
+          if (hasStatus(actor, BuffEnum.STATIC)) {
+            console.log('unable to regenerate');
+          } else {
+            regenerateHealth(actor);
+            regenerateMana(actor);
+          }
 
           await delayAction(1000);
         }
@@ -151,11 +155,20 @@ const BattleField = defineComponent({
 
           await delayAction(2000);
         }
-
-        value.enableAction = true;
         
+        const isStunned = hasStatus(actor, BuffEnum.STUN);
+        if (isStunned) {
+          // do the messaging here
+        }
+
         // reduce statuses that proc per turn
         reduceStatusTurns(actor);
+        
+        if (isStunned) { // skip current action and proceed to next if current actor is stunned
+          getNextActor();
+        }
+
+        value.enableAction = true;
       }
     });
 
