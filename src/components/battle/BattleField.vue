@@ -151,9 +151,6 @@ const BattleField = defineComponent({
           await delayAction(2000);
         }
 
-      // reduce statuses that proc per turn
-      reduceStatusTurns(actor);
-
         value.enableAction = true
       }
     });
@@ -252,6 +249,9 @@ const BattleField = defineComponent({
 
       // reset currentActor after action
       currentActor.value = undefined;
+      
+      // reduce statuses that proc per turn
+      reduceStatusTurns(actor);
 
       setNextActor = setTimeout(() => {
         targets.value = [];
