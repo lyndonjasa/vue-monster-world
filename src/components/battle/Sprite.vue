@@ -19,7 +19,7 @@
         :isAutomated="isAutomated"
         :currentMana="currentMana"
         @change-state="changeState"
-        @execute-command="selectedSkill = $event"
+        @execute-command="onCommandExecution"
         @target-select="selectedTargets = $event"
       >
       </app-sprite-command>
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { delayAction } from '@/helpers/delay.helper';
-import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Skill } from '@/models/skills/skill';
@@ -122,6 +122,17 @@ const Sprite = defineComponent({
         currentActor.value?.enableAction;
     })
 
+    const targets = computed((): Target[] => {
+      return [...allies.value, ...enemies.value];
+    });
+
+    const writeMessage = inject(InjectedTypewriter);
+    const onCommandExecution = (executedSkill: Skill): void => {
+      const actor = targets.value.find(t => t.monsterId === currentActor.value.monsterId);
+      writeMessage(`${actor.name} used ${executedSkill.name}`, 1500);
+      selectedSkill.value = executedSkill;
+    }
+
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {
       if (newValue < oldValue) {
         changeState(SpriteStateEnum.HIT)
@@ -144,7 +155,8 @@ const Sprite = defineComponent({
       allies,
       enemies,
       selectedTargets,
-      blinkingTarget
+      blinkingTarget,
+      onCommandExecution
     }
   },
 })

@@ -34,7 +34,7 @@ import useTypewriter from '@/hooks/useTypewriter';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
+import { BlinkingTarget, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
@@ -137,8 +137,11 @@ const BattleField = defineComponent({
       };
     });
 
+    provide(InjectedTypewriter, writeMessage);
+
     watch(currentActor, async (value: Actor) => {
       if (value) {
+        writeMessage('', 0)
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
 
         if (willRegen(actor)) {
