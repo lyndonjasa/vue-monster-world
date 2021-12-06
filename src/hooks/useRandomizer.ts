@@ -20,12 +20,28 @@ const useRandomizer = () => {
   const procMiss = (actor: DetailedMonster, target: DetailedMonster): boolean => {
     const speedProbabilityReduction = !hasStatus(actor, BuffEnum.BLIND) ? 1 : blindSpeedReduction;
 
-    // TODO: add speed status [Speed Up, Speed Down]
+    // actor speed buffs
+    let actorSpeed = actor.stats.speed;
+    if (hasStatus(actor, BuffEnum.SPEED_UP)) {
+      actorSpeed += (actor.stats.speed * 0.5);
+    }
+    if (hasStatus(actor, BuffEnum.SPEED_DOWN)) {
+      actorSpeed -= (actor.stats.speed * 0.5);
+    }
 
-    const totalSpeed = (actor.stats.speed + target.stats.speed) * speedProbabilityReduction;
+    // target speed buffs
+    let targetSpeed = target.stats.speed;
+    if (hasStatus(target, BuffEnum.SPEED_UP)) {
+      targetSpeed += (target.stats.speed * 0.5);
+    }
+    if (hasStatus(target, BuffEnum.SPEED_DOWN)) {
+      targetSpeed -= (target.stats.speed * 0.5);
+    }
+
+    const totalSpeed = (actorSpeed + targetSpeed) * speedProbabilityReduction;
     const randomValue = randomize(1, totalSpeed);
     
-    return Math.ceil(target.stats.speed * 0.5) >= randomValue;
+    return Math.ceil(targetSpeed * 0.5) >= randomValue;
   }
 
   const procStatus = (chance: number): boolean => {
