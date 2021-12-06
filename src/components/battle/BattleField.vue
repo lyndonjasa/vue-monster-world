@@ -21,6 +21,7 @@
       </app-monster>
     </div>
   </div>
+  <div class="battle-notification">{{ writtenMessage }}</div>
 </template>
 
 <script lang="ts">
@@ -29,6 +30,7 @@ import useMonsterFactory from '@/hooks/useMonsterFactory';
 import useBattleCalculator from '@/hooks/useBattleCalculator';
 import useRandomizer from '@/hooks/useRandomizer';
 import useBattleEvents from '@/hooks/useBattleEvents';
+import useTypewriter from '@/hooks/useTypewriter';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
@@ -51,6 +53,7 @@ const BattleField = defineComponent({
     const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
     const { procCrit, procMiss, procStatus } = useRandomizer();
     const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasStatus, triggerBurn, reduceStatusTurns } = useBattleEvents();
+    const { writtenMessage, writeMessage } = useTypewriter();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -140,7 +143,7 @@ const BattleField = defineComponent({
 
         if (willRegen(actor)) {
           if (hasStatus(actor, BuffEnum.STATIC)) {
-            console.log('unable to regenerate');
+            writeMessage(`${actor.name} is unable to regenerate`, 1000);
           } else {
             regenerateHealth(actor);
             regenerateMana(actor);
@@ -151,6 +154,7 @@ const BattleField = defineComponent({
 
         // apply burn damage if actor has burn status
         if (hasStatus(actor, BuffEnum.BURN)) {
+          writeMessage(`${actor.name} got burned`, 1000);
           triggerBurn(actor);
 
           await delayAction(2000);
@@ -158,12 +162,14 @@ const BattleField = defineComponent({
         
         const isStunned = hasStatus(actor, BuffEnum.STUN);
         if (isStunned) {
-          // do the messaging here
+          writeMessage(`${actor.name} is stunned and unable to act`, 2000);
+          await delayAction(3000);
+          writeMessage('', 0);
         }
 
         // reduce statuses that proc per turn
         reduceStatusTurns(actor);
-        
+
         if (isStunned) { // skip current action and proceed to next if current actor is stunned
           getNextActor();
         }
@@ -334,7 +340,8 @@ const BattleField = defineComponent({
       targets,
       isTarget,
       fetchDamage,
-      critProced
+      critProced,
+      writtenMessage
     }
   },
 })
