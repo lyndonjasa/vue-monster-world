@@ -118,7 +118,8 @@ const Sprite = defineComponent({
 
     const currentActor = inject(CurrentActorKey);
     const isCurrentTurn = computed((): boolean => {
-      return currentActor.value?.monsterId === props.monsterId;
+      return currentActor.value?.monsterId === props.monsterId &&
+        currentActor.value?.enableAction;
     })
 
     watch(() => props.currentHP, (newValue: number, oldValue: number) => {

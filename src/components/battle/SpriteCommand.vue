@@ -85,7 +85,7 @@ const SpriteCommand = defineComponent({
             const target = getSelectedTarget(selectedCommand);
             onTargetSelect(target.monsterId);
           }
-        }, 500)
+        }, 1500)
       }
     })
 

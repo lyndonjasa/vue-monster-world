@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -129,14 +129,14 @@ const BattleField = defineComponent({
     watch(orderOfActors, () => {
       currentActor.value = {
         monsterId: orderOfActors.value[actorIndex]._id,
-        actorSkills: orderOfActors.value[actorIndex].skills
+        actorSkills: orderOfActors.value[actorIndex].skills,
+        enableAction: false
       };
     });
 
     watch(currentActor, async (value: Actor) => {
       if (value) {
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
-        value.monsterId = '';
 
         if (willRegen(actor)) {
           regenerateHealth(actor);
@@ -151,7 +151,7 @@ const BattleField = defineComponent({
           await delayAction(2000);
         }
 
-        value.monsterId = actor._id;
+        value.enableAction = true
       }
     });
 
@@ -256,7 +256,8 @@ const BattleField = defineComponent({
         targets.value = [];
         currentActor.value = {
           monsterId: orderOfActors.value[actorIndex]._id,
-          actorSkills: orderOfActors.value[actorIndex].skills
+          actorSkills: orderOfActors.value[actorIndex].skills,
+          enableAction: false
         };
         
       }, 2000)
