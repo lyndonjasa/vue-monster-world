@@ -1,3 +1,4 @@
+import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Status } from "@/models/skills/status";
@@ -57,13 +58,25 @@ const useBattleEvents = () => {
     }
   }
 
+  const reduceStatusTurns = (actor: DetailedMonster): void => {
+    const statusBuffs = actor.appliedStatus.filter(s => s.statusInstance === BuffInstanceEnum.PER_TURN);
+
+    statusBuffs.forEach(sb => {
+      sb.duration -= 1;
+    })
+
+    // retain statuses that have remaining duration
+    actor.appliedStatus = statusBuffs.filter(sb => sb.duration != 0);
+  }
+
   return {
     willRegen,
     regenerateHealth,
     regenerateMana,
     applyStatus,
     hasBurnStatus,
-    triggerBurn
+    triggerBurn,
+    reduceStatusTurns
   }
 }
 

@@ -50,7 +50,7 @@ const BattleField = defineComponent({
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
     const { procCrit, procMiss, procStatus } = useRandomizer();
-    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasBurnStatus, triggerBurn } = useBattleEvents();
+    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasBurnStatus, triggerBurn, reduceStatusTurns } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -151,13 +151,15 @@ const BattleField = defineComponent({
           await delayAction(2000);
         }
 
+      // reduce statuses that proc per turn
+      reduceStatusTurns(actor);
+
         value.enableAction = true
       }
     });
 
     let setNextActor = 0;
 
-    // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
 
@@ -224,7 +226,6 @@ const BattleField = defineComponent({
             }
 
             applyStatus(target, statusEffect);
-            console.log(target);
           }
         }
       })
