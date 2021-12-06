@@ -40,6 +40,7 @@ import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
 import { Target } from '@/models/battle/target';
 import { TargetEnum } from '@/models/skills/target.enum';
 import { BuffEnum } from '@/models/battle/buff.enum';
+import { delayAction } from '@/helpers/delay.helper';
 
 const BattleField = defineComponent({
   components: {
@@ -90,20 +91,22 @@ const BattleField = defineComponent({
     })
 
     const winningTeam = ref<MonsterTeamEnum>(MonsterTeamEnum.NEUTRAL);
-    watch(leftTeamTargets, (value: Target[]) => {
+    watch(leftTeamTargets, async (value: Target[]) => {
       if (value.length === 0) {
         // stop further actions
         clearTimeout(setNextActor);
-        setTimeout(() => targets.value = [], 2000);
+        await delayAction(2000);
+        targets.value = [];
         winningTeam.value = MonsterTeamEnum.RIGHT; // enemy team
       }
     })
 
-    watch(rightTeamTargets, (value: Target[]) => {
+    watch(rightTeamTargets, async (value: Target[]) => {
       if (value.length === 0) {
         // stop further actions
         clearTimeout(setNextActor);
-        setTimeout(() => targets.value = [], 2000);
+        await delayAction(2000);
+        targets.value = [];
         winningTeam.value = MonsterTeamEnum.LEFT;
       }
     })
@@ -130,10 +133,6 @@ const BattleField = defineComponent({
       };
     });
 
-    const delayAction = (ms: number) => {
-      return new Promise(res => setTimeout(res, ms));
-    }
-
     watch(currentActor, async (value: Actor) => {
       if (value) {
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
@@ -158,7 +157,6 @@ const BattleField = defineComponent({
 
     let setNextActor = 0;
 
-    // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
 

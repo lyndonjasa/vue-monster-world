@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import { delayAction } from '@/helpers/delay.helper';
 import { BlinkingTarget, CurrentActorKey, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
@@ -73,12 +74,11 @@ const Sprite = defineComponent({
     const rightTeam = inject(RightTeamTargets);
     const winningTeam = inject(WinningTeam);
 
-    watch(winningTeam, (value: MonsterTeamEnum) => {
+    watch(winningTeam, async (value: MonsterTeamEnum) => {
       if ((value === MonsterTeamEnum.LEFT && !props.isEnemy) ||
         value === MonsterTeamEnum.RIGHT && props.isEnemy) {
-          setTimeout(() => {
-            currentState.value = props.sprite.getState(SpriteStateEnum.WIN);
-          }, 2500)
+          await delayAction(500);
+          currentState.value = props.sprite.getState(SpriteStateEnum.WIN);
         }
     })
 
