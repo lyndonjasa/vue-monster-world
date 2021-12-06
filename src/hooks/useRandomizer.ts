@@ -1,6 +1,10 @@
+import { BuffEnum } from "@/models/battle/buff.enum";
+import { DetailedMonster } from "@/models/monster/detailed-monster";
+import useBattleEvents from "./useBattleEvents";
 import useEnvironment from "./useEnvironment"
 
 const { blindSpeedReduction } = useEnvironment();
+const { hasStatus } = useBattleEvents();
 
 const useRandomizer = () => {
   const randomize = (min: number, max: number): number => {
@@ -13,13 +17,15 @@ const useRandomizer = () => {
     return critRate >= randomValue;
   }
 
-  const procMiss = (actorSpeed: number, targetSpeed: number, hasBlindStatus: boolean): boolean => {
-    const speedProbabilityReduction = !hasBlindStatus ? 1 : blindSpeedReduction;
+  const procMiss = (actor: DetailedMonster, target: DetailedMonster): boolean => {
+    const speedProbabilityReduction = !hasStatus(actor, BuffEnum.BLIND) ? 1 : blindSpeedReduction;
 
-    const totalSpeed = (actorSpeed + targetSpeed) * speedProbabilityReduction;
+    // TODO: add speed status [Speed Up, Speed Down]
+
+    const totalSpeed = (actor.stats.speed + target.stats.speed) * speedProbabilityReduction;
     const randomValue = randomize(1, totalSpeed);
     
-    return Math.ceil(targetSpeed * 0.5) >= randomValue;
+    return Math.ceil(target.stats.speed * 0.5) >= randomValue;
   }
 
   const procStatus = (chance: number): boolean => {

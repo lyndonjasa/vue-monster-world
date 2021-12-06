@@ -1,6 +1,8 @@
+import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
+import useBattleEvents from "./useBattleEvents";
 import useElement from "./useElement";
 import useEnvironment from "./useEnvironment";
 import useRandomizer from "./useRandomizer";
@@ -10,14 +12,14 @@ const useBattleCalculator = () => {
   const { damageMargin, wetAmplifier, burnPercentage } = useEnvironment();
   const { randomize } = useRandomizer();
   const { getElementalMultiplier } = useElement();
+  const { hasStatus } = useBattleEvents();
 
   // TODO: 
   // add margin of error
   // add elemental strength / weakness
   const calculateSkillDamage = (actor: DetailedMonster, 
     target: DetailedMonster,
-    skill: Skill,
-    applyWetAmplifier: boolean): number => {
+    skill: Skill): number => {
       const baseDamage = actor.stats.offense * skill.power;
       let damageReduction = target.stats.defense * 0.75;
 
@@ -30,10 +32,12 @@ const useBattleCalculator = () => {
 
       const elemMultiplier = getElementalMultiplier(skill.skillElement, target.element);
 
+      // TODO: Add other status multipliers [Boost, Weltgeist, Power Down, Power Up, Defense Down, Defense Up]
+
       let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier);
       
       // if target has wet status, amplify damage by 10%
-      if (applyWetAmplifier) {
+      if (hasStatus(target, BuffEnum.WET)) {
         grossDamage = grossDamage * wetAmplifier
       }
 

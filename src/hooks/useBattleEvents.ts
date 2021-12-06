@@ -2,20 +2,13 @@ import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Status } from "@/models/skills/status";
-import useBattleCalculator from "./useBattleCalculator";
 
 const useBattleEvents = () => {
-  const { calculateHealthRegen, calculateManaRegen } = useBattleCalculator();
-
   const willRegen = (actor: DetailedMonster): boolean => {
-    // TODO: add check for Static status
-
     return actor.stats.health < actor.stats.maxHealth || actor.stats.mana < actor.stats.maxMana;
   }
 
-  const regenerateHealth = (actor: DetailedMonster): void => {
-    const regenRate = calculateHealthRegen(actor);
-
+  const regenerateHealth = (actor: DetailedMonster, regenRate: number): void => {
     // if regen goes overboard, max health. . set to max health
     // otherwise, add to current health
     if ((actor.stats.health + regenRate) > actor.stats.maxHealth) {
@@ -25,9 +18,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const regenerateMana = (actor: DetailedMonster): void => {
-    const regenRate = calculateManaRegen(actor);
-
+  const regenerateMana = (actor: DetailedMonster, regenRate: number): void => {
     // if regen goes overboard, max health. . set to max health
     // otherwise, add to current health
     if ((actor.stats.mana + regenRate) > actor.stats.maxMana) {

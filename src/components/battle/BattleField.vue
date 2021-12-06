@@ -50,9 +50,25 @@ const BattleField = defineComponent({
   },
   setup() {
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
-    const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
-    const { procCrit, procMiss, procStatus } = useRandomizer();
-    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasStatus, triggerBurn, reduceStatusTurns } = useBattleEvents();
+    const { 
+      calculateSkillDamage, 
+      calculateCriticalStrike, 
+      calculatePenaltyDamage, 
+      calculateBurnDamage,
+      calculateHealthRegen,
+      calculateManaRegen } = useBattleCalculator();
+    const { 
+      procCrit, 
+      procMiss, 
+      procStatus } = useRandomizer();
+    const { 
+      regenerateHealth, 
+      regenerateMana, 
+      willRegen, 
+      applyStatus, 
+      hasStatus, 
+      triggerBurn, 
+      reduceStatusTurns } = useBattleEvents();
     const { writtenMessage, writeMessage } = useTypewriter();
     
     const monsters = ref<DetailedMonster[]>([]);
@@ -150,8 +166,8 @@ const BattleField = defineComponent({
             await delayAction(3000);
             writeMessage('', 0);
           } else {
-            regenerateHealth(actor);
-            regenerateMana(actor);
+            regenerateHealth(actor, calculateHealthRegen(actor));
+            regenerateMana(actor, calculateManaRegen(actor));
             await delayAction(1500);
           }
         }
@@ -202,7 +218,7 @@ const BattleField = defineComponent({
       // target loop
       // core battle functionality
       selectedTargets.forEach(target => {
-        let overallDamage = calculateSkillDamage(actor, target, skill, hasStatus(target, BuffEnum.WET));
+        let overallDamage = calculateSkillDamage(actor, target, skill);
         let critProced = false
 
         // if skill type is not heal, check for procs
@@ -212,7 +228,7 @@ const BattleField = defineComponent({
             overallDamage = calculateCriticalStrike(actor, overallDamage);
           }
 
-          if (procMiss(actor.stats.speed, target.stats.speed, hasStatus(actor, BuffEnum.BLIND))) {
+          if (procMiss(actor, target)) {
             overallDamage = 0;
           }
         } else {
