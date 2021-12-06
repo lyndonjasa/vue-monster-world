@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="false"
+        :isAutomated="true"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -15,7 +15,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="true"
-        :isAutomated="false"
+        :isAutomated="true"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -97,7 +97,7 @@ const BattleField = defineComponent({
         clearTimeout(setNextActor);
         await delayAction(2000);
         targets.value = [];
-        winningTeam.value = MonsterTeamEnum.RIGHT; // enemy team
+        winningTeam.value = MonsterTeamEnum.RIGHT;
       }
     })
 
@@ -157,6 +157,7 @@ const BattleField = defineComponent({
 
     let setNextActor = 0;
 
+    // TODO: add target on the future
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
 
