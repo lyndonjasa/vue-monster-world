@@ -168,14 +168,14 @@ const BattleField = defineComponent({
           } else {
             regenerateHealth(actor, calculateHealthRegen(actor));
             regenerateMana(actor, calculateManaRegen(actor));
-            await delayAction(1500);
+            await delayAction(1000);
           }
         }
 
         // apply burn damage if actor has burn status
         if (hasStatus(actor, BuffEnum.BURN)) {
           writeMessage(`${actor.name} received damage from burns`, 2000);
-          await delayAction(150);
+          await delayAction(50);
           triggerBurn(actor);
           await delayAction(3000);
           // writeMessage('', 0);

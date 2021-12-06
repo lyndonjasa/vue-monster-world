@@ -20,8 +20,24 @@ const useBattleCalculator = () => {
   const calculateSkillDamage = (actor: DetailedMonster, 
     target: DetailedMonster,
     skill: Skill): number => {
-      const baseDamage = actor.stats.offense * skill.power;
-      let damageReduction = target.stats.defense * 0.75;
+      let actorOffense = actor.stats.offense;
+      if (hasStatus(actor, BuffEnum.POWER_UP)) {
+        actorOffense += (actor.stats.offense * 0.25)
+      }
+      if (hasStatus(actor, BuffEnum.POWER_DOWN)) {
+        actorOffense -= (actor.stats.offense * 0.25)
+      }
+
+      let targetDefense = target.stats.defense;
+      if (hasStatus(target, BuffEnum.DEFENSE_UP)) {
+        targetDefense += (target.stats.defense * 0.25)
+      }
+      if (hasStatus(target, BuffEnum.DEFENSE_DOWN)) {
+        targetDefense -= (target.stats.defense * 0.25)
+      }
+
+      const baseDamage = actorOffense * skill.power;
+      let damageReduction = targetDefense * 0.75;
 
       // if skill ignores defense, reset divider to 1
       // ignore reduction if skill type is heal or buff
