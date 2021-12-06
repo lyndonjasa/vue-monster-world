@@ -1,3 +1,7 @@
+import useEnvironment from "./useEnvironment"
+
+const { blindSpeedReduction } = useEnvironment();
+
 const useRandomizer = () => {
   const randomize = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -9,9 +13,11 @@ const useRandomizer = () => {
     return critRate >= randomValue;
   }
 
-  const procMiss = (actorSpeed: number, targetSpeed: number): boolean => {
-    const totalSpeed = actorSpeed + targetSpeed;
-    const randomValue = randomize(0, totalSpeed);
+  const procMiss = (actorSpeed: number, targetSpeed: number, hasBlindStatus: boolean): boolean => {
+    const speedProbabilityReduction = !hasBlindStatus ? 1 : blindSpeedReduction;
+
+    const totalSpeed = (actorSpeed + targetSpeed) * speedProbabilityReduction;
+    const randomValue = randomize(1, totalSpeed);
     
     return Math.ceil(targetSpeed * 0.5) >= randomValue;
   }

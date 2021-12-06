@@ -31,7 +31,7 @@ const useBattleCalculator = () => {
       const elemMultiplier = getElementalMultiplier(skill.skillElement, target.element);
 
       let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier);
-      console.log(grossDamage);
+      
       // if target has wet status, amplify damage by 10%
       if (applyWetAmplifier) {
         grossDamage = grossDamage * wetAmplifier

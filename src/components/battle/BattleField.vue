@@ -15,7 +15,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="true"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -152,9 +152,10 @@ const BattleField = defineComponent({
           await delayAction(2000);
         }
 
+        value.enableAction = true;
+        
         // reduce statuses that proc per turn
         reduceStatusTurns(actor);
-        value.enableAction = true
       }
     });
 
@@ -187,7 +188,7 @@ const BattleField = defineComponent({
             overallDamage = calculateCriticalStrike(actor, overallDamage);
           }
 
-          if (procMiss(actor.stats.speed, target.stats.speed)) {
+          if (procMiss(actor.stats.speed, target.stats.speed, hasStatus(actor, BuffEnum.BLIND))) {
             overallDamage = 0;
           }
         } else {
