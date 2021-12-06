@@ -150,7 +150,7 @@ const BattleField = defineComponent({
 
           await delayAction(2000);
         }
-        
+
         // reduce statuses that proc per turn
         reduceStatusTurns(actor);
         value.enableAction = true
@@ -234,6 +234,10 @@ const BattleField = defineComponent({
         applyPenalties(skill, team, actor);
       }
 
+      getNextActor();
+    }
+
+    const getNextActor = (): void => {
       for (let index = 0; index < orderOfActors.value.length; index++) {
         if (actorIndex === orderOfActors.value.length - 1) {
           actorIndex = 0; // reset to 0
@@ -259,7 +263,6 @@ const BattleField = defineComponent({
           actorSkills: orderOfActors.value[actorIndex].skills,
           enableAction: false
         };
-        
       }, 2000)
     }
 
