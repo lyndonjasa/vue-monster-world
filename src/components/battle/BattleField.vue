@@ -143,21 +143,22 @@ const BattleField = defineComponent({
 
         if (willRegen(actor)) {
           if (hasStatus(actor, BuffEnum.STATIC)) {
-            writeMessage(`${actor.name} is unable to regenerate`, 1000);
+            writeMessage(`${actor.name} is unable to regenerate due to staticity`, 2000);
+            await delayAction(3000);
           } else {
             regenerateHealth(actor);
             regenerateMana(actor);
+            await delayAction(1500);
           }
-
-          await delayAction(1000);
         }
 
         // apply burn damage if actor has burn status
         if (hasStatus(actor, BuffEnum.BURN)) {
-          writeMessage(`${actor.name} got burned`, 1000);
+          writeMessage(`${actor.name} received damage from burns`, 2000);
+          await delayAction(150);
           triggerBurn(actor);
-
-          await delayAction(2000);
+          await delayAction(3000);
+          // writeMessage('', 0);
         }
         
         const isStunned = hasStatus(actor, BuffEnum.STUN);
