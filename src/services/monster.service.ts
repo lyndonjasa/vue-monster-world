@@ -120,12 +120,12 @@ const monsterData: DetailedMonster[] = [
         power: 55,
         ignoreDefense: false,
         name: 'Burst Flame',
-        skillElement: ElementEnum.FIRE,
+        skillElement: ElementEnum.WATER,
         skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.DAMAGE,
         statusEffect: {
           duration: 2,
-          buff: BuffEnum.BURN,
+          buff: BuffEnum.WET,
           target: TargetEnum.OTHERS, // status target is either self or other
           statusInstance:BuffInstanceEnum.PER_TURN,
           chance: 100

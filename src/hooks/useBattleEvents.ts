@@ -43,8 +43,8 @@ const useBattleEvents = () => {
     target.appliedStatus.push(status);
   }
 
-  const hasBurnStatus = (actor: DetailedMonster): boolean => {
-    return actor.appliedStatus.find(s => s.buff === BuffEnum.BURN) !== undefined
+  const hasStatus = (actor: DetailedMonster, status: BuffEnum): boolean => {
+    return actor.appliedStatus.find(s => s.buff === status) !== undefined
   }
 
   const triggerBurn = (target: DetailedMonster): void => {
@@ -74,7 +74,7 @@ const useBattleEvents = () => {
     regenerateHealth,
     regenerateMana,
     applyStatus,
-    hasBurnStatus,
+    hasStatus,
     triggerBurn,
     reduceStatusTurns
   }

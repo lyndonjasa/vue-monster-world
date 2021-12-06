@@ -7,7 +7,7 @@ import useRandomizer from "./useRandomizer";
 
 const useBattleCalculator = () => {
 
-  const { damageMargin } = useEnvironment();
+  const { damageMargin, wetAmplifier, burnPercentage } = useEnvironment();
   const { randomize } = useRandomizer();
   const { getElementalMultiplier } = useElement();
 
@@ -16,7 +16,8 @@ const useBattleCalculator = () => {
   // add elemental strength / weakness
   const calculateSkillDamage = (actor: DetailedMonster, 
     target: DetailedMonster,
-    skill: Skill): number => {
+    skill: Skill,
+    applyWetAmplifier: boolean): number => {
       const baseDamage = actor.stats.offense * skill.power;
       let damageReduction = target.stats.defense * 0.75;
 
@@ -30,6 +31,11 @@ const useBattleCalculator = () => {
       const elemMultiplier = getElementalMultiplier(skill.skillElement, target.element);
 
       let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier);
+      console.log(grossDamage);
+      // if target has wet status, amplify damage by 10%
+      if (applyWetAmplifier) {
+        grossDamage = grossDamage * wetAmplifier
+      }
 
       // add margins if skill type is damage/signature
       if (skill.skillType === SkillTypeEnum.DAMAGE || skill.skillType === SkillTypeEnum.SIGNATURE) {
@@ -65,7 +71,7 @@ const useBattleCalculator = () => {
   }
 
   const calculateBurnDamage = (damage: number): number => {
-    const burnDamage = Math.ceil(damage * 0.10)
+    const burnDamage = Math.ceil(damage * (burnPercentage / 100))
 
     return marginalizeOutput(burnDamage);
   }

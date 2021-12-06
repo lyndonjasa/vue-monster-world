@@ -50,7 +50,7 @@ const BattleField = defineComponent({
     const { getMonsterParty, getEnemyParty } = useMonsterFactory();
     const { calculateSkillDamage, calculateCriticalStrike, calculatePenaltyDamage, calculateBurnDamage } = useBattleCalculator();
     const { procCrit, procMiss, procStatus } = useRandomizer();
-    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasBurnStatus, triggerBurn, reduceStatusTurns } = useBattleEvents();
+    const { regenerateHealth, regenerateMana, willRegen, applyStatus, hasStatus, triggerBurn, reduceStatusTurns } = useBattleEvents();
     
     const monsters = ref<DetailedMonster[]>([]);
     const enemyMonsters = ref<DetailedMonster[]>([]);
@@ -145,7 +145,8 @@ const BattleField = defineComponent({
           await delayAction(1000);
         }
 
-        if (hasBurnStatus(actor)) {
+        // apply burn damage if actor has burn status
+        if (hasStatus(actor, BuffEnum.BURN)) {
           triggerBurn(actor);
 
           await delayAction(2000);
@@ -176,7 +177,7 @@ const BattleField = defineComponent({
       // target loop
       // core battle functionality
       selectedTargets.forEach(target => {
-        let overallDamage = calculateSkillDamage(actor, target, skill);
+        let overallDamage = calculateSkillDamage(actor, target, skill, hasStatus(target, BuffEnum.WET));
         let critProced = false
 
         // if skill type is not heal, check for procs
