@@ -56,8 +56,19 @@ const useBattleEvents = () => {
       sb.duration -= 1;
     })
 
+    removeExpiredBuffs(actor);
+  }
+
+  const reduceStatusInstance = (actor: DetailedMonster, buff: BuffEnum): void => {
+    const statusBuff = actor.appliedStatus.find(s => s.buff === buff);
+    statusBuff.duration -= 1;
+
+    removeExpiredBuffs(actor);
+  }
+
+  const removeExpiredBuffs = (actor: DetailedMonster): void => {
     // retain statuses that have remaining duration
-    actor.appliedStatus = statusBuffs.filter(sb => sb.duration != 0);
+    actor.appliedStatus = actor.appliedStatus.filter(sb => sb.duration != 0);
   }
 
   return {
@@ -67,7 +78,8 @@ const useBattleEvents = () => {
     applyStatus,
     hasStatus,
     triggerBurn,
-    reduceStatusTurns
+    reduceStatusTurns,
+    reduceStatusInstance
   }
 }
 

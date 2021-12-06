@@ -68,7 +68,8 @@ const BattleField = defineComponent({
       applyStatus, 
       hasStatus, 
       triggerBurn, 
-      reduceStatusTurns } = useBattleEvents();
+      reduceStatusTurns,
+      reduceStatusInstance } = useBattleEvents();
     const { writtenMessage, writeMessage } = useTypewriter();
     
     const monsters = ref<DetailedMonster[]>([]);
@@ -195,6 +196,7 @@ const BattleField = defineComponent({
           getNextActor();
         }
 
+        await delayAction(1000);
         value.enableAction = true;
       }
     });
@@ -230,6 +232,11 @@ const BattleField = defineComponent({
 
           if (procMiss(actor, target)) {
             overallDamage = 0;
+          } else {
+            if (hasStatus(target, BuffEnum.BARRIER)) {
+              overallDamage = 1;
+              reduceStatusInstance(target, BuffEnum.BARRIER);
+            }
           }
         } else {
           overallDamage *= -1;

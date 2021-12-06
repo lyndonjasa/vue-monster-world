@@ -48,9 +48,15 @@ const useBattleCalculator = () => {
 
       const elemMultiplier = getElementalMultiplier(skill.skillElement, target.element);
 
-      // TODO: Add other status multipliers [Boost, Weltgeist, Power Down, Power Up, Defense Down, Defense Up]
+      let damageBuffMultiplier = 1;
+      if (hasStatus(actor, BuffEnum.BOOST)) {
+        damageBuffMultiplier *= 2;
+      }
+      if (hasStatus(actor, BuffEnum.WELTGEIST)) {
+        damageBuffMultiplier *= 3;
+      }
 
-      let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier);
+      let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier) * damageBuffMultiplier;
       
       // if target has wet status, amplify damage by 10%
       if (hasStatus(target, BuffEnum.WET)) {
@@ -99,8 +105,8 @@ const useBattleCalculator = () => {
   const marginalizeOutput = (damage: number): number => {
     const marginValue = damage * (damageMargin / 100);
 
-    const lowerMargin = Math.floor(damage - marginValue);
-    const upperMargin = Math.floor(damage + marginValue);
+    const lowerMargin = Math.ceil(damage - marginValue);
+    const upperMargin = Math.ceil(damage + marginValue);
 
     return randomize(lowerMargin, upperMargin);
   } 
