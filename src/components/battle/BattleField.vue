@@ -161,39 +161,44 @@ const BattleField = defineComponent({
         writeMessage('', 0)
         const actor = orderOfActors.value.find(a => a._id === value.monsterId);
 
-        if (willRegen(actor)) {
-          if (hasStatus(actor, BuffEnum.STATIC)) {
-            writeMessage(`${actor.name} is unable to regenerate due to staticity`, 2000);
+        const isCounterAction = counterAction.value && counterAction.value.actor.monsterId === actor._id;
+
+        // proceed usual flow if not counter action
+        if (!isCounterAction) {
+          if (willRegen(actor)) {
+            if (hasStatus(actor, BuffEnum.STATIC)) {
+              writeMessage(`${actor.name} is unable to regenerate due to staticity`, 2000);
+              await delayAction(3000);
+              writeMessage('', 0);
+            } else {
+              regenerateHealth(actor, calculateHealthRegen(actor));
+              regenerateMana(actor, calculateManaRegen(actor));
+              await delayAction(1000);
+            }
+          }
+
+          // apply burn damage if actor has burn status
+          if (hasStatus(actor, BuffEnum.BURN)) {
+            writeMessage(`${actor.name} received damage from burns`, 2000);
+            await delayAction(50);
+            triggerBurn(actor);
+            await delayAction(3000);
+            // writeMessage('', 0);
+          }
+          
+          const isStunned = hasStatus(actor, BuffEnum.STUN);
+          if (isStunned) {
+            writeMessage(`${actor.name} is stunned and unable to act`, 2000);
             await delayAction(3000);
             writeMessage('', 0);
-          } else {
-            regenerateHealth(actor, calculateHealthRegen(actor));
-            regenerateMana(actor, calculateManaRegen(actor));
-            await delayAction(1000);
           }
-        }
 
-        // apply burn damage if actor has burn status
-        if (hasStatus(actor, BuffEnum.BURN)) {
-          writeMessage(`${actor.name} received damage from burns`, 2000);
-          await delayAction(50);
-          triggerBurn(actor);
-          await delayAction(3000);
-          // writeMessage('', 0);
-        }
-        
-        const isStunned = hasStatus(actor, BuffEnum.STUN);
-        if (isStunned) {
-          writeMessage(`${actor.name} is stunned and unable to act`, 2000);
-          await delayAction(3000);
-          writeMessage('', 0);
-        }
+          // reduce statuses that proc per turn
+          reduceStatusTurns(actor);
 
-        // reduce statuses that proc per turn
-        reduceStatusTurns(actor);
-
-        if (isStunned) { // skip current action and proceed to next if current actor is stunned
-          getNextActor();
+          if (isStunned) { // skip current action and proceed to next if current actor is stunned
+            getNextActor();
+          }
         }
 
         await delayAction(1000);
@@ -289,6 +294,12 @@ const BattleField = defineComponent({
           }
         }
       })
+
+      const isCounterAction = counterAction.value && counterAction.value.actor.monsterId === actor._id;
+      if (isCounterAction) {
+        reduceStatusInstance(actor, BuffEnum.COUNTER);
+        counterAction.value = undefined;
+      }
 
       // TODO: add status target self
 
