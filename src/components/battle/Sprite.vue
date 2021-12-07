@@ -16,7 +16,7 @@
         :commands="currentActor.actorSkills"
         :allyTargets="allies"
         :enemyTargets="enemies"
-        :isAutomated="isAutomated"
+        :isAutomated="isAutomated || counterAction"
         :currentMana="currentMana"
         @change-state="changeState"
         @execute-command="onCommandExecution"
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { delayAction } from '@/helpers/delay.helper';
-import { BlinkingTarget, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
+import { BlinkingTarget, CounterActor, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, WinningTeam } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
 import { Skill } from '@/models/skills/skill';
@@ -73,6 +73,7 @@ const Sprite = defineComponent({
     const leftTeam = inject(LeftTeamTargets);
     const rightTeam = inject(RightTeamTargets);
     const winningTeam = inject(WinningTeam);
+    const counterAction = inject(CounterActor);
 
     watch(winningTeam, async (value: MonsterTeamEnum) => {
       if ((value === MonsterTeamEnum.LEFT && !props.isEnemy) ||
@@ -156,7 +157,8 @@ const Sprite = defineComponent({
       enemies,
       selectedTargets,
       blinkingTarget,
-      onCommandExecution
+      onCommandExecution,
+      counterAction
     }
   },
 })

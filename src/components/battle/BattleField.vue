@@ -34,7 +34,7 @@ import useTypewriter from '@/hooks/useTypewriter';
 import MonsterView from './MonsterView.vue';
 import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { BlinkingTarget, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
+import { BlinkingTarget, CounterActor, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
@@ -305,6 +305,8 @@ const BattleField = defineComponent({
       return counterAction.value !== undefined;
     })
 
+    provide(CounterActor, counterAction);
+
     const getNextActor = (): void => {
       let nextActor: Actor;
 
@@ -335,8 +337,6 @@ const BattleField = defineComponent({
           enableAction: false,
           actorSkills: counterAction.value.actor.actorSkills
         }
-        // test 
-        counterAction.value = undefined;
       }
 
       // reset currentActor after action

@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { SelectBlinkingTarget } from '@/injections/battle.injection';
+import { CounterActor, SelectBlinkingTarget } from '@/injections/battle.injection';
 import { Target } from '@/models/battle/target';
 import { Skill } from '@/models/skills/skill';
 import { SkillTypeEnum } from '@/models/skills/skill-type.enum';
@@ -75,15 +75,24 @@ const SpriteCommand = defineComponent({
 
     const { getAction, getSelectedTarget } = useAI(props.commands, props.currentMana, props.allyTargets, props.enemyTargets);
 
+    const counterAction = inject(CounterActor);
+
     onMounted(() => {
       if (props.isAutomated) {
         setTimeout(() => {
-          const selectedCommand = getAction();
-          initiateCommand(selectedCommand);
-          // if single target, call the method
-          if (selectedCommand.skillTarget === TargetEnum.ALLY || selectedCommand.skillTarget === TargetEnum.ENEMY) {
-            const target = getSelectedTarget(selectedCommand);
-            onTargetSelect(target.monsterId);
+          // non counter action
+          if (!counterAction.value) {
+            const selectedCommand = getAction();
+            initiateCommand(selectedCommand);
+            // if single target, call the method
+            if (selectedCommand.skillTarget === TargetEnum.ALLY || selectedCommand.skillTarget === TargetEnum.ENEMY) {
+              const target = getSelectedTarget(selectedCommand);
+              onTargetSelect(target.monsterId);
+            }
+          } else { // counter action
+            const attackCommand = counterAction.value.actor.actorSkills.find(s => s.name === 'Attack');
+            initiateCommand(attackCommand);
+            onTargetSelect(counterAction.value.target);
           }
         }, 1500)
       }

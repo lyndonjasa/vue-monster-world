@@ -12,3 +12,4 @@ export const BlinkingTarget: InjectionKey<Ref<string>> = Symbol();
 export const SelectBlinkingTarget: InjectionKey<(monsterId: string) => void> = Symbol();
 export const WinningTeam: InjectionKey<Ref<MonsterTeamEnum>> = Symbol();
 export const InjectedTypewriter: InjectionKey<(message: string, delay: number) => void> = Symbol();
+export const CounterActor: InjectionKey<Ref<{ actor: Actor, target: string }>> = Symbol();
