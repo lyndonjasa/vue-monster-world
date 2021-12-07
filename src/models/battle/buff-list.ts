@@ -56,7 +56,7 @@ export const BuffList: Buff[] = [
   {
     id: BuffEnum.COUNTER,
     icon: BuffIconEnum.COUNTER,
-    name: 'Counter'
+    name: 'Counter Stance'
   },
   {
     id: BuffEnum.POWER_DOWN,
