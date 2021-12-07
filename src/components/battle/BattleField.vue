@@ -211,12 +211,21 @@ const BattleField = defineComponent({
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: DetailedMonster;
 
-      const selectedTargets = orderOfActors.value.filter(a => targetIds.includes(a._id));
-
+      let selectedTargets = orderOfActors.value.filter(a => targetIds.includes(a._id));
+      let targetMonsterId: string = undefined;
       if (team == MonsterTeamEnum.LEFT) {
         actor = monsters.value.find(m => m._id === actorId);
+
+        targetMonsterId = enemyMonsters.value.find(e => hasStatus(e, BuffEnum.AGGRO) && e.stats.health !== 0)?._id;
       } else if (MonsterTeamEnum.RIGHT) {
         actor = enemyMonsters.value.find(m => m._id === actorId);
+
+        targetMonsterId = monsters.value.find(e => hasStatus(e, BuffEnum.AGGRO) && e.stats.health !== 0)?._id;
+      }
+
+      // if aggro is found and skill is single target, set target to enemy
+      if (targetMonsterId && skill.skillTarget === TargetEnum.ENEMY) {
+        selectedTargets = [orderOfActors.value.find(a => a._id === targetMonsterId)];
       }
 
       // reduce mana based on skill cost
