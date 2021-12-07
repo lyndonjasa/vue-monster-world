@@ -125,7 +125,7 @@ const monsterData: DetailedMonster[] = [
         skillType: SkillTypeEnum.DAMAGE,
         statusEffect: {
           duration: 1,
-          buff: BuffEnum.STATIC,
+          buff: BuffEnum.COUNTER,
           target: TargetEnum.OTHERS, // status target is either self or other
           statusInstance:BuffInstanceEnum.PER_TURN,
           chance: 100

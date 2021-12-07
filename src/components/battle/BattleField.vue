@@ -261,6 +261,18 @@ const BattleField = defineComponent({
             target.stats.health = 0
           } else {
             target.stats.health -= overallDamage;
+
+            // set the last target with counter status as counter actor
+            if (hasStatus(target, BuffEnum.COUNTER)) {
+              counterAction.value = {
+                actor: {
+                  monsterId: target._id,
+                  enableAction: false,
+                  actorSkills: target.skills
+                },
+                target: actor._id
+              };
+            }
           }
         }
 
@@ -278,6 +290,8 @@ const BattleField = defineComponent({
         }
       })
 
+      // TODO: add status target self
+
       // if skill has penalty, apply damage penalty
       if (skill.penalty) {
         applyPenalties(skill, team, actor);
@@ -286,20 +300,43 @@ const BattleField = defineComponent({
       getNextActor();
     }
 
+    const counterAction = ref<{ actor: Actor, target: string }>(undefined);
+    const hasCounterActor = computed((): boolean => {
+      return counterAction.value !== undefined;
+    })
+
     const getNextActor = (): void => {
-      for (let index = 0; index < orderOfActors.value.length; index++) {
-        if (actorIndex === orderOfActors.value.length - 1) {
-          actorIndex = 0; // reset to 0
-        } else {
-          actorIndex++;
+      let nextActor: Actor;
+
+      if (!hasCounterActor.value) {
+        for (let index = 0; index < orderOfActors.value.length; index++) {
+          if (actorIndex === orderOfActors.value.length - 1) {
+            actorIndex = 0; // reset to 0
+          } else {
+            actorIndex++;
+          }
+
+          // if next actor is dead, skip to next actor
+          if (orderOfActors.value[actorIndex].stats.health <= 0) {
+            continue;
+          } else {
+            break;
+          }
         }
 
-        // if next actor is dead, skip to next actor
-        if (orderOfActors.value[actorIndex].stats.health <= 0) {
-          continue;
-        } else {
-          break;
+        nextActor = {
+          monsterId: orderOfActors.value[actorIndex]._id,
+          actorSkills: orderOfActors.value[actorIndex].skills,
+          enableAction: false
+        };
+      } else {
+        nextActor = {
+          monsterId: counterAction.value.actor.monsterId,
+          enableAction: false,
+          actorSkills: counterAction.value.actor.actorSkills
         }
+        // test 
+        counterAction.value = undefined;
       }
 
       // reset currentActor after action
@@ -308,8 +345,8 @@ const BattleField = defineComponent({
       setNextActor = setTimeout(() => {
         targets.value = [];
         currentActor.value = {
-          monsterId: orderOfActors.value[actorIndex]._id,
-          actorSkills: orderOfActors.value[actorIndex].skills,
+          monsterId: nextActor.monsterId,
+          actorSkills: nextActor.actorSkills,
           enableAction: false
         };
       }, 2000)
