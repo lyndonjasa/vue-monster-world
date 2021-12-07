@@ -29,9 +29,15 @@ const useBattleEvents = () => {
   }
 
   const applyStatus = (target: DetailedMonster, status: Status): void => {
-    // TODO: add reapplication of same buffs
+    const existingApplication = target.appliedStatus.find(as => as.buff === status.buff);
 
-    target.appliedStatus.push(status);
+    // if status exists, overwrite
+    if (existingApplication) {
+      existingApplication.duration = status.duration;
+      existingApplication.appliedDamage = status.appliedDamage;
+    } else { // otherwise stack
+      target.appliedStatus.push(status);
+    }
   }
 
   const hasStatus = (actor: DetailedMonster, status: BuffEnum): boolean => {
