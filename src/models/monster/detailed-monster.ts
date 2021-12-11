@@ -1,4 +1,5 @@
 import { Status } from "../skills/status";
+import { TalentEnum } from "../talents/talent.enum";
 import { Monster } from "./monster";
 
 export class DetailedMonster extends Monster {
@@ -7,5 +8,5 @@ export class DetailedMonster extends Monster {
   currentExp: number;
   expToLevel: number;
   appliedStatus: Status[];
-  talents: string[];
+  talents: TalentEnum[];
 }
