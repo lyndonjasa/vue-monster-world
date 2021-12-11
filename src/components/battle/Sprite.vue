@@ -139,6 +139,8 @@ const Sprite = defineComponent({
         changeState(SpriteStateEnum.HIT)
       }
 
+      console.log(newValue);
+
       if (newValue > 0) {
         setTimeout(() => changeState(SpriteStateEnum.IDLE), 2000)
       } else {

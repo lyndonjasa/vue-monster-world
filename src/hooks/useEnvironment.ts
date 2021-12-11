@@ -10,6 +10,8 @@ const useEnvironment = () => {
   // talent settings
   const wrathProcChance: number = process.env.VUE_APP_WRATH_PROC_CHANCE
   const wrathMultiplier: number = process.env.VUE_APP_WRATH_MULTIPLIER
+  const vampirismPercentage: number = process.env.VUE_APP_VAMPIRISM_PERCENTAGE
+  const resuPercentage: number = process.env.VUE_APP_UNDYING_RESU_PERCENTAGE
 
   return {
     damageMargin,
@@ -18,7 +20,9 @@ const useEnvironment = () => {
     burnPercentage,
     blindSpeedReduction,
     wrathProcChance,
-    wrathMultiplier
+    wrathMultiplier,
+    vampirismPercentage,
+    resuPercentage
   }
 }
 

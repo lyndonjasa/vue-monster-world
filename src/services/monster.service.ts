@@ -176,7 +176,9 @@ const monsterData: DetailedMonster[] = [
         skillType: SkillTypeEnum.HEAL
       }
     ],
-    talents: []
+    talents: [
+      TalentEnum.VAMPIRISM
+    ]
   }
 ]
 

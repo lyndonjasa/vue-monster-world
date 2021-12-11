@@ -43,6 +43,8 @@ import { Target } from '@/models/battle/target';
 import { TargetEnum } from '@/models/skills/target.enum';
 import { BuffEnum } from '@/models/battle/buff.enum';
 import { delayAction } from '@/helpers/delay.helper';
+import { TalentEnum } from '@/models/talents/talent.enum';
+import useEnvironment from '@/hooks/useEnvironment';
 
 const BattleField = defineComponent({
   components: {
@@ -56,11 +58,15 @@ const BattleField = defineComponent({
       calculatePenaltyDamage, 
       calculateBurnDamage,
       calculateHealthRegen,
-      calculateManaRegen } = useBattleCalculator();
+      calculateManaRegen 
+    } = useBattleCalculator();
+
     const { 
       procCrit, 
       procMiss, 
-      procStatus } = useRandomizer();
+      procStatus 
+    } = useRandomizer();
+
     const { 
       regenerateHealth, 
       regenerateMana, 
@@ -69,7 +75,12 @@ const BattleField = defineComponent({
       hasStatus, 
       triggerBurn, 
       reduceStatusTurns,
-      reduceStatusInstance } = useBattleEvents();
+      reduceStatusInstance,
+      hasTalent 
+    } = useBattleEvents();
+
+    const { vampirismPercentage } = useEnvironment();
+
     const { writtenMessage, writeMessage } = useTypewriter();
     
     const monsters = ref<DetailedMonster[]>([]);
@@ -276,6 +287,10 @@ const BattleField = defineComponent({
             target.stats.health -= overallDamage;
           }
         } else { // damage
+          if (hasTalent(actor, TalentEnum.VAMPIRISM)) {
+            regenerateHealth(actor, overallDamage * vampirismPercentage)
+          }
+
           if (overallDamage > target.stats.health) {
             target.stats.health = 0
           } else {
