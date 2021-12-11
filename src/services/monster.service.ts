@@ -179,7 +179,9 @@ const monsterData: DetailedMonster[] = [
       }
     ],
     talents: [
-      TalentEnum.VAMPIRISM
+      TalentEnum.VAMPIRISM,
+      TalentEnum.EFFICIENCY,
+      TalentEnum.LETHARGY
     ]
   }
 ]

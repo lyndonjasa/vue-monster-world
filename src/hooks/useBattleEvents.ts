@@ -29,6 +29,14 @@ const useBattleEvents = () => {
     }
   }
 
+  const reduceMana = (target: DetailedMonster, reductionRate: number): void => {
+    if ((target.stats.mana - reductionRate) < 0) {
+      target.stats.mana = 0;
+    } else {
+      target.stats.mana -= reductionRate;
+    }
+  }
+
   const applyStatus = (target: DetailedMonster, status: Status): void => {
     const existingApplication = target.appliedStatus.find(as => as.buff === status.buff);
 
@@ -96,7 +104,8 @@ const useBattleEvents = () => {
     reduceStatusTurns,
     reduceStatusInstance,
     hasTalent,
-    removeTalent
+    removeTalent,
+    reduceMana
   }
 }
 

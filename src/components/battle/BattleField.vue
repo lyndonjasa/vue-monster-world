@@ -69,7 +69,8 @@ const BattleField = defineComponent({
 
     const { 
       regenerateHealth, 
-      regenerateMana, 
+      regenerateMana,
+      reduceMana,
       willRegen, 
       applyStatus, 
       hasStatus, 
@@ -80,7 +81,12 @@ const BattleField = defineComponent({
       removeTalent
     } = useBattleEvents();
 
-    const { vampirismPercentage, resuPercentage } = useEnvironment();
+    const { 
+      vampirismPercentage, 
+      resuPercentage,
+      efficiencyPercentage,
+      lethargyPercentage
+    } = useEnvironment();
 
     const { writtenMessage, writeMessage } = useTypewriter();
     
@@ -241,7 +247,13 @@ const BattleField = defineComponent({
       }
 
       // reduce mana based on skill cost
-      actor.stats.mana -= skill.cost;
+      let skillCost = skill.cost;
+      // reduce skill cost if actor has efficiency talent
+      if (hasTalent(actor, TalentEnum.EFFICIENCY)) {
+        skillCost *= efficiencyPercentage
+      }
+
+      actor.stats.mana -= skillCost;
 
       // target loop
       // core battle functionality
@@ -307,6 +319,10 @@ const BattleField = defineComponent({
             }
           } else {
             target.stats.health -= overallDamage;
+
+            if (hasTalent(actor, TalentEnum.LETHARGY) && actor._id !== target._id) {
+              reduceMana(target, overallDamage * lethargyPercentage);
+            }
 
             // set the last target with counter status as counter actor
             if (hasStatus(target, BuffEnum.COUNTER)) {

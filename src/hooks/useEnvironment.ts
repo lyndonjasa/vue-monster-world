@@ -12,6 +12,8 @@ const useEnvironment = () => {
   const wrathMultiplier: number = process.env.VUE_APP_WRATH_MULTIPLIER
   const vampirismPercentage: number = process.env.VUE_APP_VAMPIRISM_PERCENTAGE
   const resuPercentage: number = process.env.VUE_APP_UNDYING_RESU_PERCENTAGE
+  const efficiencyPercentage: number = process.env.VUE_APP_EFFICIENCY_PERCENTAGE
+  const lethargyPercentage: number = process.env.VUE_APP_LETHARGY_PERCENTAGE
 
   return {
     damageMargin,
@@ -22,7 +24,9 @@ const useEnvironment = () => {
     wrathProcChance,
     wrathMultiplier,
     vampirismPercentage,
-    resuPercentage
+    resuPercentage,
+    efficiencyPercentage,
+    lethargyPercentage
   }
 }
 
