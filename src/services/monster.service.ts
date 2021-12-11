@@ -60,7 +60,7 @@ const monsterData: DetailedMonster[] = [
       critRate: 10.5,
       critDamage: 200,
       healthRegen: 10,
-      manaRegen: 10
+      manaRegen: 10,
     },
     appliedStatus: [],
     element: ElementEnum.ROCK,
@@ -80,7 +80,8 @@ const monsterData: DetailedMonster[] = [
         skillTarget: TargetEnum.ENEMY,
         skillElement: ElementEnum.NON_ELEMENTAL
       }
-    ]
+    ],
+    talents: []
   },
   {
     name: 'Agumon',
@@ -91,7 +92,7 @@ const monsterData: DetailedMonster[] = [
       maxMana: 20,
       offense: 68,
       defense: 45,
-      speed: 137,
+      speed: 37,
       critRate: 1.5,
       critDamage: 200,
       healthRegen: 10,
@@ -122,32 +123,10 @@ const monsterData: DetailedMonster[] = [
         name: 'Burst Flame',
         skillElement: ElementEnum.FIRE,
         skillTarget: TargetEnum.ENEMY,
-        skillType: SkillTypeEnum.DAMAGE,
-        statusEffect: {
-          duration: 2,
-          buff: BuffEnum.AGGRO,
-          target: TargetEnum.OTHERS, // status target is either self or other
-          statusInstance: BuffInstanceEnum.PER_TURN,
-          chance: 100
-        }
-      },
-      {
-        cost: 20,
-        power: 0,
-        ignoreDefense: false,
-        name: 'Boost',
-        skillElement: ElementEnum.NON_ELEMENTAL,
-        skillTarget: TargetEnum.ALL_ALLIES,
-        skillType: SkillTypeEnum.BUFF,
-        statusEffect: {
-          duration: 2,
-          buff: BuffEnum.BOOST,
-          target: TargetEnum.SELF,
-          statusInstance: BuffInstanceEnum.PER_TURN,
-          chance: 100
-        }
+        skillType: SkillTypeEnum.DAMAGE
       }
-    ]
+    ],
+    talents: []
   },
   {
     name: 'AeroVeedramon',
@@ -195,57 +174,23 @@ const monsterData: DetailedMonster[] = [
         skillTarget: TargetEnum.ALLY,
         skillType: SkillTypeEnum.HEAL
       }
-    ]
+    ],
+    talents: []
   }
 ]
 
 const enemyData: DetailedMonster[] = [
   {
-    name: 'Alphamon',
+    name: 'Gallantmon',
     stats: {
-      health: 900,
-      maxHealth: 900,
-      mana: 79,
-      maxMana: 79,
-      offense: 105,
-      defense: 120,
+      health: 950,
+      maxHealth: 950,
+      mana: 95,
+      maxMana: 95,
+      offense: 100,
+      defense: 105,
       speed: 91,
-      critRate: 10.5,
-      critDamage: 200,
-      healthRegen: 10,
-      manaRegen: 10
-    },
-    appliedStatus: [],
-    element: ElementEnum.ROCK,
-    _id: uuidv4(),
-    currentExp: 0,
-    expToLevel: 100,
-    level: 1,
-    sprite: undefined,
-    skills: [
-      { ...attackSkill },
-      {
-        name: 'Ultimate Ouryuken',
-        cost: 50,
-        power: 4,
-        skillType: SkillTypeEnum.SIGNATURE,
-        ignoreDefense: true,
-        skillTarget: TargetEnum.ENEMY,
-        skillElement: ElementEnum.NON_ELEMENTAL
-      }
-    ]
-  },
-  {
-    name: 'Agumon',
-    stats: {
-      health: 450,
-      maxHealth: 450,
-      mana: 20,
-      maxMana: 20,
-      offense: 68,
-      defense: 45,
-      speed: 37,
-      critRate: 1.5,
+      critRate: 10,
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
@@ -258,26 +203,59 @@ const enemyData: DetailedMonster[] = [
     level: 1,
     sprite: undefined,
     skills: [
-      { ...attackSkill }
-    ]
+      { ...attackSkill },
+      {
+        name: 'Royal Saber',
+        cost: 15,
+        power: 60,
+        skillType: SkillTypeEnum.DAMAGE,
+        ignoreDefense: false,
+        skillTarget: TargetEnum.ENEMY,
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        statusEffect: {
+          buff: BuffEnum.COUNTER,
+          chance: 100,
+          duration: 3,
+          statusInstance: BuffInstanceEnum.PER_INSTANCE,
+          target: TargetEnum.SELF
+        }
+      },
+      {
+        name: 'Final Elysion',
+        cost: 25,
+        ignoreDefense: false,
+        power: 115,
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        skillTarget: TargetEnum.ENEMY,
+        skillType: SkillTypeEnum.SIGNATURE,
+        statusEffect: {
+          buff: BuffEnum.AGGRO,
+          chance: 100,
+          duration: 2,
+          statusInstance: BuffInstanceEnum.PER_TURN,
+          target: TargetEnum.SELF
+        }
+      }
+    ],
+    talents: []
   },
   {
-    name: 'AeroVeedramon',
+    name: 'Mugendramon',
     stats: {
-      health: 850,
-      maxHealth: 850,
-      mana: 50,
-      maxMana: 50,
-      offense: 100,
-      defense: 55,
-      speed: 95,
-      critRate: 5.5,
+      health: 750,
+      maxHealth: 750,
+      mana: 65,
+      maxMana: 65,
+      offense: 120,
+      defense: 120,
+      speed: 85,
+      critRate: 7.5,
       critDamage: 200,
       healthRegen: 10,
       manaRegen: 10
     },
     appliedStatus: [],
-    element: ElementEnum.WIND,
+    element: ElementEnum.ELECTRIC,
     _id: uuidv4(),
     currentExp: 0,
     expToLevel: 100,
@@ -286,14 +264,90 @@ const enemyData: DetailedMonster[] = [
     skills: [
       { ...attackSkill },
       {
-        cost: 10,
+        cost: 50,
         ignoreDefense: false,
-        name: 'Gale Storm III',
-        power: 75,
-        skillElement: ElementEnum.WIND,
+        name: 'Infinity Cannon',
+        power: 115,
+        skillElement: ElementEnum.ELECTRIC,
         skillTarget: TargetEnum.ALL_ENEMIES,
+        skillType: SkillTypeEnum.SIGNATURE,
+        statusEffect: {
+          buff: BuffEnum.STATIC,
+          chance: 70,
+          duration: 2,
+          statusInstance: BuffInstanceEnum.PER_TURN,
+          target: TargetEnum.ALL_ENEMIES
+        }
+      },
+      {
+        cost: 35,
+        ignoreDefense: true,
+        name: 'Destroyed Hook',
+        power: 3,
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.DAMAGE
       }
-    ]
+    ],
+    talents: []
+  },
+  {
+    name: 'Jesmon',
+    stats: {
+      health: 900,
+      maxHealth: 900,
+      mana: 75,
+      maxMana: 75,
+      offense: 135,
+      defense: 105,
+      speed: 110,
+      critRate: 7.5,
+      critDamage: 200,
+      healthRegen: 10,
+      manaRegen: 10
+    },
+    appliedStatus: [],
+    element: ElementEnum.ELECTRIC,
+    _id: uuidv4(),
+    currentExp: 0,
+    expToLevel: 100,
+    level: 1,
+    sprite: undefined,
+    skills: [
+      { ...attackSkill },
+      {
+        cost: 15,
+        ignoreDefense: false,
+        name: 'Weltgeist',
+        power: 0,
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        skillTarget: TargetEnum.SELF,
+        skillType: SkillTypeEnum.BUFF,
+        statusEffect: {
+          buff: BuffEnum.WELTGEIST,
+          chance: 100,
+          duration: 2,
+          statusInstance: BuffInstanceEnum.PER_TURN,
+          target: TargetEnum.SELF
+        }
+      },
+      {
+        cost: 30,
+        ignoreDefense: false,
+        name: 'One For All',
+        power: 150,
+        skillElement: ElementEnum.ELECTRIC,
+        skillTarget: TargetEnum.ENEMY,
+        skillType: SkillTypeEnum.SIGNATURE,
+        statusEffect: {
+          buff: BuffEnum.STATIC,
+          chance: 35,
+          duration: 2,
+          statusInstance: BuffInstanceEnum.PER_TURN,
+          target: TargetEnum.ENEMY
+        }
+      }
+    ],
+    talents: []
   }
 ]

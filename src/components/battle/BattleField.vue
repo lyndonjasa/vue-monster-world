@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="false"
+        :isAutomated="true"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -15,7 +15,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="true"
-        :isAutomated="false"
+        :isAutomated="true"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -458,6 +458,7 @@ export default BattleField;
 .sprites {
   display: flex;
   justify-content: center;
+  align-items: center;
 
   .team {
     margin: 0 25px;

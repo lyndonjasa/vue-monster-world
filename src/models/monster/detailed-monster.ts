@@ -7,4 +7,5 @@ export class DetailedMonster extends Monster {
   currentExp: number;
   expToLevel: number;
   appliedStatus: Status[];
+  talents: string[];
 }
