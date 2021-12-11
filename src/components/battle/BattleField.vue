@@ -238,7 +238,8 @@ const BattleField = defineComponent({
         let critProced = false
 
         // if skill type is not heal, check for procs
-        if (skill.skillType !== SkillTypeEnum.HEAL) {
+        if (skill.skillType === SkillTypeEnum.DAMAGE || 
+            skill.skillType === SkillTypeEnum.SIGNATURE) {
           critProced = procCrit(actor.stats.critRate);
           if (critProced) {
             overallDamage = calculateCriticalStrike(actor, overallDamage);
@@ -252,13 +253,17 @@ const BattleField = defineComponent({
               reduceStatusInstance(target, BuffEnum.BARRIER);
             }
           }
-        } else {
+        } else if (skill.skillType === SkillTypeEnum.HEAL) {
           overallDamage *= -1;
+        } else { // skill type is Buff
+          overallDamage = 0;
         }
+
+        const damageText = overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss'
 
         targets.value.push({
           targetId: target._id,
-          damageReceived: overallDamage !== 0 ? Math.abs(overallDamage).toString() : 'Miss',
+          damageReceived: skill.skillType !== SkillTypeEnum.BUFF ? damageText : '',
           isCrit: overallDamage !== 0 ? critProced : false
         });
 
@@ -291,7 +296,14 @@ const BattleField = defineComponent({
         }
 
         // apply status to target if status target is set to others and target is still alive
-        if (skill.statusEffect && skill.statusEffect.target === TargetEnum.OTHERS && target.stats.health > 0 && overallDamage !== 0) {
+        if (skill.statusEffect && 
+            skill.statusEffect.target === TargetEnum.OTHERS && 
+            target.stats.health > 0 && 
+            (
+              (overallDamage > 0 && (skill.skillType === SkillTypeEnum.DAMAGE || skill.skillType === SkillTypeEnum.SIGNATURE)) ||
+              (overallDamage <= 0 && (skill.skillType === SkillTypeEnum.HEAL || skill.skillType === SkillTypeEnum.BUFF))
+            )) {
+
           const { statusEffect } = skill;
 
           if (procStatus(statusEffect.chance)) {
@@ -299,8 +311,16 @@ const BattleField = defineComponent({
               statusEffect.appliedDamage = calculateBurnDamage(overallDamage);
             }
 
-            applyStatus(target, statusEffect);
+            applyStatus(target, { ...statusEffect });
           }
+        } else if (skill.statusEffect && skill.statusEffect.target === TargetEnum.SELF) {
+          const { statusEffect } = skill;
+
+          if (statusEffect.buff === BuffEnum.BURN) {
+              statusEffect.appliedDamage = calculateBurnDamage(overallDamage);
+            }
+
+            applyStatus(actor, { ...statusEffect });
         }
       })
 

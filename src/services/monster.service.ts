@@ -124,10 +124,26 @@ const monsterData: DetailedMonster[] = [
         skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.DAMAGE,
         statusEffect: {
-          duration: 1,
-          buff: BuffEnum.COUNTER,
+          duration: 2,
+          buff: BuffEnum.AGGRO,
           target: TargetEnum.OTHERS, // status target is either self or other
-          statusInstance:BuffInstanceEnum.PER_TURN,
+          statusInstance: BuffInstanceEnum.PER_TURN,
+          chance: 100
+        }
+      },
+      {
+        cost: 20,
+        power: 0,
+        ignoreDefense: false,
+        name: 'Boost',
+        skillElement: ElementEnum.NON_ELEMENTAL,
+        skillTarget: TargetEnum.ALL_ALLIES,
+        skillType: SkillTypeEnum.BUFF,
+        statusEffect: {
+          duration: 2,
+          buff: BuffEnum.BOOST,
+          target: TargetEnum.SELF,
+          statusInstance: BuffInstanceEnum.PER_TURN,
           chance: 100
         }
       }
