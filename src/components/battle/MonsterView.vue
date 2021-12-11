@@ -70,9 +70,9 @@ const MonsterView = defineComponent({
     const buffs = computed((): Status[] => {
       return props.monster.appliedStatus;
     })
-    // if (!props.isEnemy) {
-    //   monsterRef.value.stats.health = 25;
-    // }
+    if (!props.isEnemy) {
+      monsterRef.value.stats.health = 25;
+    }
 
     return {
       maxHealth,

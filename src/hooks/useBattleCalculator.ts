@@ -15,7 +15,8 @@ const useBattleCalculator = () => {
     wetAmplifier, 
     burnPercentage,
     wrathMultiplier,
-    guardPercentage
+    guardPercentage,
+    retaliationPercentage
   } = useEnvironment();
   const { randomize, procWrath } = useRandomizer();
   const { getElementalMultiplier } = useElement();
@@ -72,7 +73,7 @@ const useBattleCalculator = () => {
         if (hasTalent(actor, TalentEnum.WRATH) && procWrath()) {
           grossDamage = grossDamage * wrathMultiplier;
         }
-        
+
         // proc guard talent
         if (hasTalent(target, TalentEnum.GUARD)) {
           grossDamage = grossDamage * guardPercentage
@@ -120,6 +121,10 @@ const useBattleCalculator = () => {
     return marginalizeOutput(burnDamage);
   }
 
+  const calculateRetaliationDamage = (target: DetailedMonster): number => {
+    return marginalizeOutput(target.stats.defense * retaliationPercentage)
+  }
+
   const marginalizeOutput = (damage: number): number => {
     const marginValue = damage * (damageMargin / 100);
 
@@ -135,7 +140,8 @@ const useBattleCalculator = () => {
     calculateHealthRegen,
     calculateManaRegen,
     calculatePenaltyDamage,
-    calculateBurnDamage
+    calculateBurnDamage,
+    calculateRetaliationDamage
   }
 }
 

@@ -29,6 +29,14 @@ const useBattleEvents = () => {
     }
   }
 
+  const reduceHealth = (target: DetailedMonster, reductionRate: number): void => {
+    if ((target.stats.health - reductionRate) < 0) {
+      target.stats.health = 0;
+    } else {
+      target.stats.health -= reductionRate;
+    }
+  }
+
   const reduceMana = (target: DetailedMonster, reductionRate: number): void => {
     if ((target.stats.mana - reductionRate) < 0) {
       target.stats.mana = 0;
@@ -105,7 +113,8 @@ const useBattleEvents = () => {
     reduceStatusInstance,
     hasTalent,
     removeTalent,
-    reduceMana
+    reduceMana,
+    reduceHealth
   }
 }
 

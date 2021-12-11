@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="false"
+        :isAutomated="true"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -58,7 +58,8 @@ const BattleField = defineComponent({
       calculatePenaltyDamage, 
       calculateBurnDamage,
       calculateHealthRegen,
-      calculateManaRegen 
+      calculateManaRegen,
+      calculateRetaliationDamage
     } = useBattleCalculator();
 
     const { 
@@ -72,6 +73,7 @@ const BattleField = defineComponent({
       regenerateHealth, 
       regenerateMana,
       reduceMana,
+      reduceHealth,
       willRegen, 
       applyStatus, 
       hasStatus, 
@@ -307,6 +309,16 @@ const BattleField = defineComponent({
             regenerateHealth(actor, overallDamage * vampirismPercentage)
           }
 
+          // proc lethargy
+          if (hasTalent(actor, TalentEnum.LETHARGY) && actor._id !== target._id) {
+            reduceMana(target, overallDamage * lethargyPercentage);
+          }
+
+          // proc retaliation
+          if (hasTalent(target, TalentEnum.RETALIATION) && actorId !== target._id) {
+            reduceHealth(actor, calculateRetaliationDamage(target))
+          }
+
           if (overallDamage > target.stats.health) {
             target.stats.health = 0
 
@@ -320,10 +332,6 @@ const BattleField = defineComponent({
             }
           } else {
             target.stats.health -= overallDamage;
-
-            if (hasTalent(actor, TalentEnum.LETHARGY) && actor._id !== target._id) {
-              reduceMana(target, overallDamage * lethargyPercentage);
-            }
 
             // set the last target with counter status as counter actor
             if (hasStatus(target, BuffEnum.COUNTER)) {

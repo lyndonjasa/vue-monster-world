@@ -85,7 +85,8 @@ const monsterData: DetailedMonster[] = [
     talents: [
       TalentEnum.UNDYING,
       TalentEnum.GUARD,
-      TalentEnum.PRIDE
+      TalentEnum.PRIDE,
+      TalentEnum.RETALIATION
     ]
   },
   {
@@ -246,7 +247,9 @@ const enemyData: DetailedMonster[] = [
         }
       }
     ],
-    talents: []
+    talents: [
+      TalentEnum.RETALIATION
+    ]
   },
   {
     name: 'Mugendramon',
