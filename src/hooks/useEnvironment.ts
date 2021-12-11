@@ -14,6 +14,9 @@ const useEnvironment = () => {
   const resuPercentage: number = process.env.VUE_APP_UNDYING_RESU_PERCENTAGE
   const efficiencyPercentage: number = process.env.VUE_APP_EFFICIENCY_PERCENTAGE
   const lethargyPercentage: number = process.env.VUE_APP_LETHARGY_PERCENTAGE
+  const guardPercentage: number = process.env.VUE_APP_GUARD_PERCENTAGE
+  const prideChance: number = process.env.VUE_APP_PRICE_CHANCE
+  const retaliationPercentage: number = process.env.VUE_APP_RETALIATION_PERCENTAGE
 
   return {
     damageMargin,
@@ -26,7 +29,10 @@ const useEnvironment = () => {
     vampirismPercentage,
     resuPercentage,
     efficiencyPercentage,
-    lethargyPercentage
+    lethargyPercentage,
+    guardPercentage,
+    prideChance,
+    retaliationPercentage
   }
 }
 

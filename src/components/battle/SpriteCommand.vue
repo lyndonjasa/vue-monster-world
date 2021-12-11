@@ -152,6 +152,9 @@ const SpriteCommand = defineComponent({
     }
 
     const onTargetSelect = (monsterId: string) => {
+      showEnemies.value = false;
+      showAllies.value = false;
+
       context.emit('target-select', [monsterId])
       emitAnimation();
       selectBlinkingTarget('');

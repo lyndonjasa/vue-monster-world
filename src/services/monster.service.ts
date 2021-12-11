@@ -83,7 +83,8 @@ const monsterData: DetailedMonster[] = [
       }
     ],
     talents: [
-      TalentEnum.UNDYING
+      TalentEnum.UNDYING,
+      TalentEnum.GUARD
     ]
   },
   {

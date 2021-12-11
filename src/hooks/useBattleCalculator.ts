@@ -14,7 +14,8 @@ const useBattleCalculator = () => {
     damageMargin, 
     wetAmplifier, 
     burnPercentage,
-    wrathMultiplier
+    wrathMultiplier,
+    guardPercentage
   } = useEnvironment();
   const { randomize, procWrath } = useRandomizer();
   const { getElementalMultiplier } = useElement();
@@ -70,6 +71,11 @@ const useBattleCalculator = () => {
         // proc wrath damage
         if (hasTalent(actor, TalentEnum.WRATH) && procWrath()) {
           grossDamage = grossDamage * wrathMultiplier;
+        }
+        
+        // proc guard talent
+        if (hasTalent(target, TalentEnum.GUARD)) {
+          grossDamage = grossDamage * guardPercentage
         }
 
         // if target has wet status, amplify damage by 10%
