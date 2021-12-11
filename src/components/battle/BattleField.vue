@@ -64,7 +64,8 @@ const BattleField = defineComponent({
     const { 
       procCrit, 
       procMiss, 
-      procStatus 
+      procStatus,
+      procPride
     } = useRandomizer();
 
     const { 
@@ -354,7 +355,14 @@ const BattleField = defineComponent({
               statusEffect.appliedDamage = calculateBurnDamage(overallDamage);
             }
 
-            applyStatus(target, { ...statusEffect });
+            // if skill target is enemy, check for pride talent
+            if (skill.skillTarget === TargetEnum.ALL_ENEMIES || skill.skillTarget === TargetEnum.ENEMY) {
+              if (!(hasTalent(target, TalentEnum.PRIDE) && procPride())) {
+                applyStatus(target, { ...statusEffect });
+              }
+            } else {
+              applyStatus(target, { ...statusEffect });
+            }
           }
         } else if (skill.statusEffect && skill.statusEffect.target === TargetEnum.SELF) {
           const { statusEffect } = skill;

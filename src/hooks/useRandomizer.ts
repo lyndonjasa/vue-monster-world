@@ -5,7 +5,8 @@ import useEnvironment from "./useEnvironment"
 
 const { 
   blindSpeedReduction,
-  wrathProcChance
+  wrathProcChance,
+  prideChance
 } = useEnvironment();
 const { hasStatus } = useBattleEvents();
 
@@ -56,7 +57,13 @@ const useRandomizer = () => {
   const procWrath = (): boolean => {
     const randomValue = randomize(1, 100);
 
-    return wrathProcChance > randomValue;
+    return wrathProcChance >= randomValue;
+  }
+
+  const procPride = (): boolean => {
+    const randomValue = randomize(1, 100);
+
+    return prideChance >= randomValue;
   }
 
   return {
@@ -64,7 +71,8 @@ const useRandomizer = () => {
     procCrit,
     procMiss,
     procStatus,
-    procWrath
+    procWrath,
+    procPride
   }
 }
 

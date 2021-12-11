@@ -84,7 +84,8 @@ const monsterData: DetailedMonster[] = [
     ],
     talents: [
       TalentEnum.UNDYING,
-      TalentEnum.GUARD
+      TalentEnum.GUARD,
+      TalentEnum.PRIDE
     ]
   },
   {
@@ -284,7 +285,7 @@ const enemyData: DetailedMonster[] = [
           chance: 70,
           duration: 2,
           statusInstance: BuffInstanceEnum.PER_TURN,
-          target: TargetEnum.ALL_ENEMIES
+          target: TargetEnum.OTHERS
         }
       },
       {
@@ -352,7 +353,7 @@ const enemyData: DetailedMonster[] = [
           chance: 35,
           duration: 2,
           statusInstance: BuffInstanceEnum.PER_TURN,
-          target: TargetEnum.ENEMY
+          target: TargetEnum.OTHERS
         }
       }
     ],
