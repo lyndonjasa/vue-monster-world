@@ -17,6 +17,9 @@ const useEnvironment = () => {
   const guardPercentage: number = +process.env.VUE_APP_GUARD_PERCENTAGE
   const prideChance: number = +process.env.VUE_APP_PRIDE_CHANCE
   const retaliationPercentage: number = +process.env.VUE_APP_RETALIATION_PERCENTAGE
+  const lightFootedPercentage: number = +process.env.VUE_APP_LIGHTFOOTED_PERCENTAGE
+  const accuracyPercentage: number = +process.env.VUE_APP_ACCURACY_PERCENTAGE
+  const intrusionChance: number = +process.env.VUE_APP_INTRUSION_CHANCE
 
   return {
     damageMargin,
@@ -32,7 +35,10 @@ const useEnvironment = () => {
     lethargyPercentage,
     guardPercentage,
     prideChance,
-    retaliationPercentage
+    retaliationPercentage,
+    lightFootedPercentage,
+    accuracyPercentage,
+    intrusionChance
   }
 }
 

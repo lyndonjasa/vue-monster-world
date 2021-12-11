@@ -184,7 +184,9 @@ const monsterData: DetailedMonster[] = [
     talents: [
       TalentEnum.VAMPIRISM,
       TalentEnum.EFFICIENCY,
-      TalentEnum.LETHARGY
+      TalentEnum.LETHARGY,
+      TalentEnum.LIGHT_FOOTED,
+      TalentEnum.INTRUDER
     ]
   }
 ]
@@ -349,11 +351,11 @@ const enemyData: DetailedMonster[] = [
         name: 'One For All',
         power: 150,
         skillElement: ElementEnum.ELECTRIC,
-        skillTarget: TargetEnum.ALL_ENEMIES,
+        skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.SIGNATURE,
         statusEffect: {
-          buff: BuffEnum.STATIC,
-          chance: 35,
+          buff: BuffEnum.STUN,
+          chance: 85,
           duration: 2,
           statusInstance: BuffInstanceEnum.PER_TURN,
           target: TargetEnum.OTHERS
@@ -361,7 +363,8 @@ const enemyData: DetailedMonster[] = [
       }
     ],
     talents: [
-      TalentEnum.WRATH
+      TalentEnum.WRATH,
+      TalentEnum.ACCURACY
     ]
   }
 ]

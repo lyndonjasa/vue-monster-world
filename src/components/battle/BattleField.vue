@@ -66,7 +66,8 @@ const BattleField = defineComponent({
       procCrit, 
       procMiss, 
       procStatus,
-      procPride
+      procPride,
+      procIntrusion
     } = useRandomizer();
 
     const { 
@@ -88,7 +89,8 @@ const BattleField = defineComponent({
       vampirismPercentage, 
       resuPercentage,
       efficiencyPercentage,
-      lethargyPercentage
+      lethargyPercentage,
+      accuracyPercentage
     } = useEnvironment();
 
     const { writtenMessage, writeMessage } = useTypewriter();
@@ -218,7 +220,7 @@ const BattleField = defineComponent({
           reduceStatusTurns(actor);
 
           if (isStunned) { // skip current action and proceed to next if current actor is stunned
-            getNextActor();
+            getNextActor(actor);
           }
         }
 
@@ -355,8 +357,12 @@ const BattleField = defineComponent({
             )) {
 
           const { statusEffect } = skill;
+          let statusChance = statusEffect.chance;
+          if (hasTalent(actor, TalentEnum.ACCURACY)) {
+            statusChance += accuracyPercentage;
+          }
 
-          if (procStatus(statusEffect.chance)) {
+          if (procStatus(statusChance)) {
             if (statusEffect.buff === BuffEnum.BURN) {
               statusEffect.appliedDamage = calculateBurnDamage(overallDamage);
             }
@@ -394,7 +400,7 @@ const BattleField = defineComponent({
         applyPenalties(skill, team, actor);
       }
 
-      getNextActor();
+      getNextActor(actor);
     }
 
     const counterAction = ref<{ actor: Actor, target: string }>(undefined);
@@ -404,22 +410,24 @@ const BattleField = defineComponent({
 
     provide(CounterActor, counterAction);
 
-    const getNextActor = (): void => {
+    const getNextActor = (recentActor: DetailedMonster): void => {
       let nextActor: Actor;
 
       if (!hasCounterActor.value) {
-        for (let index = 0; index < orderOfActors.value.length; index++) {
-          if (actorIndex === orderOfActors.value.length - 1) {
-            actorIndex = 0; // reset to 0
-          } else {
-            actorIndex++;
-          }
+        if (!(hasTalent(recentActor, TalentEnum.INTRUDER) && procIntrusion())) {
+          for (let index = 0; index < orderOfActors.value.length; index++) {
+            if (actorIndex === orderOfActors.value.length - 1) {
+              actorIndex = 0; // reset to 0
+            } else {
+              actorIndex++;
+            }
 
-          // if next actor is dead, skip to next actor
-          if (orderOfActors.value[actorIndex].stats.health <= 0) {
-            continue;
-          } else {
-            break;
+            // if next actor is dead, skip to next actor
+            if (orderOfActors.value[actorIndex].stats.health <= 0) {
+              continue;
+            } else {
+              break;
+            }
           }
         }
 

@@ -1,14 +1,17 @@
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { TalentEnum } from "@/models/talents/talent.enum";
 import useBattleEvents from "./useBattleEvents";
 import useEnvironment from "./useEnvironment"
 
 const { 
   blindSpeedReduction,
   wrathProcChance,
-  prideChance
+  prideChance,
+  lightFootedPercentage,
+  intrusionChance
 } = useEnvironment();
-const { hasStatus } = useBattleEvents();
+const { hasStatus, hasTalent } = useBattleEvents();
 
 const useRandomizer = () => {
   const randomize = (min: number, max: number): number => {
@@ -44,8 +47,13 @@ const useRandomizer = () => {
 
     const totalSpeed = (actorSpeed + targetSpeed) * speedProbabilityReduction;
     const randomValue = randomize(1, totalSpeed);
+
+    let speedMultiplier = 0.5;
+    if (hasTalent(target, TalentEnum.LIGHT_FOOTED)) {
+      speedMultiplier += lightFootedPercentage
+    }
     
-    return Math.ceil(targetSpeed * 0.5) >= randomValue;
+    return Math.ceil(targetSpeed * speedMultiplier) >= randomValue;
   }
 
   const procStatus = (chance: number): boolean => {
@@ -66,13 +74,20 @@ const useRandomizer = () => {
     return prideChance >= randomValue;
   }
 
+  const procIntrusion = (): boolean => {
+    const randomValue = randomize(1, 100);
+
+    return intrusionChance >= randomValue;
+  }
+
   return {
     randomize,
     procCrit,
     procMiss,
     procStatus,
     procWrath,
-    procPride
+    procPride,
+    procIntrusion
   }
 }
 
