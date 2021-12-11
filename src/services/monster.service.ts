@@ -349,7 +349,7 @@ const enemyData: DetailedMonster[] = [
         name: 'One For All',
         power: 150,
         skillElement: ElementEnum.ELECTRIC,
-        skillTarget: TargetEnum.ENEMY,
+        skillTarget: TargetEnum.ALL_ENEMIES,
         skillType: SkillTypeEnum.SIGNATURE,
         statusEffect: {
           buff: BuffEnum.STATIC,

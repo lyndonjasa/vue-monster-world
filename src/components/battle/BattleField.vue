@@ -324,11 +324,9 @@ const BattleField = defineComponent({
 
             // proc resurrection
             if (hasTalent(target, TalentEnum.UNDYING)) {
-              setTimeout(() => {
-                regenerateHealth(target, target.stats.maxHealth * resuPercentage);
-                // undying can only proc once per battle
-                removeTalent(target, TalentEnum.UNDYING);
-              }, 1000)
+              regenerateHealth(target, target.stats.maxHealth * resuPercentage);
+              // undying can only proc once per battle
+              removeTalent(target, TalentEnum.UNDYING);
             }
           } else {
             target.stats.health -= overallDamage;
