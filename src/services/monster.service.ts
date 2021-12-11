@@ -82,7 +82,9 @@ const monsterData: DetailedMonster[] = [
         skillElement: ElementEnum.NON_ELEMENTAL
       }
     ],
-    talents: []
+    talents: [
+      TalentEnum.UNDYING
+    ]
   },
   {
     name: 'Agumon',

@@ -76,10 +76,11 @@ const BattleField = defineComponent({
       triggerBurn, 
       reduceStatusTurns,
       reduceStatusInstance,
-      hasTalent 
+      hasTalent,
+      removeTalent
     } = useBattleEvents();
 
-    const { vampirismPercentage } = useEnvironment();
+    const { vampirismPercentage, resuPercentage } = useEnvironment();
 
     const { writtenMessage, writeMessage } = useTypewriter();
     
@@ -287,12 +288,23 @@ const BattleField = defineComponent({
             target.stats.health -= overallDamage;
           }
         } else { // damage
+
+          // proc vampirism
           if (hasTalent(actor, TalentEnum.VAMPIRISM)) {
             regenerateHealth(actor, overallDamage * vampirismPercentage)
           }
 
           if (overallDamage > target.stats.health) {
             target.stats.health = 0
+
+            // proc resurrection
+            if (hasTalent(target, TalentEnum.UNDYING)) {
+              setTimeout(() => {
+                regenerateHealth(target, target.stats.maxHealth * resuPercentage);
+                // undying can only proc once per battle
+                removeTalent(target, TalentEnum.UNDYING);
+              }, 1000)
+            }
           } else {
             target.stats.health -= overallDamage;
 

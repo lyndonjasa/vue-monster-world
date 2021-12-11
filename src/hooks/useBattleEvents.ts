@@ -82,6 +82,10 @@ const useBattleEvents = () => {
     return monster.talents.find(t => t === talent) !== undefined
   }
 
+  const removeTalent = (monster: DetailedMonster, talent: TalentEnum): void => {
+    monster.talents = monster.talents.filter(t => t !== talent);
+  }
+
   return {
     willRegen,
     regenerateHealth,
@@ -91,7 +95,8 @@ const useBattleEvents = () => {
     triggerBurn,
     reduceStatusTurns,
     reduceStatusInstance,
-    hasTalent
+    hasTalent,
+    removeTalent
   }
 }
 
