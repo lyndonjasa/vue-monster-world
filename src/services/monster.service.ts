@@ -6,6 +6,7 @@ import { ElementEnum } from "@/models/skills/element.enum";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { TargetEnum } from "@/models/skills/target.enum";
+import { TalentEnum } from "@/models/talents/talent.enum";
 import { v4 as uuidv4 } from 'uuid';
 
 const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> => {
@@ -348,6 +349,8 @@ const enemyData: DetailedMonster[] = [
         }
       }
     ],
-    talents: []
+    talents: [
+      TalentEnum.WRATH
+    ]
   }
 ]

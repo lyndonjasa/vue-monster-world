@@ -3,7 +3,10 @@ import { DetailedMonster } from "@/models/monster/detailed-monster";
 import useBattleEvents from "./useBattleEvents";
 import useEnvironment from "./useEnvironment"
 
-const { blindSpeedReduction } = useEnvironment();
+const { 
+  blindSpeedReduction,
+  wrathProcChance
+} = useEnvironment();
 const { hasStatus } = useBattleEvents();
 
 const useRandomizer = () => {
@@ -50,11 +53,18 @@ const useRandomizer = () => {
     return chance >= randomValue;
   }
 
+  const procWrath = (): boolean => {
+    const randomValue = randomize(1, 100);
+
+    return wrathProcChance > randomValue;
+  }
+
   return {
     randomize,
     procCrit,
     procMiss,
-    procStatus
+    procStatus,
+    procWrath
   }
 }
 

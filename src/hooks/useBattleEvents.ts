@@ -2,6 +2,7 @@ import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Status } from "@/models/skills/status";
+import { TalentEnum } from "@/models/talents/talent.enum";
 
 const useBattleEvents = () => {
   const willRegen = (actor: DetailedMonster): boolean => {
@@ -77,6 +78,10 @@ const useBattleEvents = () => {
     actor.appliedStatus = actor.appliedStatus.filter(sb => sb.duration != 0);
   }
 
+  const hasTalent = (monster: DetailedMonster, talent: TalentEnum): boolean => {
+    return monster.talents.find(t => t === talent) !== undefined
+  }
+
   return {
     willRegen,
     regenerateHealth,
@@ -85,7 +90,8 @@ const useBattleEvents = () => {
     hasStatus,
     triggerBurn,
     reduceStatusTurns,
-    reduceStatusInstance
+    reduceStatusInstance,
+    hasTalent
   }
 }
 

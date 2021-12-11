@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -15,7 +15,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="true"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>

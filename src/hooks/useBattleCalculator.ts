@@ -2,6 +2,7 @@ import { BuffEnum } from "@/models/battle/buff.enum";
 import { DetailedMonster } from "@/models/monster/detailed-monster";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
+import { TalentEnum } from "@/models/talents/talent.enum";
 import useBattleEvents from "./useBattleEvents";
 import useElement from "./useElement";
 import useEnvironment from "./useEnvironment";
@@ -9,10 +10,15 @@ import useRandomizer from "./useRandomizer";
 
 const useBattleCalculator = () => {
 
-  const { damageMargin, wetAmplifier, burnPercentage } = useEnvironment();
-  const { randomize } = useRandomizer();
+  const { 
+    damageMargin, 
+    wetAmplifier, 
+    burnPercentage,
+    wrathMultiplier
+  } = useEnvironment();
+  const { randomize, procWrath } = useRandomizer();
   const { getElementalMultiplier } = useElement();
-  const { hasStatus } = useBattleEvents();
+  const { hasStatus, hasTalent } = useBattleEvents();
 
   // TODO: 
   // add margin of error
@@ -57,14 +63,20 @@ const useBattleCalculator = () => {
       }
 
       let grossDamage = Math.ceil((baseDamage / damageReduction) * elemMultiplier) * damageBuffMultiplier;
-      
-      // if target has wet status, amplify damage by 10%
-      if (hasStatus(target, BuffEnum.WET)) {
-        grossDamage = grossDamage * wetAmplifier
-      }
 
       // add margins if skill type is damage/signature
       if (skill.skillType === SkillTypeEnum.DAMAGE || skill.skillType === SkillTypeEnum.SIGNATURE) {
+        
+        // proc wrath damage
+        if (hasTalent(actor, TalentEnum.WRATH) && procWrath()) {
+          grossDamage = grossDamage * wrathMultiplier;
+        }
+
+        // if target has wet status, amplify damage by 10%
+        if (hasStatus(target, BuffEnum.WET)) {
+          grossDamage = grossDamage * wetAmplifier
+        }
+
         grossDamage = marginalizeOutput(grossDamage);
       }
 
