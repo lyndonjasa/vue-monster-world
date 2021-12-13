@@ -1,15 +1,15 @@
 import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
-import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { BattleMonster } from "@/models/monster/battle-monster";
 import { Status } from "@/models/skills/status";
 import { TalentEnum } from "@/models/talents/talent.enum";
 
 const useBattleEvents = () => {
-  const willRegen = (actor: DetailedMonster): boolean => {
+  const willRegen = (actor: BattleMonster): boolean => {
     return actor.stats.health < actor.stats.maxHealth || actor.stats.mana < actor.stats.maxMana;
   }
 
-  const regenerateHealth = (actor: DetailedMonster, regenRate: number): void => {
+  const regenerateHealth = (actor: BattleMonster, regenRate: number): void => {
     // if regen goes overboard, max health. . set to max health
     // otherwise, add to current health
     if ((actor.stats.health + regenRate) > actor.stats.maxHealth) {
@@ -19,7 +19,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const regenerateMana = (actor: DetailedMonster, regenRate: number): void => {
+  const regenerateMana = (actor: BattleMonster, regenRate: number): void => {
     // if regen goes overboard, max health. . set to max health
     // otherwise, add to current health
     if ((actor.stats.mana + regenRate) > actor.stats.maxMana) {
@@ -29,7 +29,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const reduceHealth = (target: DetailedMonster, reductionRate: number): void => {
+  const reduceHealth = (target: BattleMonster, reductionRate: number): void => {
     if ((target.stats.health - reductionRate) < 0) {
       target.stats.health = 0;
     } else {
@@ -37,7 +37,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const reduceMana = (target: DetailedMonster, reductionRate: number): void => {
+  const reduceMana = (target: BattleMonster, reductionRate: number): void => {
     if ((target.stats.mana - reductionRate) < 0) {
       target.stats.mana = 0;
     } else {
@@ -45,7 +45,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const applyStatus = (target: DetailedMonster, status: Status): void => {
+  const applyStatus = (target: BattleMonster, status: Status): void => {
     const existingApplication = target.appliedStatus.find(as => as.buff === status.buff);
 
     // if status exists, overwrite
@@ -57,11 +57,11 @@ const useBattleEvents = () => {
     }
   }
 
-  const hasStatus = (actor: DetailedMonster, status: BuffEnum): boolean => {
+  const hasStatus = (actor: BattleMonster, status: BuffEnum): boolean => {
     return actor.appliedStatus.find(s => s.buff === status) !== undefined
   }
 
-  const triggerBurn = (target: DetailedMonster): void => {
+  const triggerBurn = (target: BattleMonster): void => {
     const burnDamage = target.appliedStatus.find(s => s.buff === BuffEnum.BURN).appliedDamage;
 
     // burn damage cannot kill
@@ -72,7 +72,7 @@ const useBattleEvents = () => {
     }
   }
 
-  const reduceStatusTurns = (actor: DetailedMonster): void => {
+  const reduceStatusTurns = (actor: BattleMonster): void => {
     const statusBuffs = actor.appliedStatus.filter(s => s.statusInstance === BuffInstanceEnum.PER_TURN);
 
     statusBuffs.forEach(sb => {
@@ -82,23 +82,23 @@ const useBattleEvents = () => {
     removeExpiredBuffs(actor);
   }
 
-  const reduceStatusInstance = (actor: DetailedMonster, buff: BuffEnum): void => {
+  const reduceStatusInstance = (actor: BattleMonster, buff: BuffEnum): void => {
     const statusBuff = actor.appliedStatus.find(s => s.buff === buff);
     statusBuff.duration -= 1;
 
     removeExpiredBuffs(actor);
   }
 
-  const removeExpiredBuffs = (actor: DetailedMonster): void => {
+  const removeExpiredBuffs = (actor: BattleMonster): void => {
     // retain statuses that have remaining duration
     actor.appliedStatus = actor.appliedStatus.filter(sb => sb.duration != 0);
   }
 
-  const hasTalent = (monster: DetailedMonster, talent: TalentEnum): boolean => {
+  const hasTalent = (monster: BattleMonster, talent: TalentEnum): boolean => {
     return monster.talents.find(t => t === talent) !== undefined
   }
 
-  const removeTalent = (monster: DetailedMonster, talent: TalentEnum): void => {
+  const removeTalent = (monster: BattleMonster, talent: TalentEnum): void => {
     monster.talents = monster.talents.filter(t => t !== talent);
   }
 

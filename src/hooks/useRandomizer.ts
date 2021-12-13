@@ -1,5 +1,5 @@
 import { BuffEnum } from "@/models/battle/buff.enum";
-import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { BattleMonster } from "@/models/monster/battle-monster";
 import { TalentEnum } from "@/models/talents/talent.enum";
 import useBattleEvents from "./useBattleEvents";
 import useEnvironment from "./useEnvironment"
@@ -24,7 +24,7 @@ const useRandomizer = () => {
     return critRate >= randomValue;
   }
 
-  const procMiss = (actor: DetailedMonster, target: DetailedMonster): boolean => {
+  const procMiss = (actor: BattleMonster, target: BattleMonster): boolean => {
     const speedProbabilityReduction = !hasStatus(actor, BuffEnum.BLIND) ? 1 : blindSpeedReduction;
 
     // actor speed buffs

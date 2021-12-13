@@ -1,5 +1,5 @@
 import { BuffEnum } from "@/models/battle/buff.enum";
-import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { BattleMonster } from "@/models/monster/battle-monster";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { TalentEnum } from "@/models/talents/talent.enum";
@@ -25,8 +25,8 @@ const useBattleCalculator = () => {
   // TODO: 
   // add margin of error
   // add elemental strength / weakness
-  const calculateSkillDamage = (actor: DetailedMonster, 
-    target: DetailedMonster,
+  const calculateSkillDamage = (actor: BattleMonster, 
+    target: BattleMonster,
     skill: Skill): number => {
       let actorOffense = actor.stats.offense;
       if (hasStatus(actor, BuffEnum.POWER_UP)) {
@@ -90,7 +90,7 @@ const useBattleCalculator = () => {
       return grossDamage !== 0 ? grossDamage : 1;
   }
 
-  const calculatePenaltyDamage = (actor: DetailedMonster, skill: Skill, target: DetailedMonster) => {
+  const calculatePenaltyDamage = (actor: BattleMonster, skill: Skill, target: BattleMonster) => {
     const baseDamage = (actor.stats.offense * skill.power);
     const damageReduction = target.stats.defense * 0.75;
 
@@ -99,17 +99,17 @@ const useBattleCalculator = () => {
     return marginalizeOutput(penaltyDamage);
   }
 
-  const calculateCriticalStrike = (actor: DetailedMonster, damage: number): number => {
+  const calculateCriticalStrike = (actor: BattleMonster, damage: number): number => {
     return damage * (actor.stats.critDamage / 100);
   }
 
-  const calculateHealthRegen = (actor: DetailedMonster): number => {
+  const calculateHealthRegen = (actor: BattleMonster): number => {
     // TODO: add health regen talent in the future
 
     return Math.ceil(actor.stats.maxHealth * (actor.stats.healthRegen / 100));
   }
 
-  const calculateManaRegen = (actor: DetailedMonster): number => {
+  const calculateManaRegen = (actor: BattleMonster): number => {
     // TODO: add mana regen talent in the future
 
     return Math.ceil(actor.stats.maxMana * (actor.stats.manaRegen / 100));
@@ -121,7 +121,7 @@ const useBattleCalculator = () => {
     return marginalizeOutput(burnDamage);
   }
 
-  const calculateRetaliationDamage = (target: DetailedMonster): number => {
+  const calculateRetaliationDamage = (target: BattleMonster): number => {
     return marginalizeOutput(target.stats.defense * retaliationPercentage)
   }
 

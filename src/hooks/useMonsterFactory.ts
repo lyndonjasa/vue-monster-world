@@ -1,18 +1,18 @@
-import { DetailedMonster } from "@/models/monster/detailed-monster"
+import { BattleMonster } from "@/models/monster/battle-monster";
 import MonsterService from "@/services/monster.service"
 
 interface Factory {
-  getMonsterParty(): Promise<DetailedMonster[]>,
-  getEnemyParty(): Promise<DetailedMonster[]>
+  getMonsterParty(): Promise<BattleMonster[]>,
+  getEnemyParty(): Promise<BattleMonster[]>
 }
 
 const useMonsterFactory = (): Factory => {
 
-  const getMonsterParty = (): Promise<DetailedMonster[]> => {
+  const getMonsterParty = (): Promise<BattleMonster[]> => {
     return MonsterService.getMonsterParty('test id');
   }
 
-  const getEnemyParty = (): Promise<DetailedMonster[]> => {
+  const getEnemyParty = (): Promise<BattleMonster[]> => {
     return MonsterService.getEnemyParty();
   }
 

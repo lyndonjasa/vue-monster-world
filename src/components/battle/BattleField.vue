@@ -32,9 +32,17 @@ import useRandomizer from '@/hooks/useRandomizer';
 import useBattleEvents from '@/hooks/useBattleEvents';
 import useTypewriter from '@/hooks/useTypewriter';
 import MonsterView from './MonsterView.vue';
-import { DetailedMonster } from '@/models/monster/detailed-monster';
 import { MonsterTeamEnum } from '@/models/monster/monster-team.enum';
-import { BlinkingTarget, CounterActor, CurrentActorKey, InjectedTypewriter, LeftTeamTargets, OnSkillActivationKey, RightTeamTargets, SelectBlinkingTarget, WinningTeam } from '@/injections/battle.injection';
+import { 
+  BlinkingTarget, 
+  CounterActor, 
+  CurrentActorKey, 
+  InjectedTypewriter, 
+  LeftTeamTargets, 
+  OnSkillActivationKey, 
+  RightTeamTargets, 
+  SelectBlinkingTarget, 
+  WinningTeam } from '@/injections/battle.injection';
 import _ from 'lodash';
 import { Actor } from '@/models/battle/actor';
 import { Skill } from '@/models/skills/skill';
@@ -45,6 +53,7 @@ import { BuffEnum } from '@/models/battle/buff.enum';
 import { delayAction } from '@/helpers/delay.helper';
 import { TalentEnum } from '@/models/talents/talent.enum';
 import useEnvironment from '@/hooks/useEnvironment';
+import { BattleMonster } from '@/models/monster/battle-monster';
 
 const BattleField = defineComponent({
   components: {
@@ -95,8 +104,8 @@ const BattleField = defineComponent({
 
     const { writtenMessage, writeMessage } = useTypewriter();
     
-    const monsters = ref<DetailedMonster[]>([]);
-    const enemyMonsters = ref<DetailedMonster[]>([]);
+    const monsters = ref<BattleMonster[]>([]);
+    const enemyMonsters = ref<BattleMonster[]>([]);
     const targets = ref<{ targetId: string, damageReceived: string, isCrit: boolean }[]>([]);
 
     getMonsterParty().then(mp => {
@@ -107,7 +116,7 @@ const BattleField = defineComponent({
       enemyMonsters.value = emp
     })
 
-    const orderOfActors = computed((): DetailedMonster[] => {
+    const orderOfActors = computed((): BattleMonster[] => {
       const actors = [...monsters.value, ...enemyMonsters.value];
 
       const sortedActors = _.orderBy(actors, ['stats.speed', '_id'], ['desc', 'asc']);
@@ -232,7 +241,7 @@ const BattleField = defineComponent({
     let setNextActor = 0;
 
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
-      let actor: DetailedMonster;
+      let actor: BattleMonster;
 
       let selectedTargets = orderOfActors.value.filter(a => targetIds.includes(a._id));
       let targetMonsterId: string = undefined;
@@ -415,7 +424,7 @@ const BattleField = defineComponent({
 
     provide(CounterActor, counterAction);
 
-    const getNextActor = (recentActor: DetailedMonster): void => {
+    const getNextActor = (recentActor: BattleMonster): void => {
       let nextActor: Actor;
 
       if (!hasCounterActor.value) {
@@ -462,8 +471,8 @@ const BattleField = defineComponent({
       }, 2000)
     }
 
-    const applyPenalties = (skill: Skill, team: MonsterTeamEnum, actor: DetailedMonster) => {
-      const penaltyTargets: DetailedMonster[] = [];
+    const applyPenalties = (skill: Skill, team: MonsterTeamEnum, actor: BattleMonster) => {
+      const penaltyTargets: BattleMonster[] = [];
       // penalty targets could only be self or all allies
       if (skill.penalty.target === TargetEnum.SELF) {
         penaltyTargets.push(actor);

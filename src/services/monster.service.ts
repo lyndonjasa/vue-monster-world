@@ -1,7 +1,8 @@
 import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
-import { DetailedMonster } from "@/models/monster/detailed-monster";
+import { BattleMonster } from "@/models/monster/battle-monster";
+import { MonsterTeamEnum } from "@/models/monster/monster-team.enum";
 import { ElementEnum } from "@/models/skills/element.enum";
 import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
@@ -9,7 +10,7 @@ import { TargetEnum } from "@/models/skills/target.enum";
 import { TalentEnum } from "@/models/talents/talent.enum";
 import { v4 as uuidv4 } from 'uuid';
 
-const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> => {
+const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
   // character id will be supplied in the future
 
   console.log(characterId);
@@ -21,7 +22,7 @@ const getMonsterParty = async (characterId: string): Promise<DetailedMonster[]> 
   return await Promise.resolve(monsterData);
 }
 
-const getEnemyParty  = async (): Promise<DetailedMonster[]> => {
+const getEnemyParty  = async (): Promise<BattleMonster[]> => {
   // temporary code for getting enemy team
 
   const { sprites } = useSpriteFactory();
@@ -47,7 +48,7 @@ const attackSkill: Skill = {
   skillElement: ElementEnum.NON_ELEMENTAL
 }
 
-const monsterData: DetailedMonster[] = [
+const monsterData: BattleMonster[] = [
   {
     name: 'Alphamon',
     stats: {
@@ -63,6 +64,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10,
     },
+    team: MonsterTeamEnum.LEFT,
     appliedStatus: [],
     element: ElementEnum.ROCK,
     _id: uuidv4(),
@@ -104,6 +106,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    team: MonsterTeamEnum.LEFT,
     appliedStatus: [],
     element: ElementEnum.FIRE,
     _id: uuidv4(),
@@ -149,6 +152,7 @@ const monsterData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    team: MonsterTeamEnum.LEFT,
     appliedStatus: [],
     element: ElementEnum.WIND,
     _id: uuidv4(),
@@ -191,7 +195,7 @@ const monsterData: DetailedMonster[] = [
   }
 ]
 
-const enemyData: DetailedMonster[] = [
+const enemyData: BattleMonster[] = [
   {
     name: 'Gallantmon',
     stats: {
@@ -207,6 +211,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    team: MonsterTeamEnum.RIGHT,
     appliedStatus: [],
     element: ElementEnum.FIRE,
     _id: uuidv4(),
@@ -268,6 +273,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    team: MonsterTeamEnum.RIGHT,
     appliedStatus: [],
     element: ElementEnum.ELECTRIC,
     _id: uuidv4(),
@@ -320,6 +326,7 @@ const enemyData: DetailedMonster[] = [
       healthRegen: 10,
       manaRegen: 10
     },
+    team: MonsterTeamEnum.RIGHT,
     appliedStatus: [],
     element: ElementEnum.ELECTRIC,
     _id: uuidv4(),

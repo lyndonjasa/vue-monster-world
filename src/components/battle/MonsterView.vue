@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { DetailedMonster as MonsterModel } from '@/models/monster/detailed-monster';
+import { BattleMonster } from '@/models/monster/battle-monster';
 import { Status } from '@/models/skills/status';
 import { computed, defineComponent, PropType, ref } from 'vue'
 import BuffContainer from './BuffContainer.vue';
@@ -46,7 +46,7 @@ import Sprite from './Sprite.vue';
 import StatusBar from './StatusBar.vue';
 
 interface Props {
-  monster: MonsterModel,
+  monster: BattleMonster,
   isEnemy: boolean,
   isAutomated: boolean
 }
@@ -58,7 +58,7 @@ const MonsterView = defineComponent({
     appBuffContainer: BuffContainer
   },
   props: {
-    monster: { required: true, type: Object as PropType<MonsterModel> },
+    monster: { required: true, type: Object as PropType<BattleMonster> },
     isEnemy: Boolean,
     isAutomated: Boolean
   },
