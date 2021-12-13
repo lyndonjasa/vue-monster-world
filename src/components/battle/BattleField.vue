@@ -328,10 +328,8 @@ const BattleField = defineComponent({
             reduceMana(target, overallDamage * lethargyPercentage);
           }
 
-          // proc retaliation
-          if (hasTalent(target, TalentEnum.RETALIATION) && 
-            actorId !== target._id &&
-            skill.skillType !== SkillTypeEnum.HEAL) {
+          // proc retaliation, must not be proced on team mates
+          if (hasTalent(target, TalentEnum.RETALIATION) && actor.team !== target.team) {
             reduceHealth(actor, calculateRetaliationDamage(target))
           }
 
