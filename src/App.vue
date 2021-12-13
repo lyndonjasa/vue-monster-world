@@ -17,7 +17,8 @@ export default defineComponent({
   setup() {
     const credits = [
       'Gunmenagumonred',
-      'dragonrod342'
+      'dragonrod342',
+      'matykiller'
     ];
 
     return {

@@ -354,7 +354,7 @@ const enemyData: DetailedMonster[] = [
         skillTarget: TargetEnum.ENEMY,
         skillType: SkillTypeEnum.SIGNATURE,
         statusEffect: {
-          buff: BuffEnum.STUN,
+          buff: BuffEnum.STATIC,
           chance: 85,
           duration: 2,
           statusInstance: BuffInstanceEnum.PER_TURN,

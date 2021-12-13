@@ -5,7 +5,7 @@
         :key="monster.name" 
         :monster="monster"
         :isEnemy="false"
-        :isAutomated="true"
+        :isAutomated="false"
       >
         <span class="damage-output" :class="{ 'crit': critProced(monster._id) }">{{ fetchDamage(monster._id) }}</span>
       </app-monster>
@@ -284,6 +284,9 @@ const BattleField = defineComponent({
           }
         } else if (skill.skillType === SkillTypeEnum.HEAL) {
           overallDamage *= -1;
+          if (hasStatus(target, BuffEnum.STATIC)) {
+            overallDamage = 0;
+          }
         } else { // skill type is Buff
           overallDamage = 0;
         }
@@ -317,7 +320,9 @@ const BattleField = defineComponent({
           }
 
           // proc retaliation
-          if (hasTalent(target, TalentEnum.RETALIATION) && actorId !== target._id) {
+          if (hasTalent(target, TalentEnum.RETALIATION) && 
+            actorId !== target._id &&
+            skill.skillType !== SkillTypeEnum.HEAL) {
             reduceHealth(actor, calculateRetaliationDamage(target))
           }
 

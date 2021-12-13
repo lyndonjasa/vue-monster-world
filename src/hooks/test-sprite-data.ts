@@ -134,7 +134,7 @@ export const spriteData = [
   {
     "digimon": "Gallantmon",
     "dimensions": {
-      "scale": 1.25,
+      "scale": 1.35,
       "width": 90,
       "height": 65
     },
@@ -178,7 +178,7 @@ export const spriteData = [
   {
     "digimon": "Mugendramon",
     "dimensions": {
-      "scale": 1.5,
+      "scale": 1.75,
       "width": 100,
       "height": 65
     },
@@ -222,7 +222,7 @@ export const spriteData = [
   {
     "digimon": "Jesmon",
     "dimensions": {
-      "scale": 1,
+      "scale": 1.15,
       "width": 170,
       "height": 145
     },
