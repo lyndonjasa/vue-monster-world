@@ -330,7 +330,13 @@ const BattleField = defineComponent({
 
           // proc retaliation, must not be proced on team mates
           if (hasTalent(target, TalentEnum.RETALIATION) && actor.team !== target.team) {
-            reduceHealth(actor, calculateRetaliationDamage(target))
+            let retaliationDamage = calculateRetaliationDamage(target)
+            if (retaliationDamage >= actor.stats.health) {
+              // retaliation can't kill
+              retaliationDamage = actor.stats.health - 1
+            }
+
+            reduceHealth(actor, retaliationDamage)
           }
 
           if (overallDamage > target.stats.health) {
@@ -539,6 +545,7 @@ export default BattleField;
 
   .team {
     margin: 0 25px;
+    text-align: center;
   }
 
   .damage-output {
@@ -551,5 +558,9 @@ export default BattleField;
       color: red;
     }
   }
+}
+
+.battle-notification {
+  text-align: center;
 }
 </style>
