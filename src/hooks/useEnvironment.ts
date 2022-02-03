@@ -21,6 +21,9 @@ const useEnvironment = () => {
   const accuracyPercentage: number = +process.env.VUE_APP_ACCURACY_PERCENTAGE
   const intrusionChance: number = +process.env.VUE_APP_INTRUSION_CHANCE
 
+  // api settings
+  const apiBaseUrl: string = process.env.VUE_APP_API_URL
+
   return {
     damageMargin,
     spriteScale,
@@ -38,7 +41,8 @@ const useEnvironment = () => {
     retaliationPercentage,
     lightFootedPercentage,
     accuracyPercentage,
-    intrusionChance
+    intrusionChance,
+    apiBaseUrl
   }
 }
 
