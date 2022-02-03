@@ -1,5 +1,6 @@
 <template>
-  <app-battle-field></app-battle-field>
+  <!-- <app-battle-field></app-battle-field> -->
+  <router-view></router-view>
   <div class="credits">
     CTTO of the sprite images: {{ credits.join(', ') }} from DeviantArt
   </div>

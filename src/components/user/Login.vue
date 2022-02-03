@@ -5,14 +5,10 @@ const Login = defineComponent({
   setup() {
     const username = ref<string>(undefined);
     const password = ref<string>(undefined);
-    const firstName = ref<string>(undefined);
-    const lastName = ref<string>(undefined);
 
     return {
       username,
-      password,
-      firstName,
-      lastName
+      password
     }
   },
 })
