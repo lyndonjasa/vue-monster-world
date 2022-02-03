@@ -1,45 +1,34 @@
 <template>
-  <!-- <app-battle-field></app-battle-field> -->
-  <router-view></router-view>
-  <div class="credits">
-    CTTO of the sprite images: {{ credits.join(', ') }} from DeviantArt
+  <app-header></app-header>
+  <div class="content-wrapper">
+    <router-view></router-view>
   </div>
+  <app-footer></app-footer>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import BattleField from './components/battle/BattleField.vue';
+import Footer from './components/layout/Footer.vue';
+import Header from './components/layout/Header.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    appBattleField: BattleField
-  },
-  setup() {
-    const credits = [
-      'Gunmenagumonred',
-      'dragonrod342',
-      'matykiller'
-    ];
-
-    return {
-      credits
-    }
+    appHeader: Header,
+    appFooter: Footer
   }
 });
 </script>
 
 <style lang="scss">
+@import url('./assets/styles.scss');
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
-  text-align: center;
+}
 
-  .credits {
-    margin-top: 25px;
-  }
+.content-wrapper {
+  height: calc(100vh - 90px);
+  min-height: 660px;
 }
 </style>
