@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Prop, PropType } from 'vue'
+import { defineComponent, Prop } from 'vue'
 
 interface Emits {
   'onUpdate:modelValue'(value: any): boolean
