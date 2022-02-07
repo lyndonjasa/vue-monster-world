@@ -3,6 +3,12 @@
   margin: 0;
 }
 
+.app-black-div {
+  background-color: black;
+  opacity: 0.75;
+  color: white;
+}
+
 @font-face {
   font-family: Plaguard;
   src: url('./fonts/Plaguard-ZVnjx.otf') format('opentype');
