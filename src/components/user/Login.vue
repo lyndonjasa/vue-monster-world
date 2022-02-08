@@ -6,7 +6,7 @@
           <app-base-input 
             v-model="username"
             placeholder="Username"
-            required="true" 
+            :required="true" 
             updateOn="change"
             errorMessage="Username is required">
           </app-base-input>
@@ -16,7 +16,7 @@
             v-model="password" 
             placeholder="Password" 
             type="password" 
-            required="true" 
+            :required="true" 
             updateOn="change"
             errorMessage="Password is required">
           </app-base-input>
