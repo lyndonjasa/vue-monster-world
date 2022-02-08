@@ -8,7 +8,8 @@
         <div class="form-control">
           <app-base-input v-model="password" placeholder="Password" type="password"></app-base-input>
         </div>
-        <button @click="userLogin">Test</button>
+        <button class="app-black-btn" @click="userLogin">Login</button>
+        <button class="app-black-btn" @click="userLogin">Sign Up</button>
       </div>
     </div>
   </div>
@@ -75,6 +76,10 @@ export default Login
       .form-control {
         width: 400px;
         margin: 40px auto;
+      }
+
+      button {
+        margin: 0 20px;
       }
     }
   }
