@@ -2,11 +2,24 @@
   <div class="login-wrapper">
     <div class="login-container">
       <div class="login-form-container app-black-div">
-        <div class="form-control">
-          <app-base-input v-model="username" placeholder="Username"></app-base-input>
+        <div class="form-control text-username">
+          <app-base-input 
+            v-model="username"
+            placeholder="Username"
+            required="true" 
+            updateOn="change"
+            errorMessage="Username is required">
+          </app-base-input>
         </div>
         <div class="form-control">
-          <app-base-input v-model="password" placeholder="Password" type="password"></app-base-input>
+          <app-base-input 
+            v-model="password" 
+            placeholder="Password" 
+            type="password" 
+            required="true" 
+            updateOn="change"
+            errorMessage="Password is required">
+          </app-base-input>
         </div>
         <button class="app-black-btn" @click="userLogin">Login</button>
         <button class="app-black-btn" @click="userLogin">Sign Up</button>
@@ -75,7 +88,11 @@ export default Login
 
       .form-control {
         width: 400px;
-        margin: 40px auto;
+        margin: 25px auto;
+
+        &.text-username {
+          margin-top: 40px;
+        }
       }
 
       button {
