@@ -1,12 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Login from './components/user/Login.vue';
 import BattleField from './components/battle/BattleField.vue'
+import { UserRoutes } from "./components/user/user.routes";
 
 const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    component: Login
-  },
+  ...UserRoutes,
   {
     path: '/battle',
     component: BattleField
