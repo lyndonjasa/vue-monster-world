@@ -84,6 +84,9 @@ export default UserAccount;
     height: 25px;
     display: flex;
     justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease-in;
 
     svg {
       height: 25px;
@@ -95,6 +98,12 @@ export default UserAccount;
         color: rgba(255,255,255,1);
       }
     }
+  }
+  
+  &:hover .user-account-actions {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s ease-out;
   }
 }
 </style>
