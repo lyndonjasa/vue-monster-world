@@ -1,30 +1,26 @@
 <template>
-  <div class="login-wrapper">
-    <div class="login-container">
-      <div class="login-form-container app-transluscent-div">
-        <div class="form-control text-username">
-          <app-base-input 
-            v-model="username"
-            placeholder="Username"
-            :required="true"
-            updateOn="change"
-            :errorMessage="usernameError">
-          </app-base-input>
-        </div>
-        <div class="form-control">
-          <app-base-input 
-            v-model="password" 
-            placeholder="Password" 
-            type="password" 
-            :required="true" 
-            updateOn="change"
-            :errorMessage="passwordError">
-          </app-base-input>
-        </div>
-        <button class="app-generic-btn" @click="userLogin">Login</button>
-        <button class="app-generic-btn" @click="userLogin">Sign Up</button>
-      </div>
+  <div class="login-form-container app-transluscent-div">
+    <div class="form-control text-username">
+      <app-base-input 
+        v-model="username"
+        placeholder="Username"
+        :required="true"
+        updateOn="change"
+        :errorMessage="usernameError">
+      </app-base-input>
     </div>
+    <div class="form-control">
+      <app-base-input 
+        v-model="password" 
+        placeholder="Password" 
+        type="password" 
+        :required="true" 
+        updateOn="change"
+        :errorMessage="passwordError">
+      </app-base-input>
+    </div>
+    <button class="app-generic-btn" @click="userLogin">Login</button>
+    <button class="app-generic-btn" @click="userLogin">Sign Up</button>
   </div>
 </template>
 
@@ -98,45 +94,24 @@ export default Login
 </script>
 
 <style lang="scss" scoped>
-.login-wrapper {
-  background: rgb(2,0,36);
-  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(43,43,179,1) 100%);
-  height: 100%;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.login-form-container {
+  align-self: center;
+  height: 300px;
+  width: 500px;
+  text-align: center;
 
-  .login-container {
-    height: calc(100% - 20px);
-    background-image: url('../../assets/login_bg.jpg');
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: calc(100% - 40px);
-    display: flex;
-    justify-content: center;
+  .form-control {
+    width: 400px;
+    margin: 25px auto;
 
-    .login-form-container {
-      align-self: center;
-      height: 300px;
-      width: 500px;
-      text-align: center;
-
-      .form-control {
-        width: 400px;
-        margin: 25px auto;
-
-        &.text-username {
-          margin-top: 40px;
-        }
-      }
-
-      button {
-        margin: 0 20px;
-        width: 95px;
-      }
+    &.text-username {
+      margin-top: 40px;
     }
+  }
+
+  button {
+    margin: 0 20px;
+    width: 95px;
   }
 }
 </style>
