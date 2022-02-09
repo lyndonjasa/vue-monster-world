@@ -1,7 +1,7 @@
 import { CreateUserRequest, LoginRequest } from "@/http/requests";
 import useEnvironment from '@/hooks/useEnvironment'
 import axios from "axios";
-import { LoginResponse } from "@/http/responses";
+import { LoginResponse, UserAccountsResponse } from "@/http/responses";
 
 const { apiBaseUrl } = useEnvironment();
 const baseUserRoute = `${apiBaseUrl}/users`
@@ -14,7 +14,12 @@ const login = async (request: LoginRequest): Promise<LoginResponse> => {
   return axios.post(`${baseUserRoute}/login`, request).then(r => r.data);
 }
 
+const getUserAccounts = async (userId: string): Promise<UserAccountsResponse[]> => {
+  return axios.get(`${baseUserRoute}/${userId}/accounts`).then(r => r.data)
+}
+
 export default {
   createUser,
-  login
+  login,
+  getUserAccounts
 }

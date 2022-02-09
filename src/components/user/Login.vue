@@ -30,14 +30,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import useUser from '@/hooks/useUser'
+import useUser from '@/hooks/http-hooks/useUser'
 import { useField, useForm } from 'vee-validate'
 import { useRouter } from 'vue-router';
+import useAppStateCore from '@/hooks/store-hooks/useAppStateCore';
 
 const Login = defineComponent({
   setup() {
     const { login } = useUser();
     const router = useRouter();
+    const appState = useAppStateCore();
 
     const schema = {
       username(value: string) {
@@ -72,8 +74,10 @@ const Login = defineComponent({
       if (result.valid) {
         try {
           const result = await login(username.value, password.value);
-          console.log(result);
-          router.push('/battle');
+          // TODO: push auth token to cookie storage
+          appState.userId.value = result.userId
+
+          router.push('/accounts');
         } catch (error) {
           console.log(error.response.data);
         }
@@ -130,6 +134,7 @@ export default Login
 
       button {
         margin: 0 20px;
+        width: 95px;
       }
     }
   }
