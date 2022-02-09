@@ -6,9 +6,9 @@
           <app-base-input 
             v-model="username"
             placeholder="Username"
-            :required="true" 
+            :required="true"
             updateOn="change"
-            errorMessage="Username is required">
+            :errorMessage="usernameError">
           </app-base-input>
         </div>
         <div class="form-control">
@@ -18,7 +18,7 @@
             type="password" 
             :required="true" 
             updateOn="change"
-            errorMessage="Password is required">
+            :errorMessage="passwordError">
           </app-base-input>
         </div>
         <button class="app-black-btn" @click="userLogin">Login</button>
@@ -29,29 +29,59 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import useUser from '@/hooks/useUser'
+import { useField, useForm } from 'vee-validate'
 
 const Login = defineComponent({
   setup() {
     const { login } = useUser();
 
-    const username = ref<string>(undefined);
-    const password = ref<string>(undefined);
+    const schema = {
+      username(value: string) {
+        if (validateValue(value)) {
+          return true
+        } else {
+          return 'Username is required'
+        }
+      },
+      password(value: string) {
+        if (validateValue(value)) {
+          return true
+        } else {
+          return 'Password is required'
+        }
+      }
+    }
 
-    const userLogin = () => {
-      login(username.value, password.value)
-        .then(r => {
-          console.log(r);
-        })
-        .catch(e => {
-          console.log(e);
-        })
+    const validateValue = (value: string): boolean => {
+      return value !== undefined && value.trim() !== '';
+    }
+
+    const form = useForm({
+      validationSchema: schema
+    })
+
+    const { value: username, errorMessage: usernameError } = useField<string>('username')
+    const { value: password, errorMessage: passwordError } = useField<string>('password')
+
+    const userLogin = async () => {
+      const result = await form.validate();
+      if (result.valid) {
+        try {
+          const result = await login(username.value, password.value);
+          console.log(result);
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      }
     }
 
     return {
       username,
       password,
+      usernameError,
+      passwordError,
       userLogin
     }
   },

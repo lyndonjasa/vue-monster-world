@@ -2,17 +2,17 @@
   <input :type="type" class="base-text-input" 
     :value="modelValue" 
     :placeholder="placeholder"
-    :class="{ 'error': error }"
+    :class="{ 'error': hasErrors }"
     @input="onInput"
     @blur="onBlur"
     @change="onChange">
   <div class="validation-message-container">
-    <p class="validation-message" v-if="error">{{ errorMessage }}</p>
+    <p class="validation-message" v-if="hasErrors">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Prop, ref } from 'vue'
+import { computed, defineComponent, Prop, ref } from 'vue'
 
 interface Emits {
   'onUpdate:modelValue'(value: any): boolean
@@ -42,13 +42,17 @@ const BaseInput = defineComponent({
   setup(props: Props, context) {
     const error = ref<boolean>(false);
 
+    const hasErrors = computed((): boolean => {
+      return props.errorMessage !== undefined;
+    })
+
     const onInput = (event: InputEvent) => {
       if (props.updateOn === 'input') {
         updateModelValue(event.target['value'])
       }
     }
 
-    const onBlur = (event: InputEvent) => {
+    const onBlur = (event: FocusEvent) => {
       if (props.updateOn === 'blur') {
         updateModelValue(event.target['value'])
       }
@@ -74,7 +78,8 @@ const BaseInput = defineComponent({
       onInput,
       onBlur,
       onChange,
-      error
+      error,
+      hasErrors
     }
   }
 })
