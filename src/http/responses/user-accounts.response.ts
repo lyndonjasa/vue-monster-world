@@ -5,5 +5,6 @@ interface IAccountPartyDetail {
 
 export class UserAccountsResponse {
   accountId: string
+  accountName: string;
   monsters: IAccountPartyDetail[]
 }
