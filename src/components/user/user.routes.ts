@@ -1,8 +1,8 @@
 import { RouteRecordRaw } from "vue-router";
 import Login from './Login.vue'
 import UserAccountsWrapper from './UserAccountsWrapper.vue'
-import UserModule from './UserModule.vue';
 
+const UserModule = () => import('./UserModule.vue')
 export const UserRoutes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -10,6 +10,7 @@ export const UserRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'login',
         component: Login
       },
       {
