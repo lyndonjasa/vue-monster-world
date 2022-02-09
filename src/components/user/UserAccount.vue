@@ -4,10 +4,13 @@
       <p class="user-account-name">{{ account.accountName }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
-        <div class="monster-thumbnail"></div>
+          <div class="monster-thumbnail">
+            <img :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name" />
+          </div>
           <div class="monster-details">
             <p>{{ monster.name }}</p>
             <p>Lvl. {{ monster.level }}</p>
+            <app-base-element :element="monster.element"></app-base-element>
           </div>
         </div>
       </div>
@@ -29,7 +32,12 @@ const UserAccount = defineComponent({
     account: { required: true } as Prop<UserAccountsResponse>
   },
   setup() {
+    const monsterThumbnail = (thumb: string) => {
+      return require(`@/assets/thumbs/${thumb.replace(/\s+/g, '')}.jpg`)
+    }
+
     return {
+      monsterThumbnail,
       faRightToBracket,
       faTrashCan
     }
