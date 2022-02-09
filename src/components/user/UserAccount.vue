@@ -79,7 +79,6 @@ export default UserAccount;
     .monster-thumbnail {
       height: 50px;
       width: 50px;
-      background-color: yellow;
     }
 
     .monster-details {
