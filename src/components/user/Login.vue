@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrapper">
     <div class="login-container">
-      <div class="login-form-container app-black-div">
+      <div class="login-form-container app-transluscent-div">
         <div class="form-control text-username">
           <app-base-input 
             v-model="username"
@@ -21,8 +21,8 @@
             :errorMessage="passwordError">
           </app-base-input>
         </div>
-        <button class="app-black-btn" @click="userLogin">Login</button>
-        <button class="app-black-btn" @click="userLogin">Sign Up</button>
+        <button class="app-generic-btn" @click="userLogin">Login</button>
+        <button class="app-generic-btn" @click="userLogin">Sign Up</button>
       </div>
     </div>
   </div>

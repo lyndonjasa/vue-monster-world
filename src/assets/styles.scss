@@ -3,22 +3,22 @@
   margin: 0;
 }
 
-.app-black-div {
-  background-color: rgba(2, 54, 65, 0.85);
+.app-transluscent-div {
+  background-color: rgba(20, 17, 36, 0.90);
   color: white;
 }
 
-.app-black-btn {
+.app-generic-btn {
   color: white;
-  background-color: #412502;
+  background-color: #3a9eb4;
   padding: 10px 15px;
   font-size: 18px;
   cursor: pointer;
   border: none;
 }
 
-.app-black-btn:hover {
-  background-color: #5a3b15;
+.app-generic-btn:hover {
+  background-color: #19ACCD;
 }
 
 @font-face {
