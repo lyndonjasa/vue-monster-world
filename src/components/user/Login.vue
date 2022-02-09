@@ -32,10 +32,12 @@
 import { defineComponent } from 'vue'
 import useUser from '@/hooks/useUser'
 import { useField, useForm } from 'vee-validate'
+import { useRouter } from 'vue-router';
 
 const Login = defineComponent({
   setup() {
     const { login } = useUser();
+    const router = useRouter();
 
     const schema = {
       username(value: string) {
@@ -71,6 +73,7 @@ const Login = defineComponent({
         try {
           const result = await login(username.value, password.value);
           console.log(result);
+          router.push('/battle');
         } catch (error) {
           console.log(error.response.data);
         }
