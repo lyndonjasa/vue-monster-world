@@ -5,6 +5,9 @@
       :account="account"
       @remove-account="deleteAccount(account.accountId)">
     </user-account>
+    <user-account v-if="userAccounts.length < 3"
+      :template="true">
+    </user-account>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="user-account-wrapper">
-    <div class="user-account-details app-transluscent-div">
+    <div class="user-account-details app-transluscent-div" v-if="!template">
       <p class="user-account-name">{{ account.accountName }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
@@ -19,6 +19,16 @@
         <fa-icon :icon="faTrashCan" title="Delete" @click="showDeleteModal = true"></fa-icon>
       </div>
     </div>
+
+    <div class="user-account-details app-transluscent-div" v-if="template">
+      <p class="user-account-name">New Account</p>
+      <div class="new-user-account">
+        <p>Create New User Account</p>
+      </div>
+      <div class="user-account-actions">
+        <fa-icon :icon="faCirclePlus" title="Create New Account"></fa-icon>
+      </div>
+    </div>
   </div>
   <app-base-modal v-if="showDeleteModal" 
     :message="`Are you sure you want to delete this account? ${account.accountName}`"
@@ -31,20 +41,22 @@
 
 <script lang="ts">
 import { UserAccountsResponse } from "@/http/responses";
-import { defineComponent, Prop, ref } from "vue";
-import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { defineComponent, Prop, PropType, ref } from "vue";
+import { faRightToBracket, faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Emits {
   'onRemove-account'(accountId: string): boolean
 }
 
 interface Props extends Emits {
-  account: UserAccountsResponse
+  account: UserAccountsResponse,
+  template: boolean
 }
 
 const UserAccount = defineComponent({
   props: {
-    account: { required: true } as Prop<UserAccountsResponse>
+    account: { type: Object as PropType<UserAccountsResponse> } as Prop<UserAccountsResponse>,
+    template: { default: false } as Prop<boolean>
   },
   emits: {
     'remove-account': (accountId: string) => accountId !== undefined
@@ -64,6 +76,7 @@ const UserAccount = defineComponent({
       onAccountDelete,
       faRightToBracket,
       faTrashCan,
+      faCirclePlus,
       showDeleteModal
     }
   }
@@ -91,6 +104,12 @@ export default UserAccount;
     font-size: 24px;
     padding-bottom: 15px;
     border-bottom: 2px solid white;
+  }
+
+  .new-user-account {
+    padding: 35px 0px;
+    font-size: 18px;
+    text-align: center;
   }
 
   .user-account-monsters {
