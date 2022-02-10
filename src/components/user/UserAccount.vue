@@ -23,6 +23,7 @@
   <app-base-modal v-if="showDeleteModal" 
     :message="`Are you sure you want to delete this account? ${account.accountName}`"
     @close="showDeleteModal = false"
+    @accept="onAccountDelete"
     acceptText="Yes"
     closeText="Cancel">
   </app-base-modal>
@@ -33,19 +34,34 @@ import { UserAccountsResponse } from "@/http/responses";
 import { defineComponent, Prop, ref } from "vue";
 import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
+interface Emits {
+  'onRemove-account'(accountId: string): boolean
+}
+
+interface Props extends Emits {
+  account: UserAccountsResponse
+}
+
 const UserAccount = defineComponent({
   props: {
     account: { required: true } as Prop<UserAccountsResponse>
   },
-  setup() {
+  emits: {
+    'remove-account': (accountId: string) => accountId !== undefined
+  },
+  setup(props: Props, context) {
     const monsterThumbnail = (thumb: string) => {
       return require(`@/assets/thumbs/${thumb.replace(/\s+/g, '')}.jpg`)
     }
 
     const showDeleteModal = ref<boolean>(false);
+    const onAccountDelete = (): void => {
+      context.emit('remove-account', props.account.accountId)
+    }
 
     return {
       monsterThumbnail,
+      onAccountDelete,
       faRightToBracket,
       faTrashCan,
       showDeleteModal
