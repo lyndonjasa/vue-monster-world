@@ -43,6 +43,7 @@ import StarterPack from './StarterPack.vue'
 import useMonster from '@/hooks/http-hooks/useMonster';
 import { StarterPackResponse } from '@/http/responses';
 import { useRouter } from 'vue-router';
+import useAccount from '@/hooks/http-hooks/useAccount';
 
 const CreateAccount = defineComponent({
   components: {
@@ -51,6 +52,7 @@ const CreateAccount = defineComponent({
   setup() {
     const { validateRequired, validateLength } = useValidators();
     const { getStarterPacks } = useMonster();
+    const { createUserAccount } = useAccount();
     const router = useRouter();
 
     const accountNameValidation = (value: string) => {
@@ -87,8 +89,14 @@ const CreateAccount = defineComponent({
     }
 
     const saveAccount = () => {
-      console.log('Save Called');
-      showCreateConfirmationModal.value = false
+      createUserAccount(accountName.value, selectedGroup.value)
+        .then(() => {
+          showCreateConfirmationModal.value = false
+          router.push('/accounts');
+        })
+        .catch(err => {
+          console.log(err.response.data)
+        })
     }
 
     getStarterPacks().then(r => {
