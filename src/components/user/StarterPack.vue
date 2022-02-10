@@ -45,7 +45,7 @@ export default StarterPack;
 .starter-pack-wrapper {
   border: 2px solid rgba(255, 255, 255, 0.5);
   height: 80px;
-  width: 100%;
+  width: calc(100% - 4px);
   margin: 15px 0;
   cursor: pointer;
   display: flex;

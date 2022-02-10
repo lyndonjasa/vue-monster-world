@@ -4,9 +4,7 @@
       <p class="user-account-name app-text-header">{{ account.accountName }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
-          <div class="monster-thumbnail">
-            <img :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name" />
-          </div>
+          <app-base-monster-thumbnail :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name"></app-base-monster-thumbnail>
           <div class="monster-details">
             <p>{{ monster.name }}</p>
             <p>Lvl. {{ monster.level }}</p>
@@ -111,11 +109,6 @@ export default UserAccount;
   .user-account-monster {
     margin-top: 25px;
     display: flex;
-
-    .monster-thumbnail {
-      height: 50px;
-      width: 50px;
-    }
 
     .monster-details {
       margin-left: 10px;
