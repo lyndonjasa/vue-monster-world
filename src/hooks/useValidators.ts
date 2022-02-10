@@ -1,3 +1,5 @@
+import * as EmailValidator from 'email-validator';
+
 const useValidators = () => {
   const validateRequired = (value: any): boolean => {
     if (!value || (value && value.toString().trim() === '')) {
@@ -20,10 +22,17 @@ const useValidators = () => {
     return isValid
   }
 
+  const validateEmail = (value: string): boolean => {
+    return EmailValidator.validate(value);
+  }
+
   return {
     validateRequired,
-    validateLength
+    validateLength,
+    validateEmail
   }
 }
+
+
 
 export default useValidators;
