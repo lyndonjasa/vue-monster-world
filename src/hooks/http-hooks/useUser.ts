@@ -1,9 +1,13 @@
-import { LoginRequest } from "@/http/requests";
+import { CreateUserRequest, LoginRequest } from "@/http/requests";
 import userService from "@/services/user.service"
 import useAppStateCore from "../store-hooks/useAppStateCore";
 
 const useUser = () => {
   const { userId } = useAppStateCore();
+
+  const createUser = (request: CreateUserRequest) => {
+    return userService.createUser(request);
+  }
 
   const login = (username: string, password: string) => {
     const request: LoginRequest = {
@@ -19,6 +23,7 @@ const useUser = () => {
   }
 
   return {
+    createUser,
     login,
     getUserAccounts
   }

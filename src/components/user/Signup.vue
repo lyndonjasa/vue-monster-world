@@ -57,7 +57,9 @@
 </template>
 
 <script lang="ts">
+import useUser from '@/hooks/http-hooks/useUser';
 import useValidators from '@/hooks/useValidators';
+import { CreateUserRequest } from '@/http/requests';
 import { useField, useForm } from 'vee-validate';
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router';
@@ -66,6 +68,7 @@ const Signup = defineComponent({
   setup() {
     const router = useRouter();
     const { validateRequired, validateLength, validateEmail } = useValidators();
+    const { createUser } = useUser();
 
     type Validator = boolean | string
 
@@ -133,7 +136,7 @@ const Signup = defineComponent({
 
     const { value: firstName, errorMessage: firstNameError } = useField<string>('firstName');
     const { value: lastName, errorMessage: lastNameError } = useField<string>('lastName');
-    const { value: email, errorMessage: emailError } = useField<string>('email');
+    const { value: email, errorMessage: emailError, setErrors: setEmailErrors } = useField<string>('email');
     const { value: username, errorMessage: usernameError, setErrors: setUsernameErrors } = useField<string>('username');
     const { value: password, errorMessage: passwordError } = useField<string>('password');
 
@@ -144,7 +147,25 @@ const Signup = defineComponent({
     const submitForm = async () => {
       const result = await form.validate();
       if (result.valid) {
-        alert('form valid');
+        try {
+          const request: CreateUserRequest = {
+            username: username.value,
+            password: password.value,
+            email: email.value,
+            firstName: firstName.value,
+            lastName: lastName.value
+          }
+
+          await createUser(request);
+
+          reroute('/login')
+        } catch (error) {
+          const { status, data } = error.response;
+          if (status == 400) {
+            setEmailErrors(data);
+            setUsernameErrors(data);
+          }
+        }
       }
     }
 

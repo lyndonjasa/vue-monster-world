@@ -62,7 +62,7 @@ export default UserAccountsWrapper
 .user-accounts-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 900px;
 }
 </style>
