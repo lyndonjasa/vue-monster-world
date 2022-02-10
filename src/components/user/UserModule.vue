@@ -34,6 +34,7 @@ export default UserModule;
     background-repeat: no-repeat;
     width: calc(100% - 40px);
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
   }
 }

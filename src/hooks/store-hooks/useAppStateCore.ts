@@ -25,9 +25,24 @@ const useAppStateCore = () => {
     }
   })
 
+  const username = computed({
+    get(): string {
+      return store.getters.username
+    },
+    set(value: string) {
+      store.commit(CoreMutationTypes.setUsername, value)
+    }
+  })
+
+  const clearState = () => {
+    store.commit(CoreMutationTypes.clearCoreState, undefined);
+  }
+
   return {
     userId,
-    accountId
+    accountId,
+    username,
+    clearState
   }
 }
 

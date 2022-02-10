@@ -4,6 +4,7 @@ import { GetterTree } from 'vuex'
 export type CoreGetters = {
   userId(state: ICoreState): string,
   accountId(state: ICoreState): string
+  username(state: ICoreState): string
 }
 
 export const coreGetters: GetterTree<ICoreState, ICoreState> & CoreGetters = {
@@ -12,5 +13,8 @@ export const coreGetters: GetterTree<ICoreState, ICoreState> & CoreGetters = {
   },
   accountId: (state: ICoreState) => {
     return state.accountId
+  },
+  username: (state: ICoreState) => {
+    return state.username
   }
 }

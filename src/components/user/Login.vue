@@ -70,6 +70,7 @@ const Login = defineComponent({
           const result = await login(username.value, password.value);
           // TODO: push auth token to cookie storage
           appState.userId.value = result.userId
+          appState.username.value = result.username
 
           router.push('/accounts');
         } catch (error) {
