@@ -13,7 +13,12 @@
       </div>
       <div class="starter-packs-container">
         <p>CHOOSE STARTER PACK:</p>
-        <starter-pack></starter-pack>
+        <starter-pack v-for="pack in starterPacks" 
+          :key="pack.group"
+          :starterPack="pack"
+          :selected="pack.group == selectedGroup"
+          @select-pack="selectedGroup = $event">
+        </starter-pack>
       </div>
     </div>
   </div>
@@ -24,6 +29,8 @@ import useValidators from '@/hooks/useValidators'
 import { useField } from 'vee-validate'
 import { defineComponent, ref } from 'vue'
 import StarterPack from './StarterPack.vue'
+import useMonster from '@/hooks/http-hooks/useMonster';
+import { StarterPackResponse } from '@/http/responses';
 
 const CreateAccount = defineComponent({
   components: {
@@ -31,6 +38,7 @@ const CreateAccount = defineComponent({
   },
   setup() {
     const { validateRequired, validateLength } = useValidators();
+    const { getStarterPacks } = useMonster();
 
     const accountNameValidation = (value: string) => {
       if (!validateRequired(value)) {
@@ -46,12 +54,18 @@ const CreateAccount = defineComponent({
 
     const { value: accountName, errorMessage: accountNameError } = useField<string>('fieldName', accountNameValidation)
 
-    const starterGroup = ref<number>(1);
+    const selectedGroup = ref<number>(1);
+    const starterPacks = ref<StarterPackResponse[]>([]);
+
+    getStarterPacks().then(r => {
+      starterPacks.value = r
+    })
 
     return {
       accountName,
       accountNameError,
-      starterGroup
+      selectedGroup,
+      starterPacks
     }
   },
 })

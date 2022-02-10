@@ -1,4 +1,6 @@
+import useEnvironment from "@/hooks/useEnvironment";
 import useSpriteFactory from "@/hooks/useSpriteFactory";
+import { StarterPackResponse } from "@/http/responses";
 import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { BattleMonster } from "@/models/monster/battle-monster";
@@ -8,7 +10,15 @@ import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { TargetEnum } from "@/models/skills/target.enum";
 import { TalentEnum } from "@/models/talents/talent.enum";
+import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+
+const { apiBaseUrl } = useEnvironment();
+const baseMonsterRoute = `${apiBaseUrl}/monsters`
+
+const getStarterPacks = (): Promise<StarterPackResponse[]> => {
+  return axios.get(`${baseMonsterRoute}/starters`).then(r => r.data)
+}
 
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
   // character id will be supplied in the future
@@ -35,7 +45,8 @@ const getEnemyParty  = async (): Promise<BattleMonster[]> => {
 
 export default { 
   getMonsterParty,
-  getEnemyParty
+  getEnemyParty,
+  getStarterPacks
 }
 
 const attackSkill: Skill = {
