@@ -20,7 +20,7 @@
       </base-input>
     </div>
     <button class="app-generic-btn" @click="userLogin">Login</button>
-    <button class="app-generic-btn" @click="userLogin">Sign Up</button>
+    <button class="app-generic-btn" @click="reroute('/signup')">Sign Up</button>
   </div>
 </template>
 
@@ -56,10 +56,6 @@ const Login = defineComponent({
       }
     }
 
-    // const validateValue = (value: string): boolean => {
-    //   return value !== undefined && value.trim() !== '';
-    // }
-
     const form = useForm({
       validationSchema: schema
     })
@@ -82,12 +78,17 @@ const Login = defineComponent({
       }
     }
 
+    const reroute = (route: string) => {
+      router.push(route);
+    }
+
     return {
       username,
       password,
       usernameError,
       passwordError,
-      userLogin
+      userLogin,
+      reroute
     }
   },
 })

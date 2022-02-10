@@ -5,6 +5,10 @@ import { UserRoutes } from "./components/user/user.routes";
 const routes: RouteRecordRaw[] = [
   ...UserRoutes,
   {
+    path: '',
+    redirect: '/login'
+  },
+  {
     path: '/battle',
     component: BattleField
   }
