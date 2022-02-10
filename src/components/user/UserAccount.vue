@@ -16,15 +16,21 @@
       </div>
       <div class="user-account-actions">
         <fa-icon :icon="faRightToBracket" title="Enter"></fa-icon>
-        <fa-icon :icon="faTrashCan" title="Delete"></fa-icon>
+        <fa-icon :icon="faTrashCan" title="Delete" @click="showDeleteModal = true"></fa-icon>
       </div>
     </div>
   </div>
+  <app-base-modal v-if="showDeleteModal" 
+    :message="`Are you sure you want to delete this account? ${account.accountName}`"
+    @close="showDeleteModal = false"
+    acceptText="Yes"
+    closeText="Cancel">
+  </app-base-modal>
 </template>
 
 <script lang="ts">
 import { UserAccountsResponse } from "@/http/responses";
-import { defineComponent, Prop } from "vue";
+import { defineComponent, Prop, ref } from "vue";
 import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const UserAccount = defineComponent({
@@ -36,10 +42,13 @@ const UserAccount = defineComponent({
       return require(`@/assets/thumbs/${thumb.replace(/\s+/g, '')}.jpg`)
     }
 
+    const showDeleteModal = ref<boolean>(false);
+
     return {
       monsterThumbnail,
       faRightToBracket,
-      faTrashCan
+      faTrashCan,
+      showDeleteModal
     }
   }
 })
