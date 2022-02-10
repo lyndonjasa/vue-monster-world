@@ -11,22 +11,33 @@
           :errorMessage="accountNameError">
         </app-base-input>
       </div>
+      <div class="starter-packs-container">
+        <p>CHOOSE STARTER PACK:</p>
+        <starter-pack></starter-pack>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import useValidators from '@/hooks/useValidators'
 import { useField } from 'vee-validate'
 import { defineComponent, ref } from 'vue'
+import StarterPack from './StarterPack.vue'
 
 const CreateAccount = defineComponent({
+  components: {
+    StarterPack
+  },
   setup() {
+    const { validateRequired, validateLength } = useValidators();
+
     const accountNameValidation = (value: string) => {
-      if (!value || (value && value.trim() === '')) {
+      if (!validateRequired(value)) {
         return 'Account Name is required'
       }
 
-      if (value.length < 6 || value.length > 15) {
+      if (!validateLength(value, 6, 15)) {
         return 'Account Name must be between 6-15 characters'
       }
 
@@ -59,6 +70,10 @@ export default CreateAccount
 
     .account-name {
       margin-top: 35px;
+    }
+
+    .starter-packs-container {
+      margin-top: 20px;
     }
   }
 }
