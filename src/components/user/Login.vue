@@ -31,9 +31,11 @@ import { useField, useForm } from 'vee-validate'
 import { useRouter } from 'vue-router';
 import useValidators from '@/hooks/useValidators';
 import useAppStateCore from '@/hooks/store-hooks/useAppStateCore';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 
 const Login = defineComponent({
   setup() {
+    const { showModalLoader } = useLoaders();
     const { login } = useUser();
     const router = useRouter();
     const { validateRequired } = useValidators();
@@ -66,15 +68,18 @@ const Login = defineComponent({
     const userLogin = async () => {
       const result = await form.validate();
       if (result.valid) {
+        showModalLoader.value = true;
         try {
           const result = await login(username.value, password.value);
-          // TODO: push auth token to cookie storage
+          
           appState.userId.value = result.userId
           appState.username.value = result.username
 
           router.push('/accounts');
         } catch (error) {
           console.log(error.response.data);
+        } finally {
+          showModalLoader.value = false;
         }
       }
     }

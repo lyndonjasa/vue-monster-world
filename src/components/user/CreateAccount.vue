@@ -44,12 +44,15 @@ import useMonster from '@/hooks/http-hooks/useMonster';
 import { StarterPackResponse } from '@/http/responses';
 import { useRouter } from 'vue-router';
 import useAccount from '@/hooks/http-hooks/useAccount';
+import { delayAction } from '@/helpers/delay.helper';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 
 const CreateAccount = defineComponent({
   components: {
     StarterPack
   },
   setup() {
+    const { showModalLoader } = useLoaders();
     const { validateRequired, validateLength } = useValidators();
     const { getStarterPacks } = useMonster();
     const { createUserAccount } = useAccount();
@@ -89,20 +92,22 @@ const CreateAccount = defineComponent({
       }
     }
 
-    const saveAccount = () => {
-      createUserAccount(accountName.value, selectedGroup.value)
-        .then(() => {
-          router.push('/accounts');
-        })
-        .catch(err => {
-          const { status, data } = err.response;
-          if (status == 400) {
-            setAccountNameError(data);
-          }
-        })
-        .finally(() => {
-          showCreateConfirmationModal.value = false
-        })
+    const saveAccount = async () => {
+      showModalLoader.value = true;
+      try {
+        await createUserAccount(accountName.value, selectedGroup.value);
+        await delayAction(2000);
+
+        router.push('/accounts');
+      } catch (err) {
+        const { status, data } = err.response;
+        if (status == 400) {
+          setAccountNameError(data);
+        }
+      } finally {
+        showCreateConfirmationModal.value = false
+        showModalLoader.value = false;
+      }
     }
 
     getStarterPacks().then(r => {

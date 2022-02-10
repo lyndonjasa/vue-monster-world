@@ -58,6 +58,7 @@
 
 <script lang="ts">
 import useUser from '@/hooks/http-hooks/useUser';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 import useValidators from '@/hooks/useValidators';
 import { CreateUserRequest } from '@/http/requests';
 import { useField, useForm } from 'vee-validate';
@@ -67,6 +68,7 @@ import { useRouter } from 'vue-router';
 const Signup = defineComponent({
   setup() {
     const router = useRouter();
+    const { showModalLoader } = useLoaders();
     const { validateRequired, validateLength, validateEmail } = useValidators();
     const { createUser } = useUser();
 
@@ -147,6 +149,7 @@ const Signup = defineComponent({
     const submitForm = async () => {
       const result = await form.validate();
       if (result.valid) {
+        showModalLoader.value = true
         try {
           const request: CreateUserRequest = {
             username: username.value,
@@ -165,6 +168,8 @@ const Signup = defineComponent({
             setEmailErrors(data);
             setUsernameErrors(data);
           }
+        } finally {
+          showModalLoader.value = false
         }
       }
     }

@@ -26,12 +26,15 @@ import { defineComponent, ref } from "vue";
 import UserAccount from "./UserAccount.vue";
 import useAppStateCore from "@/hooks/store-hooks/useAppStateCore";
 import { useRouter } from "vue-router";
+import useLoaders from "@/hooks/store-hooks/useLoaders";
+import { delayAction } from "@/helpers/delay.helper";
 
 const UserAccountsWrapper = defineComponent({
   components: {
     UserAccount
   },
   setup() {
+    const { showModalLoader } = useLoaders();
     const router = useRouter();
     const { username, clearState } = useAppStateCore();
     const { getUserAccounts } = useUser();
@@ -39,16 +42,18 @@ const UserAccountsWrapper = defineComponent({
     const { redirectToLogin } = useCatchRouter();
     const userAccounts = ref<UserAccountsResponse[]>([])
 
-    const loadUserAccounts = () => {
-      getUserAccounts()
-        .then(ua => {
-          userAccounts.value = ua
+    const loadUserAccounts = async () => {
+      showModalLoader.value = true;
+      try {
+        const ua = await getUserAccounts();
+        await delayAction(2000);
 
-          console.log(ua);
-        })
-        .catch(() => {
-          redirectToLogin();
-        })
+        userAccounts.value = ua
+      } catch (error) {
+        redirectToLogin();
+      } finally {
+        showModalLoader.value = false;
+      }
     }
 
     loadUserAccounts();

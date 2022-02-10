@@ -1,6 +1,6 @@
 <template>
   <teleport to="div#app">
-    <div class="app-modal-overlay">
+    <div class="app-modal-overlay" v-show="showModalLoader">
       <div class="modal-wrapper">
         <div class="sprite-loaders">
           <sprite-canvas 
@@ -25,12 +25,15 @@ import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { defineComponent, ref } from 'vue'
 import SpriteCanvas from '../battle/SpriteCanvas.vue';
 import { modalLoaderSprites } from './sprite.loader';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 
 const BaseModalLoader = defineComponent({
   components: {
     SpriteCanvas
   },
   setup() {
+    const { showModalLoader } = useLoaders();
+
     const showLoader = ref<boolean>(false);
     const toggleDots = ref<boolean>(false);
 
@@ -42,7 +45,8 @@ const BaseModalLoader = defineComponent({
       showLoader,
       sprites,
       idleState,
-      toggleDots
+      toggleDots,
+      showModalLoader
     }
   },
 })
