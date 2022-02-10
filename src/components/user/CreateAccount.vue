@@ -70,7 +70,8 @@ const CreateAccount = defineComponent({
     const { 
       value: accountName, 
       errorMessage: accountNameError, 
-      validate: validateAccountName 
+      validate: validateAccountName,
+      setErrors: setAccountNameError
     } = useField<string>('fieldName', accountNameValidation)
 
     const selectedGroup = ref<number>(1);
@@ -91,11 +92,16 @@ const CreateAccount = defineComponent({
     const saveAccount = () => {
       createUserAccount(accountName.value, selectedGroup.value)
         .then(() => {
-          showCreateConfirmationModal.value = false
           router.push('/accounts');
         })
         .catch(err => {
-          console.log(err.response.data)
+          const { status, data } = err.response;
+          if (status == 400) {
+            setAccountNameError(data);
+          }
+        })
+        .finally(() => {
+          showCreateConfirmationModal.value = false
         })
     }
 
