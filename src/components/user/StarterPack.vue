@@ -63,7 +63,7 @@ export default StarterPack;
   margin: 15px 0;
   cursor: pointer;
   display: flex;
-  filter: brightness(0.75);
+  filter: brightness(0.5);
 
   &.active {
     border-color: rgba(255, 255, 255, 1);
