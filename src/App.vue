@@ -4,6 +4,7 @@
     <router-view></router-view>
   </div>
   <app-footer></app-footer>
+  <base-modal-loader></base-modal-loader>
 </template>
 
 <script lang="ts">

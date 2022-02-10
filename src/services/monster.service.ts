@@ -1,3 +1,4 @@
+import { spriteData } from "@/hooks/test-sprite-data";
 import useEnvironment from "@/hooks/useEnvironment";
 import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { StarterPackResponse } from "@/http/responses";
@@ -24,7 +25,7 @@ const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> =>
   // character id will be supplied in the future
 
   console.log(characterId);
-  const { sprites } = useSpriteFactory();
+  const { sprites } = useSpriteFactory(spriteData);
   monsterData.forEach(m => {
     m.sprite = sprites.find(s => s.name === m.name);
   })
@@ -35,7 +36,7 @@ const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> =>
 const getEnemyParty  = async (): Promise<BattleMonster[]> => {
   // temporary code for getting enemy team
 
-  const { sprites } = useSpriteFactory();
+  const { sprites } = useSpriteFactory(spriteData);
   enemyData.forEach(m => {
     m.sprite = sprites.find(s => s.name === m.name);
   })

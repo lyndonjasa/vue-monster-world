@@ -1,50 +1,4 @@
-import { SpriteAnimation } from "@/models/sprites/sprite-animation";
-
-export const spriteData: SpriteAnimation[] = [
-  {
-    "name": "AeroVeedramon",
-    "dimensions": {
-      "scale": 1.25,
-      "width": 60,
-      "height": 60
-    },
-    "idle": {
-      "start": 0,
-      "end": 5,
-      "layer": 0,
-      "speed": 0.2
-    },
-    "attack": {
-      "start": 0,
-      "end": 8,
-      "layer": 1,
-      "speed": 0.125
-    },
-    "ultimate": {
-      "start": 0,
-      "end": 8,
-      "layer": 2,
-      "speed": 0.15
-    },
-    "hit": {
-      "start": 6,
-      "end": 6,
-      "layer": 0,
-      "speed": 0
-    },
-    "dead": {
-      "start": 8,
-      "end": 8,
-      "layer": 0,
-      "speed": 0
-    },
-    "win": {
-      "start": 7,
-      "end": 7,
-      "layer": 0,
-      "speed": 0
-    }
-  },
+export const modalLoaderSprites = [
   {
     "name": "Agumon",
     "dimensions": {
@@ -90,83 +44,39 @@ export const spriteData: SpriteAnimation[] = [
     }
   },
   {
-    "name": "Alphamon",
+    "name": "Gabumon",
     "dimensions": {
-      "scale": 1.5,
-      "width": 96,
-      "height": 96
+      "scale": 1.25,
+      "width": 40,
+      "height": 85
     },
     "idle": {
       "start": 0,
-      "end": 4,
+      "end": 9,
       "layer": 0,
       "speed": 0.2
     },
     "attack": {
       "start": 0,
-      "end": 7,
-      "layer": 1,
-      "speed": 0.15
-    },
-    "ultimate": {
-      "start": 0,
-      "end": 8,
-      "layer": 2,
-      "speed": 0.2
-    },
-    "hit": {
-      "start": 5,
-      "end": 5,
-      "layer": 0,
-      "speed": 0
-    },
-    "dead": {
-      "start": 6,
-      "end": 6,
-      "layer": 0,
-      "speed": 0
-    },
-    "win": {
-      "start": 7,
-      "end": 7,
-      "layer": 0,
-      "speed": 0
-    }
-  },
-  {
-    "name": "Gallantmon",
-    "dimensions": {
-      "scale": 1.35,
-      "width": 90,
-      "height": 65
-    },
-    "idle": {
-      "start": 0,
-      "end": 7,
-      "layer": 0,
-      "speed": 0.175
-    },
-    "attack": {
-      "start": 0,
-      "end": 12,
+      "end": 15,
       "layer": 1,
       "speed": 0.125
     },
     "ultimate": {
       "start": 0,
-      "end": 12,
+      "end": 15,
       "layer": 2,
-      "speed": 0.15
+      "speed": 0.125
     },
     "hit": {
-      "start": 8,
-      "end": 8,
+      "start": 11,
+      "end": 11,
       "layer": 0,
       "speed": 0
     },
     "dead": {
-      "start": 9,
-      "end": 9,
+      "start": 12,
+      "end": 12,
       "layer": 0,
       "speed": 0
     },
@@ -178,55 +88,10 @@ export const spriteData: SpriteAnimation[] = [
     }
   },
   {
-    "name": "Mugendramon",
     "dimensions": {
-      "scale": 1.75,
-      "width": 100,
-      "height": 65
-    },
-    "idle": {
-      "start": 0,
-      "end": 5,
-      "layer": 0,
-      "speed": 0.2
-    },
-    "attack": {
-      "start": 6,
-      "end": 12,
-      "layer": 0,
-      "speed": 0.15
-    },
-    "ultimate": {
-      "start": 2,
-      "end": 13,
-      "layer": 1,
-      "speed": 0.125
-    },
-    "hit": {
-      "start": 0,
-      "end": 0,
-      "layer": 1,
-      "speed": 0
-    },
-    "dead": {
-      "start": 1,
-      "end": 1,
-      "layer": 1,
-      "speed": 0
-    },
-    "win": {
-      "start": 13,
-      "end": 13,
-      "layer": 0,
-      "speed": 0
-    }
-  },
-  {
-    "name": "Jesmon",
-    "dimensions": {
-      "scale": 1.15,
-      "width": 170,
-      "height": 145
+      "scale": 1.25,
+      "width": 40,
+      "height": 85
     },
     "idle": {
       "start": 0,
@@ -236,15 +101,15 @@ export const spriteData: SpriteAnimation[] = [
     },
     "attack": {
       "start": 0,
-      "end": 9,
+      "end": 7,
       "layer": 1,
       "speed": 0.15
     },
     "ultimate": {
       "start": 0,
-      "end": 9,
+      "end": 7,
       "layer": 2,
-      "speed": 0.15
+      "speed": 0.125
     },
     "hit": {
       "start": 6,
@@ -263,6 +128,95 @@ export const spriteData: SpriteAnimation[] = [
       "end": 7,
       "layer": 0,
       "speed": 0
-    }
+    },
+    "name": "Hackmon"
+  },
+  {
+    "dimensions": {
+      "scale": 1.15,
+      "width": 30,
+      "height": 40
+    },
+    "idle": {
+      "start": 0,
+      "end": 3,
+      "layer": 0,
+      "speed": 0.2
+    },
+    "attack": {
+      "start": 4,
+      "end": 7,
+      "layer": 0,
+      "speed": 0.125
+    },
+    "ultimate": {
+      "start": 0,
+      "end": 4,
+      "layer": 1,
+      "speed": 0.125
+    },
+    "hit": {
+      "start": 7,
+      "end": 7,
+      "layer": 1,
+      "speed": 0
+    },
+    "dead": {
+      "start": 6,
+      "end": 6,
+      "layer": 1,
+      "speed": 0
+    },
+    "win": {
+      "start": 5,
+      "end": 5,
+      "layer": 1,
+      "speed": 0
+    },
+    "name": "Veemon"
+  },
+  {
+    "dimensions": {
+      "scale": 1.25,
+      "width": 35,
+      "height": 60
+    },
+    "idle": {
+      "start": 0,
+      "end": 5,
+      "layer": 0,
+      "speed": 0.2
+    },
+    "attack": {
+      "start": 0,
+      "end": 6,
+      "layer": 1,
+      "speed": 0.15
+    },
+    "ultimate": {
+      "start": 0,
+      "end": 6,
+      "layer": 2,
+      "speed": 0.15
+    },
+    "hit": {
+      "start": 6,
+      "end": 6,
+      "layer": 0,
+      "speed": 0
+    },
+    "dead": {
+      "start": 7,
+      "end": 7,
+      "layer": 0,
+      "speed": 0
+    },
+    "win": {
+      "start": 7,
+      "end": 7,
+      "layer": 1,
+      "speed": 0
+    },
+    "name": "Dorumon"
   }
 ]

@@ -1,18 +1,16 @@
 import { Sprite } from "@/models/sprites/sprite";
+import { SpriteAnimation } from "@/models/sprites/sprite-animation";
 import { SpriteStateEnum } from "@/models/sprites/sprite-state";
-import { spriteData } from "./test-sprite-data";
 
 interface SpriteFactory {
   sprites: Sprite[]
 }
 
-const useSpriteFactory = (): SpriteFactory => {
-  const data = spriteData;
-
+const useSpriteFactory = (data: SpriteAnimation[]): SpriteFactory => {
   const sprites: Sprite[] = [];
 
   data.forEach(d => {
-    const sprite = new Sprite(d.digimon, d.dimensions.width, d.dimensions.height, d.dimensions.scale);
+    const sprite = new Sprite(d.name, d.dimensions.width, d.dimensions.height, d.dimensions.scale);
     
     sprite.createState(SpriteStateEnum.IDLE, 
       d.idle.layer,

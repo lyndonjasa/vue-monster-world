@@ -1,6 +1,6 @@
 <template>
   <teleport to="div#app">
-    <div class="modal-overlay">
+    <div class="app-modal-overlay">
       <div class="modal-wrapper">
         <div class="modal-body">
           <p>{{ message }}</p>
@@ -47,18 +47,6 @@ export default BaseModal;
 </script>
 
 <style lang="scss" scoped>
-.modal-overlay {
-  position: fixed; /* Sit on top of the page content */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-  z-index: 2;
-}
-
 .modal-wrapper {
   color: white;
   position: absolute;
