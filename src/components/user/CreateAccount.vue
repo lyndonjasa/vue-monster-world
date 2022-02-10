@@ -20,8 +20,19 @@
           @select-pack="selectedGroup = $event">
         </starter-pack>
       </div>
+      <div class="create-account-actions">
+        <button class="app-generic-btn" @click="onBackClick">Back</button>
+        <button class="app-generic-btn" @click="onCreateClick">Create</button>
+      </div>
     </div>
   </div>
+  <base-modal v-if="showCreateConfirmationModal" 
+    message="Proceed creating this account?" 
+    acceptText="Yes"
+    closeText="No"
+    @close="showCreateConfirmationModal = false"
+    @accept="saveAccount">
+  </base-modal>
 </template>
 
 <script lang="ts">
@@ -31,6 +42,7 @@ import { defineComponent, ref } from 'vue'
 import StarterPack from './StarterPack.vue'
 import useMonster from '@/hooks/http-hooks/useMonster';
 import { StarterPackResponse } from '@/http/responses';
+import { useRouter } from 'vue-router';
 
 const CreateAccount = defineComponent({
   components: {
@@ -39,6 +51,7 @@ const CreateAccount = defineComponent({
   setup() {
     const { validateRequired, validateLength } = useValidators();
     const { getStarterPacks } = useMonster();
+    const router = useRouter();
 
     const accountNameValidation = (value: string) => {
       if (!validateRequired(value)) {
@@ -52,10 +65,31 @@ const CreateAccount = defineComponent({
       return true;
     }
 
-    const { value: accountName, errorMessage: accountNameError } = useField<string>('fieldName', accountNameValidation)
+    const { 
+      value: accountName, 
+      errorMessage: accountNameError, 
+      validate: validateAccountName 
+    } = useField<string>('fieldName', accountNameValidation)
 
     const selectedGroup = ref<number>(1);
     const starterPacks = ref<StarterPackResponse[]>([]);
+
+    const onBackClick = () => {
+      router.push('/accounts');
+    }
+
+    const showCreateConfirmationModal = ref<boolean>(false);
+    const onCreateClick = async () => {
+      const result = await validateAccountName();
+      if (result.valid) {
+        showCreateConfirmationModal.value = true;
+      }
+    }
+
+    const saveAccount = () => {
+      console.log('Save Called');
+      showCreateConfirmationModal.value = false
+    }
 
     getStarterPacks().then(r => {
       starterPacks.value = r
@@ -65,7 +99,11 @@ const CreateAccount = defineComponent({
       accountName,
       accountNameError,
       selectedGroup,
-      starterPacks
+      starterPacks,
+      showCreateConfirmationModal,
+      onBackClick,
+      onCreateClick,
+      saveAccount
     }
   },
 })
@@ -88,6 +126,12 @@ export default CreateAccount
 
     .starter-packs-container {
       margin-top: 20px;
+    }
+
+    .create-account-actions {
+      margin-top: 35px;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

@@ -19,7 +19,7 @@ export const UserRoutes: RouteRecordRaw[] = [
         component: UserAccountsWrapper
       },
       {
-        path: 'create',
+        path: 'accounts/create',
         component: CreateAccount
       }
     ]

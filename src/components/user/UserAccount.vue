@@ -24,23 +24,24 @@
         <p>Create New User Account</p>
       </div>
       <div class="user-account-actions">
-        <fa-icon :icon="faCirclePlus" title="Create New Account"></fa-icon>
+        <fa-icon :icon="faCirclePlus" title="Create New Account" @click="onCreateClick"></fa-icon>
       </div>
     </div>
   </div>
-  <app-base-modal v-if="showDeleteModal" 
+  <base-modal v-if="showDeleteModal" 
     :message="`Are you sure you want to delete this account? ${account.accountName}`"
     @close="showDeleteModal = false"
     @accept="onAccountDelete"
     acceptText="Yes"
     closeText="Cancel">
-  </app-base-modal>
+  </base-modal>
 </template>
 
 <script lang="ts">
 import { UserAccountsResponse } from "@/http/responses";
 import { defineComponent, Prop, PropType, ref } from "vue";
 import { faRightToBracket, faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "vue-router";
 
 interface Emits {
   'onRemove-account'(accountId: string): boolean
@@ -60,6 +61,8 @@ const UserAccount = defineComponent({
     'remove-account': (accountId: string) => accountId !== undefined
   },
   setup(props: Props, context) {
+    const router = useRouter();
+
     const monsterThumbnail = (thumb: string) => {
       return require(`@/assets/thumbs/${thumb.replace(/\s+/g, '')}.jpg`)
     }
@@ -69,9 +72,14 @@ const UserAccount = defineComponent({
       context.emit('remove-account', props.account.accountId)
     }
 
+    const onCreateClick = () => {
+      router.push('/accounts/create');
+    }
+
     return {
       monsterThumbnail,
       onAccountDelete,
+      onCreateClick,
       faRightToBracket,
       faTrashCan,
       faCirclePlus,
