@@ -29,24 +29,26 @@ import { defineComponent } from 'vue'
 import useUser from '@/hooks/http-hooks/useUser'
 import { useField, useForm } from 'vee-validate'
 import { useRouter } from 'vue-router';
+import useValidators from '@/hooks/useValidators';
 import useAppStateCore from '@/hooks/store-hooks/useAppStateCore';
 
 const Login = defineComponent({
   setup() {
     const { login } = useUser();
     const router = useRouter();
+    const { validateRequired } = useValidators();
     const appState = useAppStateCore();
 
     const schema = {
       username(value: string) {
-        if (validateValue(value)) {
+        if (validateRequired(value)) {
           return true
         } else {
           return 'Username is required'
         }
       },
       password(value: string) {
-        if (validateValue(value)) {
+        if (validateRequired(value)) {
           return true
         } else {
           return 'Password is required'
@@ -54,9 +56,9 @@ const Login = defineComponent({
       }
     }
 
-    const validateValue = (value: string): boolean => {
-      return value !== undefined && value.trim() !== '';
-    }
+    // const validateValue = (value: string): boolean => {
+    //   return value !== undefined && value.trim() !== '';
+    // }
 
     const form = useForm({
       validationSchema: schema
