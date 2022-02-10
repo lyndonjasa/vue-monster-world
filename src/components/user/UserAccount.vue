@@ -1,7 +1,7 @@
 <template>
   <div class="user-account-wrapper">
     <div class="user-account-details app-transluscent-div" v-if="!template">
-      <p class="user-account-name">{{ account.accountName }}</p>
+      <p class="user-account-name app-text-header">{{ account.accountName }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
           <div class="monster-thumbnail">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="user-account-details app-transluscent-div" v-if="template">
-      <p class="user-account-name">New Account</p>
+      <p class="user-account-name app-text-header">New Account</p>
       <div class="new-user-account">
         <p>Create New User Account</p>
       </div>
@@ -96,14 +96,6 @@ export default UserAccount;
     border-color: rgba(255,255,255,0.75);
     -webkit-box-shadow: 0px 0px 10px 10px rgba(255,255,255,0.75); 
     box-shadow: 0px 0px 10px 10px rgba(255,255,255,0.75);
-  }
-
-  .user-account-name {
-    text-align: center;
-    font-family: "Plaguard";
-    font-size: 24px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid white;
   }
 
   .new-user-account {
