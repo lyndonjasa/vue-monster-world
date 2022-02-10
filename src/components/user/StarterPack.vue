@@ -3,6 +3,15 @@
     <div class="radio-control-outer">
       <div class="radio-control-inner" :class="{ 'active': selected }"></div>
     </div>
+    <div class="monster-details" v-for="monster in starterPack.monsters" :key="monster.name">
+      <div class="thumbnail">
+        <base-monster-thumbnail :src="monsterThumbnail(monster.name)" :title="monster.name"></base-monster-thumbnail>
+      </div>
+      <div class="monster-name">
+        <base-element :element="monster.element"></base-element>
+        <p>{{ monster.name }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,8 +41,13 @@ const StarterPack = defineComponent({
       context.emit('select-pack', props.starterPack.group)
     }
 
+    const monsterThumbnail = (thumb: string) => {
+      return require(`@/assets/thumbs/${thumb.replace(/\s+/g, '')}.jpg`)
+    } 
+
     return {
-      selectPack
+      selectPack,
+      monsterThumbnail
     }
   },
 })
@@ -64,6 +78,7 @@ export default StarterPack;
     display: flex;
     border-radius: 999px;
     margin-left: 10px;
+    margin-right: 32px;
     justify-content: center;
 
     .radio-control-inner {
@@ -74,6 +89,25 @@ export default StarterPack;
 
       &.active {
         background-color: white;
+      }
+    }
+  }
+
+  .monster-details {
+    width: 100px;
+    text-align: center;
+    align-self: center;
+
+    .thumbnail {
+      margin-left: 20px;
+    }
+
+    .monster-name {
+      display: flex;
+
+      p {
+        font-size: 15px;
+        margin-left: 5px;
       }
     }
   }

@@ -4,11 +4,11 @@
       <p class="user-account-name app-text-header">{{ account.accountName }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
-          <app-base-monster-thumbnail :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name"></app-base-monster-thumbnail>
+          <base-monster-thumbnail :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name"></base-monster-thumbnail>
           <div class="monster-details">
             <p>{{ monster.name }}</p>
             <p>Lvl. {{ monster.level }}</p>
-            <app-base-element :element="monster.element"></app-base-element>
+            <base-element :element="monster.element"></base-element>
           </div>
         </div>
       </div>

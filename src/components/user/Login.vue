@@ -1,23 +1,23 @@
 <template>
   <div class="login-form-container app-transluscent-div">
     <div class="form-control text-username">
-      <app-base-input 
+      <base-input 
         v-model="username"
         placeholder="Username"
         :required="true"
         updateOn="change"
         :errorMessage="usernameError">
-      </app-base-input>
+      </base-input>
     </div>
     <div class="form-control">
-      <app-base-input 
+      <base-input 
         v-model="password" 
         placeholder="Password" 
         type="password" 
         :required="true" 
         updateOn="change"
         :errorMessage="passwordError">
-      </app-base-input>
+      </base-input>
     </div>
     <button class="app-generic-btn" @click="userLogin">Login</button>
     <button class="app-generic-btn" @click="userLogin">Sign Up</button>
