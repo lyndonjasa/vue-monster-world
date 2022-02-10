@@ -1,4 +1,6 @@
-export const modalLoaderSprites = [
+import { SpriteAnimation } from "@/models/sprites/sprite-animation";
+
+export const modalLoaderSprites: SpriteAnimation[] = [
   {
     "name": "Agumon",
     "dimensions": {
@@ -47,8 +49,8 @@ export const modalLoaderSprites = [
     "name": "Gabumon",
     "dimensions": {
       "scale": 1.25,
-      "width": 40,
-      "height": 85
+      "width": 85,
+      "height": 40
     },
     "idle": {
       "start": 0,
@@ -90,8 +92,8 @@ export const modalLoaderSprites = [
   {
     "dimensions": {
       "scale": 1.25,
-      "width": 40,
-      "height": 85
+      "width": 85,
+      "height": 40
     },
     "idle": {
       "start": 0,
@@ -134,8 +136,8 @@ export const modalLoaderSprites = [
   {
     "dimensions": {
       "scale": 1.15,
-      "width": 30,
-      "height": 40
+      "width": 40,
+      "height": 30
     },
     "idle": {
       "start": 0,
@@ -178,8 +180,8 @@ export const modalLoaderSprites = [
   {
     "dimensions": {
       "scale": 1.25,
-      "width": 35,
-      "height": 60
+      "width": 60,
+      "height": 35
     },
     "idle": {
       "start": 0,
