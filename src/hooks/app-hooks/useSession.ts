@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import { useStorage } from "vue-composable";
 
 const useSession = () => {
@@ -10,6 +11,18 @@ const useSession = () => {
   const { storage: sessionUsername, clear: clearUsername } = useStorage(userNameKey);
   const { storage: sessionAccountId, clear: clearAccount } = useStorage(accountIdKey);
 
+  const hasUserSession = computed(() => {
+    return (sessionUserId.value !== undefined &&
+            sessionUserId.value !== 'undefined') &&
+          (sessionUsername.value !== undefined &&
+            sessionUsername.value !== 'undefined')
+  })
+
+  const hasAccountSession = computed(() => {
+    return sessionAccountId.value !== undefined &&
+            sessionAccountId.value !== 'undefined'
+  })
+
   const clearSession = () => {
     clearUser();
     clearUsername();
@@ -18,6 +31,8 @@ const useSession = () => {
 
   return {
     clearSession,
+    hasUserSession,
+    hasAccountSession,
     sessionUserId,
     sessionUsername,
     sessionAccountId
