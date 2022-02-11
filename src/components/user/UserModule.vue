@@ -28,7 +28,7 @@ export default UserModule;
 
   .user-module-container {
     height: calc(100% - 20px);
-    background-image: url('../../assets/login_bg.jpg');
+    background-image: url('../../assets/login_bg.png');
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
