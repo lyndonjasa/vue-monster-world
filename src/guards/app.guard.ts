@@ -5,7 +5,6 @@ export function userRouteGuard(
   _: RouteLocationNormalized, 
   __: RouteLocationNormalized, 
   next: NavigationGuardNext) {
-    debugger
     const { hasUserSession } = useSession();
 
     if (!hasUserSession.value) {

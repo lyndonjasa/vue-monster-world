@@ -72,7 +72,7 @@ const Login = defineComponent({
         showModalLoader.value = true;
         try {
           const result = await login(username.value, password.value);
-          debugger
+          
           appState.userId.value = result.userId
           appState.username.value = result.username
 

@@ -7,9 +7,9 @@ const useSession = () => {
   const userNameKey = `${baseKey}_userName`
   const accountIdKey = `${baseKey}_accountId`
 
-  const { storage: sessionUserId, clear: clearUser } = useStorage(userIdKey);
-  const { storage: sessionUsername, clear: clearUsername } = useStorage(userNameKey);
-  const { storage: sessionAccountId, clear: clearAccount } = useStorage(accountIdKey);
+  const { storage: sessionUserId, remove: clearUser } = useStorage(userIdKey);
+  const { storage: sessionUsername, remove: clearUsername } = useStorage(userNameKey);
+  const { storage: sessionAccountId, remove: clearAccount } = useStorage(accountIdKey);
 
   const hasUserSession = computed(() => {
     return (sessionUserId.value !== undefined &&
