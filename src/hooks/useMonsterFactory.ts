@@ -1,3 +1,4 @@
+import { delayAction } from "@/helpers/delay.helper";
 import { convertResponseToModel, convertToModelForBattle } from "@/helpers/monster.helper";
 import { BattleMonster } from "@/models/monster/battle-monster";
 import { MonsterTeamEnum } from "@/models/monster/monster-team.enum";
@@ -25,6 +26,7 @@ const useMonsterFactory = () => {
 
     const enemy = await getEnemyParty();
 
+    await delayAction(3000);
     showScreenLoader.value = false;
     return [battleConverted, enemy];
   }
