@@ -96,7 +96,7 @@ const CreateAccount = defineComponent({
       showModalLoader.value = true;
       try {
         await createUserAccount(accountName.value, selectedGroup.value);
-        await delayAction(2000);
+        await delayAction(1000);
 
         router.push('/accounts');
       } catch (err) {
@@ -110,8 +110,10 @@ const CreateAccount = defineComponent({
       }
     }
 
+    showModalLoader.value = true
     getStarterPacks().then(r => {
       starterPacks.value = r
+      showModalLoader.value = false
     })
 
     return {

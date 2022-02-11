@@ -46,7 +46,7 @@ const UserAccountsWrapper = defineComponent({
       showModalLoader.value = true;
       try {
         const ua = await getUserAccounts();
-        await delayAction(2000);
+        await delayAction(1000);
 
         userAccounts.value = ua
       } catch (error) {
