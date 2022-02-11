@@ -35,11 +35,13 @@ import useLoaders from '@/hooks/store-hooks/useLoaders';
 
 const Login = defineComponent({
   setup() {
-    const { showModalLoader } = useLoaders();
+    const { showModalLoader, showScreenLoader } = useLoaders();
     const { login } = useUser();
     const router = useRouter();
     const { validateRequired } = useValidators();
     const appState = useAppStateCore();
+
+    showScreenLoader.value = true;
 
     const schema = {
       username(value: string) {
