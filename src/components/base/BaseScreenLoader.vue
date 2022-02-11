@@ -45,7 +45,7 @@ export default BaseScreenLoader;
 <style lang="scss" scoped>
 .screen-loader-wrapper {
   background-color: black;
-  height: calc(100% - 90px);
+  height: calc(100vh - 90px);
   min-height: 660px;
   position: absolute;
   z-index: 5;

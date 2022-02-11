@@ -16,7 +16,7 @@
     </div>
 
     <div class="monster-name" :class="{ 'enemy': isEnemy }">
-      <span>{{ monster.name }}</span>
+      <span>{{ monster.computedName }}</span>
     </div>
 
     <app-buff-container :isEnemy="isEnemy" :buffs="buffs"></app-buff-container>

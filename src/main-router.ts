@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import BattleField from './components/battle/BattleField.vue'
+import MainLayout from './components/layout/MainLayout.vue'
 import { UserRoutes } from "./components/user/user.routes";
 
 const routes: RouteRecordRaw[] = [
   ...UserRoutes,
   {
     path: '',
-    redirect: '/login'
+    component: MainLayout
   },
   {
     path: '/battle',
