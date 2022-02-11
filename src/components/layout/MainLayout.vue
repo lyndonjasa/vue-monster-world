@@ -1,6 +1,8 @@
 <template>
   <div class="main-layout-wrapper">
-    <router-view></router-view>
+    <div class="main-layout-container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -21,5 +23,12 @@ export default MainLayout;
   background-image: url('../../assets/layout_bg.jpg');
   background-position: center;
   display: flex;
+
+  .main-layout-container {
+    width: calc(100% - 60px);
+    height: calc(100% - 60px);
+    align-self: center;
+    margin: 0 auto;
+  }
 }
 </style>
