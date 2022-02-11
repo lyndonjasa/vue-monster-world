@@ -242,7 +242,7 @@ const BattleField = defineComponent({
       }
     });
 
-    let setNextActor = 0;
+    let setNextActor = undefined;
 
     const onSkillActivation = (actorId: string, team: MonsterTeamEnum, skill: Skill, targetIds: string[]) => {
       let actor: BattleMonster;

@@ -6,7 +6,7 @@ export interface ICoreState {
 
 // base core state value
 export const coreState: ICoreState = {
-  userId: '61e448bc0b56cb7c585e4883', // TODO: revert back to empty string after testing
+  userId: '',
   username: '',
   accountId: ''
 }

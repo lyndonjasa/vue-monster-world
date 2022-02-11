@@ -12,12 +12,17 @@
 import { defineComponent } from 'vue';
 import Footer from './components/layout/Footer.vue';
 import Header from './components/layout/Header.vue';
+import useAppStateCore from './hooks/store-hooks/useAppStateCore';
 
 export default defineComponent({
   name: 'App',
   components: {
     appHeader: Header,
     appFooter: Footer
+  },
+  setup() {
+    const { setStoreValues } = useAppStateCore();
+    setStoreValues();
   }
 });
 </script>
