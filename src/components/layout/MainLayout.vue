@@ -2,6 +2,16 @@
   <div class="main-layout-wrapper">
     <div class="main-layout-container">
       <div class="navigation-bar app-transluscent-div">
+        <div class="nav-items">
+          <router-link class="nav-item" to="/">ACCOUNT</router-link>
+          <router-link class="nav-item" to="/items">ITEMS</router-link>
+          <router-link class="nav-item" to="/bestiary">BESTIARY</router-link>
+          <router-link class="nav-item" to="/dungeons">DUNGEONS</router-link>
+          <router-link class="nav-item" to="/help">HELP</router-link>
+        </div>
+        <div class="change-account">
+          <fa-icon :icon="faPeopleArrowsLeftRight" title="Switch Account" @click="reroute('/accounts')" />
+        </div>
       </div>
       <div class="route-view-container">
         <div class="view-item">
@@ -14,8 +24,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { faPeopleArrowsLeftRight } from '@fortawesome/free-solid-svg-icons'
+import { useRouter } from 'vue-router'
 
 const MainLayout = defineComponent({
+  setup() {
+    const router = useRouter();
+
+    const reroute = (route: string) => {
+      router.push(route);
+    } 
+
+    return {
+      faPeopleArrowsLeftRight,
+      reroute
+    }
+  }
 })
 
 export default MainLayout;
@@ -38,6 +62,40 @@ export default MainLayout;
 
     .navigation-bar {
       height: 50px;
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.5);
+      justify-content: space-between;
+
+      .nav-items {
+        display: flex;
+        font-size: 24px;
+
+        .nav-item {
+          margin: 0 10px;
+          text-decoration: none;
+          color: inherit;
+
+          &:hover {
+            color: rgba(255, 255, 255, 1);
+            cursor: pointer;
+          }
+
+          &.router-link-active {
+            color: rgba(255, 255, 255, 1);
+          }
+        }
+      }
+
+      svg {
+        height: 25px;
+        margin: 0 20px;
+
+        &:hover {
+          color: rgba(255, 255, 255, 1);
+          cursor: pointer;
+        }
+      }
     }
 
     .route-view-container {

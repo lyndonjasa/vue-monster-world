@@ -35,7 +35,7 @@ const UserAccountsWrapper = defineComponent({
     UserAccount
   },
   setup() {
-    const { showModalLoader } = useLoaders();
+    const { showModalLoader, showScreenLoader } = useLoaders();
     const router = useRouter();
     const { username, accountId, clearState } = useAppStateCore();
     const { getUserAccounts } = useUser();
@@ -64,9 +64,15 @@ const UserAccountsWrapper = defineComponent({
       loadUserAccounts();
     }
 
-    const loadAccount = (id: string) => {
+    const loadAccount = async (id: string) => {
       accountId.value = id;
-      router.push('/battle');
+
+      showScreenLoader.value = true;
+      // TODO: add loading of global values here
+      await delayAction(2000);
+      showScreenLoader.value = false;
+
+      router.push('/');
     }
 
     const logout = () => {
