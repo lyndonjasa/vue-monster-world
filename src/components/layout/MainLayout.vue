@@ -1,5 +1,7 @@
 <template>
-  <div class="main-layout-wrapper"></div>
+  <div class="main-layout-wrapper">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,5 +20,6 @@ export default MainLayout;
   width: 100%;
   background-image: url('../../assets/layout_bg.jpg');
   background-position: center;
+  display: flex;
 }
 </style>
