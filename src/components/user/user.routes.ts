@@ -5,11 +5,10 @@ import CreateAccount from './CreateAccount.vue'
 import Signup from './Signup.vue';
 import { userRouteGuard } from "@/guards/app.guard";
 
-const UserModule = () => import('./UserModule.vue')
 export const UserRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: UserModule,
+    component: () => import('./UserModule.vue'),
     children: [
       {
         path: 'login',

@@ -3,7 +3,7 @@ import accountService from "@/services/account.service"
 import useAppStateCore from "../store-hooks/useAppStateCore";
 
 const useAccount = () => {
-  const { userId } = useAppStateCore();
+  const { userId, accountId } = useAppStateCore();
   
   const deleteUserAccount = (accountId: string) => {
     return accountService.deleteAccount(accountId);
@@ -19,9 +19,14 @@ const useAccount = () => {
     return accountService.createAccount(request);
   }
 
+  const getAccountDetails = () => {
+    return accountService.getAccountDetails(accountId.value);
+  }
+
   return {
     deleteUserAccount,
-    createUserAccount
+    createUserAccount,
+    getAccountDetails
   }
 }
 

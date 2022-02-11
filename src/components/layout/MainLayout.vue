@@ -1,7 +1,13 @@
 <template>
   <div class="main-layout-wrapper">
     <div class="main-layout-container">
-      <router-view></router-view>
+      <div class="navigation-bar app-transluscent-div">
+      </div>
+      <div class="route-view-container">
+        <div class="view-item">
+          <router-view></router-view>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,12 +29,27 @@ export default MainLayout;
   background-image: url('../../assets/layout_bg.jpg');
   background-position: center;
   display: flex;
+  color: white;
 
   .main-layout-container {
-    width: calc(100% - 60px);
-    height: calc(100% - 60px);
-    align-self: center;
+    max-width: calc(100% - 60px);
+    min-width: 1200px;
     margin: 0 auto;
+
+    .navigation-bar {
+      height: 50px;
+    }
+
+    .route-view-container {
+      height: calc(100% - 50px);
+      display: flex;
+      align-items: center;
+
+      .view-item {
+        min-height: calc(100% - 40px);
+        min-width: 100%;
+      }
+    }
   }
 }
 </style>

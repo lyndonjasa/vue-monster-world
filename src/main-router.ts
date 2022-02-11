@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { AccountRoutes } from "./components/account/account.routes";
 import BattleField from './components/battle/BattleField.vue'
 import MainLayout from './components/layout/MainLayout.vue'
 import { UserRoutes } from "./components/user/user.routes";
@@ -9,7 +10,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '',
     component: MainLayout,
-    beforeEnter: accountRouteGuard
+    beforeEnter: accountRouteGuard,
+    children: [
+      ...AccountRoutes
+    ]
   },
   {
     path: '/battle',
