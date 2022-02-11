@@ -32,6 +32,7 @@ import { useRouter } from 'vue-router';
 import useValidators from '@/hooks/useValidators';
 import useAppStateCore from '@/hooks/store-hooks/useAppStateCore';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
+import { delayAction } from '@/helpers/delay.helper';
 
 const Login = defineComponent({
   setup() {
@@ -71,9 +72,11 @@ const Login = defineComponent({
         showModalLoader.value = true;
         try {
           const result = await login(username.value, password.value);
-          
+          debugger
           appState.userId.value = result.userId
           appState.username.value = result.username
+
+          await delayAction(1000);
 
           router.push('/accounts');
         } catch (error) {
