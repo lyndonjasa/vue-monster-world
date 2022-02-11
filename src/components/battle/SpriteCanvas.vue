@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref, watch } from 'vue'
 import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
 import useEnvironment from '@/hooks/useEnvironment';
@@ -52,6 +52,7 @@ const SpriteCanvas = defineComponent({
     const currentState = ref<SpriteStateConfig>(props.spriteState);
     const canvasContext = ref<CanvasRenderingContext2D>(undefined);
     const fps = 60;
+    let requestId = 0;
 
     const animate = () => {
       canvasContext.value.drawImage(
@@ -84,7 +85,7 @@ const SpriteCanvas = defineComponent({
     const animationFrame = () => {
       canvasContext.value.clearRect(0, 0, width.value, height.value);
       animate();
-      requestAnimationFrame(animationFrame);
+      requestId = requestAnimationFrame(animationFrame);
     }
 
     const resetState = () => {
@@ -100,6 +101,10 @@ const SpriteCanvas = defineComponent({
       spriteSheet.value.src = spriteSrc.value;
       resetState();
       animationFrame();
+    })
+
+    onBeforeUnmount(() => {
+      cancelAnimationFrame(requestId);
     })
 
     watch(() => props.spriteState, () => {

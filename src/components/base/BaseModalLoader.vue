@@ -1,6 +1,6 @@
 <template>
   <teleport to="div#app">
-    <div class="app-modal-overlay" v-show="showModalLoader">
+    <div class="app-modal-overlay" v-if="showModalLoader">
       <div class="modal-wrapper">
         <div class="sprite-loaders">
           <sprite-canvas 
