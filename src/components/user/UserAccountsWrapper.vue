@@ -8,7 +8,8 @@
       <user-account v-for="account in userAccounts" 
         :key="account.accountId" 
         :account="account"
-        @remove-account="deleteAccount(account.accountId)">
+        @remove-account="deleteAccount(account.accountId)"
+        @select-account="loadAccount(account.accountId)">
       </user-account>
       <user-account v-if="userAccounts.length < 3"
         :template="true">
@@ -36,7 +37,7 @@ const UserAccountsWrapper = defineComponent({
   setup() {
     const { showModalLoader } = useLoaders();
     const router = useRouter();
-    const { username, clearState } = useAppStateCore();
+    const { username, accountId, clearState } = useAppStateCore();
     const { getUserAccounts } = useUser();
     const { deleteUserAccount } = useAccount();
     const { redirectToLogin } = useCatchRouter();
@@ -63,6 +64,11 @@ const UserAccountsWrapper = defineComponent({
       loadUserAccounts();
     }
 
+    const loadAccount = (id: string) => {
+      accountId.value = id;
+      router.push('/battle');
+    }
+
     const logout = () => {
       clearState();
       router.push({ name: 'login' });
@@ -72,6 +78,7 @@ const UserAccountsWrapper = defineComponent({
       username,
       userAccounts,
       deleteAccount,
+      loadAccount,
       logout
     }
   }

@@ -60,7 +60,7 @@ const BattleField = defineComponent({
     appMonster: MonsterView
   },
   setup() {
-    const { getMonsterParty, getEnemyParty } = useMonsterFactory();
+    const { getMonsterParty, getEnemyParty, getTeams } = useMonsterFactory();
     const { 
       calculateSkillDamage, 
       calculateCriticalStrike, 
@@ -108,12 +108,16 @@ const BattleField = defineComponent({
     const enemyMonsters = ref<BattleMonster[]>([]);
     const targets = ref<{ targetId: string, damageReceived: string, isCrit: boolean }[]>([]);
 
-    getMonsterParty().then(mp => {
-      monsters.value = mp
-    });
+    // getMonsterParty().then(mp => {
+    //   monsters.value = mp
+    // });
 
-    getEnemyParty().then(emp => {
-      enemyMonsters.value = emp
+    // getEnemyParty().then(emp => {
+    //   enemyMonsters.value = emp
+    // })
+    getTeams().then(teams => {
+      monsters.value = teams[0]
+      enemyMonsters.value = teams[1]
     })
 
     const orderOfActors = computed((): BattleMonster[] => {

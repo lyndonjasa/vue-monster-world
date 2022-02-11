@@ -2,6 +2,7 @@
   <div class="user-account-wrapper">
     <div class="user-account-details app-transluscent-div" v-if="!template">
       <p class="user-account-name app-text-header">{{ account.accountName }}</p>
+      <p class="user-account-id">AID: {{ account.accountId }}</p>
       <div class="user-account-monsters">
         <div class="user-account-monster" v-for="monster in account.monsters" :key="monster.name">
           <base-monster-thumbnail :src="monsterThumbnail(monster.thumbnailName)" :title="monster.name"></base-monster-thumbnail>
@@ -13,7 +14,7 @@
         </div>
       </div>
       <div class="user-account-actions">
-        <fa-icon :icon="faRightToBracket" title="Enter"></fa-icon>
+        <fa-icon :icon="faRightToBracket" title="Enter" @click="onAccountSelect"></fa-icon>
         <fa-icon :icon="faTrashCan" title="Delete" @click="showDeleteModal = true"></fa-icon>
       </div>
     </div>
@@ -44,7 +45,8 @@ import { faRightToBracket, faTrashCan, faCirclePlus } from "@fortawesome/free-so
 import { useRouter } from "vue-router";
 
 interface Emits {
-  'onRemove-account'(accountId: string): boolean
+  'onRemove-account'(accountId: string): boolean,
+  'onSelect-account'(accountId: string): boolean
 }
 
 interface Props extends Emits {
@@ -58,7 +60,8 @@ const UserAccount = defineComponent({
     template: { default: false } as Prop<boolean>
   },
   emits: {
-    'remove-account': (accountId: string) => accountId !== undefined
+    'remove-account': (accountId: string) => accountId !== undefined,
+    'select-account': (accountId: string) => accountId !== undefined
   },
   setup(props: Props, context) {
     const router = useRouter();
@@ -72,6 +75,10 @@ const UserAccount = defineComponent({
       context.emit('remove-account', props.account.accountId)
     }
 
+    const onAccountSelect = (): void => {
+      context.emit('select-account', props.account.accountId)
+    }
+
     const onCreateClick = () => {
       router.push('/accounts/create');
     }
@@ -80,6 +87,7 @@ const UserAccount = defineComponent({
       monsterThumbnail,
       onAccountDelete,
       onCreateClick,
+      onAccountSelect,
       faRightToBracket,
       faTrashCan,
       faCirclePlus,
@@ -102,6 +110,12 @@ export default UserAccount;
     border-color: rgba(255,255,255,0.75);
     -webkit-box-shadow: 0px 0px 10px 10px rgba(255,255,255,0.75); 
     box-shadow: 0px 0px 10px 10px rgba(255,255,255,0.75);
+  }
+
+  .user-account-id {
+    font-size: 13px;
+    text-align: center;
+    margin-top: 5px;
   }
 
   .new-user-account {

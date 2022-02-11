@@ -2,6 +2,7 @@ import { spriteData } from "@/hooks/test-sprite-data";
 import useEnvironment from "@/hooks/useEnvironment";
 import useSpriteFactory from "@/hooks/useSpriteFactory";
 import { StarterPackResponse } from "@/http/responses";
+import { DetailedMonsterResponse } from "@/http/responses/detailed-monster.response";
 import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
 import { BuffEnum } from "@/models/battle/buff.enum";
 import { BattleMonster } from "@/models/monster/battle-monster";
@@ -16,9 +17,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 const { apiBaseUrl } = useEnvironment();
 const baseMonsterRoute = `${apiBaseUrl}/monsters`
+const baseAccountRoute = `${apiBaseUrl}/accounts`
 
 const getStarterPacks = (): Promise<StarterPackResponse[]> => {
   return axios.get(`${baseMonsterRoute}/starters`).then(r => r.data)
+}
+
+const getAccountMonsterParty = (accountId: string): Promise<DetailedMonsterResponse[]> => {
+  return axios.get(`${baseAccountRoute}/${accountId}/party`).then(r => r.data)
 }
 
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
@@ -29,6 +35,8 @@ const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> =>
   monsterData.forEach(m => {
     m.sprite = sprites.find(s => s.name === m.name);
   })
+
+  console.log(monsterData);
 
   return await Promise.resolve(monsterData);
 }
@@ -47,7 +55,8 @@ const getEnemyParty  = async (): Promise<BattleMonster[]> => {
 export default { 
   getMonsterParty,
   getEnemyParty,
-  getStarterPacks
+  getStarterPacks,
+  getAccountMonsterParty
 }
 
 const attackSkill: Skill = {
@@ -63,6 +72,7 @@ const attackSkill: Skill = {
 const monsterData: BattleMonster[] = [
   {
     name: 'Alphamon',
+    computedName: 'Alphamon',
     stats: {
       health: 900,
       maxHealth: 900,
@@ -101,10 +111,12 @@ const monsterData: BattleMonster[] = [
       TalentEnum.GUARD,
       TalentEnum.PRIDE,
       TalentEnum.RETALIATION
-    ]
+    ],
+    talentPoints: 0
   },
   {
     name: 'Agumon',
+    computedName: 'Alphamon',
     stats: {
       health: 450,
       maxHealth: 450,
@@ -147,10 +159,12 @@ const monsterData: BattleMonster[] = [
         skillType: SkillTypeEnum.DAMAGE
       }
     ],
-    talents: []
+    talents: [],
+    talentPoints: 0
   },
   {
     name: 'AeroVeedramon',
+    computedName: 'Alphamon',
     stats: {
       health: 850,
       maxHealth: 850,
@@ -203,13 +217,15 @@ const monsterData: BattleMonster[] = [
       TalentEnum.LETHARGY,
       TalentEnum.LIGHT_FOOTED,
       TalentEnum.INTRUDER
-    ]
+    ],
+    talentPoints: 0
   }
 ]
 
 const enemyData: BattleMonster[] = [
   {
     name: 'Gallantmon',
+    computedName: 'Alphamon',
     stats: {
       health: 950,
       maxHealth: 950,
@@ -268,10 +284,12 @@ const enemyData: BattleMonster[] = [
     ],
     talents: [
       TalentEnum.RETALIATION
-    ]
+    ],
+    talentPoints: 0
   },
   {
     name: 'Mugendramon',
+    computedName: 'Alphamon',
     stats: {
       health: 750,
       maxHealth: 750,
@@ -321,10 +339,12 @@ const enemyData: BattleMonster[] = [
         skillType: SkillTypeEnum.DAMAGE
       }
     ],
-    talents: []
+    talents: [],
+    talentPoints: 0
   },
   {
     name: 'Jesmon',
+    computedName: 'Alphamon',
     stats: {
       health: 900,
       maxHealth: 900,
@@ -384,6 +404,7 @@ const enemyData: BattleMonster[] = [
     talents: [
       TalentEnum.WRATH,
       TalentEnum.ACCURACY
-    ]
+    ],
+    talentPoints: 0
   }
 ]

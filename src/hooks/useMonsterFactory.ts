@@ -1,12 +1,13 @@
+import { convertResponseToModel, convertToModelForBattle } from "@/helpers/monster.helper";
 import { BattleMonster } from "@/models/monster/battle-monster";
+import { MonsterTeamEnum } from "@/models/monster/monster-team.enum";
 import MonsterService from "@/services/monster.service"
+import useAppStateCore from "./store-hooks/useAppStateCore";
+import useLoaders from "./store-hooks/useLoaders";
 
-interface Factory {
-  getMonsterParty(): Promise<BattleMonster[]>,
-  getEnemyParty(): Promise<BattleMonster[]>
-}
-
-const useMonsterFactory = (): Factory => {
+const useMonsterFactory = () => {
+  const { accountId } = useAppStateCore();
+  const { showScreenLoader } = useLoaders();
 
   const getMonsterParty = (): Promise<BattleMonster[]> => {
     return MonsterService.getMonsterParty('test id');
@@ -16,9 +17,22 @@ const useMonsterFactory = (): Factory => {
     return MonsterService.getEnemyParty();
   }
 
+  const getTeams = async (): Promise<BattleMonster[][]> => {
+    showScreenLoader.value = true;
+    const party = await MonsterService.getAccountMonsterParty(accountId.value);
+    const modelConverted = convertResponseToModel(party);
+    const battleConverted = convertToModelForBattle(modelConverted, MonsterTeamEnum.LEFT);
+
+    const enemy = await getEnemyParty();
+
+    showScreenLoader.value = false;
+    return [battleConverted, enemy];
+  }
+
   return {
     getMonsterParty,
-    getEnemyParty
+    getEnemyParty,
+    getTeams
   }
 }
 
