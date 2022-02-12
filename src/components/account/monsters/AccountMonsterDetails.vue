@@ -8,11 +8,15 @@
     <div class="monster-details">
       <p class="monster-name" v-on="enableSelection ? { click: onMonsterSelect } : {}"
         :class="{ 'clickable' : enableSelection }"
-        :title="enableSelection ? 'Click to view details' : ''">{{ monster.computedName }}</p>
+        :title="enableSelection ? 'Click to view details' : ''">
+        {{ monster.computedName }}
+        <span class="expand-icon">... <fa-icon :icon="faUpRightAndDownLeftFromCenter" /></span>
+      </p>
       <div class="summary">
         <div class="summary-key">Overview</div>
         <div class="summary-value">
-          <div class="details" v-for="detail in overviewDetails" :key="detail.key">
+          <div class="details" v-for="detail in overviewDetails" 
+            :key="detail.key">
             <div class="detail-key">{{ detail.key }}</div>
             <div class="detail-value">{{ detail.value }}</div>
           </div>
@@ -47,7 +51,8 @@ import { toElementString } from '@/helpers/element.helper';
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { defineComponent, Prop } from 'vue'
+import { computed, defineComponent, Prop } from 'vue'
+import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons'
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean
@@ -62,6 +67,7 @@ interface Props extends Emits {
 interface Details {
   key: string;
   value: string | number;
+  detailedOnly: boolean;
 }
 
 const AccountMonsterDetails = defineComponent({
@@ -80,70 +86,100 @@ const AccountMonsterDetails = defineComponent({
     const state = SpriteStateEnum.IDLE;
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
-    const overviewDetails: Details[] = [
+    const overviewDetailsValue: Details[] = [
       {
         key: 'Level',
-        value: props.monster.level
+        value: props.monster.level,
+        detailedOnly: false
       },
       {
         key: 'Element',
-        value: toElementString(props.monster.element)
+        value: toElementString(props.monster.element),
+        detailedOnly: false
       },
       {
         key: 'Current Exp',
-        value: props.monster.currentExp
+        value: props.monster.currentExp,
+        detailedOnly: true
       },
       {
         key: 'Evolution',
-        value: props.monster.stage
+        value: props.monster.stage,
+        detailedOnly: true
       },
       {
         key: 'To Next Level',
-        value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel
+        value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel,
+        detailedOnly: true
       }
     ];
+
+    const overviewDetails = computed((): Details[] => {
+      if (!props.showDetailedView) {
+        return overviewDetailsValue.filter(odv => !odv.detailedOnly)
+      } else {
+        return overviewDetailsValue
+      }
+    })
 
     // TODO: add showing of talents
 
     const { stats, skills } = props.monster
-    const statDetails: Details[] = [
+    const statDetailsValue: Details[] = [
       {
         key: 'Health',
-        value: stats.health
+        value: stats.health,
+        detailedOnly: false
       },
       {
         key: 'Health Regen',
-        value: stats.healthRegen + '%'
+        value: stats.healthRegen + '%',
+        detailedOnly: true
       },
       {
         key: 'Mana',
-        value: stats.mana
+        value: stats.mana,
+        detailedOnly: false
       },
       {
         key: 'Mana Regen',
-        value: stats.manaRegen + '%'
+        value: stats.manaRegen + '%',
+        detailedOnly: true
       },
       {
         key: 'Offense',
-        value: stats.offense
+        value: stats.offense,
+        detailedOnly: true
       },
       {
         key: 'Defense',
-        value: stats.defense
+        value: stats.defense,
+        detailedOnly: true
       },
       {
         key: 'Crit Rate',
-        value: stats.critRate + '%'
+        value: stats.critRate + '%',
+        detailedOnly: true
       },
       {
         key: 'Speed',
-        value: stats.speed
+        value: stats.speed,
+        detailedOnly: true
       },
       {
         key: 'Crit Damage',
-        value: stats.critDamage + '%'
+        value: stats.critDamage + '%',
+        detailedOnly: true
       }
     ]
+
+    const statDetails = computed((): Details[] => {
+      if (!props.showDetailedView) {
+        return statDetailsValue.filter(odv => !odv.detailedOnly)
+      } else {
+        return statDetailsValue
+      }
+    })
 
     const onMonsterSelect = (): void => {
       context.emit('select-monster', props.monster._id);
@@ -155,7 +191,8 @@ const AccountMonsterDetails = defineComponent({
       overviewDetails,
       statDetails,
       skills,
-      onMonsterSelect
+      onMonsterSelect,
+      faUpRightAndDownLeftFromCenter
     }
   },
 })

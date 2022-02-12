@@ -27,6 +27,7 @@ const HomeModule = defineComponent({
     const monsterParty = ref<DetailedMonsterResponse[]>([]);
     const showLoader = ref<boolean>(false);
 
+    const showDetails = ref<boolean>(false);
     const loadParty = async () => {
       showLoader.value = true
       monsterParty.value = await getAccountParty();
@@ -38,7 +39,8 @@ const HomeModule = defineComponent({
 
     return {
       monsterParty,
-      showLoader
+      showLoader,
+      showDetails
     }
   }
 })
