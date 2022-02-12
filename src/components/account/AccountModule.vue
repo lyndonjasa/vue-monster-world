@@ -10,7 +10,8 @@ import useAccount from '@/hooks/http-hooks/useAccount';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
 import AccountDetails from './AccountDetails.vue'
 import { AccountDetails as Account } from '@/models/account/account-details';
-import { defineComponent, ref } from 'vue'
+import { defineComponent, provide, ref } from 'vue'
+import { ReloadAccountKey } from '@/injections/account.injection'
 
 const AccountModule = defineComponent({
   components: {
@@ -32,6 +33,7 @@ const AccountModule = defineComponent({
         showScreenLoader.value = false;
       }
     }
+    provide(ReloadAccountKey, loadAccount);
     
     loadAccount();
 
