@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { AccountRoutes } from "./components/account/account.routes";
-import BattleField from './components/battle/BattleField.vue'
+import { BestiaryRoutes } from "./components/bestiary/bestiary.routes";
+import { DungeonRoutes } from "./components/dungeon/dungeon.routes";
+import { HelpRoutes } from "./components/help/help.routes";
 import { ItemRoutes } from "./components/item/item.route";
 import MainLayout from './components/layout/MainLayout.vue'
 import { UserRoutes } from "./components/user/user.routes";
@@ -14,12 +16,11 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: accountRouteGuard,
     children: [
       ...AccountRoutes,
-      ...ItemRoutes
+      ...ItemRoutes,
+      ...DungeonRoutes,
+      ...BestiaryRoutes,
+      ...HelpRoutes
     ]
-  },
-  {
-    path: '/battle',
-    component: BattleField
   }
 ]
 
