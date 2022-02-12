@@ -1,15 +1,15 @@
 <template>
   <div class="account-details-wrapper app-transluscent-div">
     <div class="account-details row no-margin">
-      <div class="col-sm-12">
+      <div class="w-100">
         <span class="account-name">{{ account.accountName }}</span> ({{ account._id }})
       </div>
-      <div class="col-sm-4">Currency:</div>
-      <div class="col-sm-8">{{ account.currency }}</div>
-      <div class="col-sm-4">Monsters Unlocked:</div>
-      <div class="col-sm-8"><span class="monsters-unlocked">{{ account.unlockedMonsters.length }}</span></div>
-      <div class="col-sm-4">Tamer Rank:</div>
-      <div class="col-sm-8">Bronze Tamer</div>
+      <div class="w-45">Currency:</div>
+      <div class="w-55">{{ account.currency }}</div>
+      <div class="w-45">Monsters Unlocked:</div>
+      <div class="w-55"><span class="monsters-unlocked">{{ account.unlockedMonsters.length }}</span></div>
+      <div class="w-45">Tamer Rank:</div>
+      <div class="w-55">Bronze Tamer</div>
     </div>
     <div class="account-party">
       <p>PARTY COMPOSITION:</p>
@@ -48,13 +48,34 @@ export default AccountDetails
 
 <style lang="scss" scoped>
 .account-details-wrapper {
-  padding: 10px;
+  padding: 20px 10px;
   margin-bottom: 25px;
   display: flex;
   justify-content: space-between;
 
   .account-details {
     margin-left: 20px;
+    width: 385px;
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+      margin: 3px 0px;
+    }
+
+    .w-100 {
+      width: 100%;
+      margin-top: 0px;
+      margin-bottom: 10px;
+    }
+
+    .w-45 {
+      width: 45%;
+    }
+
+    .w-55 {
+      width: 55%;
+    }
 
     .account-name {
       font-family: 'Plaguard';

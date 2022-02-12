@@ -3,14 +3,6 @@
   margin: 0;
 }
 
-.row {
-  margin: 0px;
-}
-
-.row > * {
-  padding: 0px !important;
-}
-
 .app-transluscent-div {
   background-color: rgba(20, 17, 36, 0.85);
   color: white;
@@ -54,5 +46,3 @@
   font-family: Plaguard;
   src: url('./fonts/Plaguard-ZVnjx.otf') format('opentype');
 }
-
-@import '~bootstrap/dist/css/bootstrap.css'

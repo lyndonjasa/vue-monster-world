@@ -4,7 +4,7 @@
       <div class="navigation-bar app-transluscent-div">
         <div class="nav-items">
           <router-link class="nav-item" to="/account">ACCOUNT</router-link>
-          <router-link class="nav-item" to="/items">ITEMS</router-link>
+          <router-link class="nav-item" to="/items">SHOP</router-link>
           <router-link class="nav-item" to="/bestiary">BESTIARY</router-link>
           <router-link class="nav-item" to="/dungeons">DUNGEONS</router-link>
           <router-link class="nav-item" to="/help">HELP</router-link>
