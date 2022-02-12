@@ -7,6 +7,7 @@ import { ItemRoutes } from "./components/item/item.route";
 import MainLayout from './components/layout/MainLayout.vue'
 import { UserRoutes } from "./components/user/user.routes";
 import { accountRouteGuard } from "./guards/app.guard";
+import BattleField from './components/battle/BattleField.vue'
 
 const routes: RouteRecordRaw[] = [
   ...UserRoutes,
@@ -21,6 +22,10 @@ const routes: RouteRecordRaw[] = [
       ...BestiaryRoutes,
       ...HelpRoutes
     ]
+  },
+  {
+    path: '/battle',
+    component: BattleField
   }
 ]
 
