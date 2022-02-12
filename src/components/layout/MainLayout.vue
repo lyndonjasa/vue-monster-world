@@ -57,6 +57,8 @@ export default MainLayout;
   background-position: center;
   display: flex;
   color: white;
+  font-family: 'PixelFont';
+  font-size: 14px;
 
   .main-layout-container {
     max-width: calc(100% - 60px);

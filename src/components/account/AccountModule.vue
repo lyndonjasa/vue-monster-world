@@ -1,7 +1,14 @@
 <template>
   <div class="account-module-wrapper" v-if="account">
     <account-details :account="account"></account-details>
-    <router-view></router-view>
+    <div class="account-module-body">
+      <div class="account-route-view app-transluscent-div">
+        <router-view></router-view>
+      </div>
+      <div class="account-menu app-transluscent-div">
+        Account Menu
+      </div>
+      </div>
   </div>
 </template>
 
@@ -45,3 +52,19 @@ const AccountModule = defineComponent({
 
 export default AccountModule;
 </script>
+
+<style lang="scss" scoped>
+.account-module-body {
+  display: flex;
+  justify-content: space-between;
+  height: calc(100% - 175px);
+
+  .account-route-view {
+    width: calc(100% - 275px);
+  }
+
+  .account-menu {
+    width: 250px;
+  }
+}
+</style>
