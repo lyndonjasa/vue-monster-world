@@ -16,4 +16,5 @@ export class DetailedMonsterResponse {
   talentPoints: number;
   skills: SkillResponse[];
   sprite: SpriteAnimation
+  stage: string;
 }

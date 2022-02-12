@@ -1,6 +1,7 @@
 <template>
   <base-div-loader v-if="showLoader"></base-div-loader>
   <div class="home-module-wrapper" v-else>
+    <p class="home-title">PARTY COMPOSITION:</p>
     <account-monster-details v-for="monster in monsterParty" 
       :key="monster._id"
       :monster="monster">
@@ -41,3 +42,9 @@ const HomeModule = defineComponent({
 
 export default HomeModule;
 </script>
+
+<style lang="scss" scoped>
+.home-title {
+  font-size: 20px;
+}
+</style>

@@ -85,6 +85,10 @@ const AccountMonsterDetails = defineComponent({
         value: props.monster.currentExp
       },
       {
+        key: 'Evolution',
+        value: props.monster.stage
+      },
+      {
         key: 'To Next Level',
         value: props.monster.expToLevel
       }
