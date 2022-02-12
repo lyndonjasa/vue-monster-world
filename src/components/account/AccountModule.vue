@@ -6,7 +6,7 @@
         <router-view></router-view>
       </div>
       <div class="account-menu app-transluscent-div">
-        Account Menu
+        <account-menu></account-menu>
       </div>
       </div>
   </div>
@@ -16,13 +16,15 @@
 import useAccount from '@/hooks/http-hooks/useAccount';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
 import AccountDetails from './AccountDetails.vue'
+import AccountMenu from './AccountMenu.vue';
 import { AccountDetails as Account } from '@/models/account/account-details';
 import { defineComponent, provide, ref } from 'vue'
 import { ReloadAccountKey } from '@/injections/account.injection'
 
 const AccountModule = defineComponent({
   components: {
-    AccountDetails
+    AccountDetails,
+    AccountMenu
   },
   setup() {
     const { getAccountDetails } = useAccount();

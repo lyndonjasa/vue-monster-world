@@ -2,7 +2,7 @@
   <div class="account-details-wrapper app-transluscent-div">
     <div class="account-details row no-margin">
       <div class="w-100">
-        <span class="account-name">{{ account.accountName }}</span> ({{ account._id }})
+        <span class="account-name">{{ account.accountName }}</span> <span class="account-id">({{ account._id }})</span>
       </div>
       <div class="w-45">Currency:</div>
       <div class="w-55">{{ account.currency }}</div>
@@ -80,6 +80,10 @@ export default AccountDetails
     .account-name {
       font-family: 'Plaguard';
       font-size: 28px;
+    }
+
+    .account-id {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
     }
   }
 
