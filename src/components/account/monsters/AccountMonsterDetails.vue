@@ -18,11 +18,22 @@
       </div>
       <div class="summary">
         <div class="summary-key">Stats</div>
-        <div class="summary-value"></div>
+        <div class="summary-value">
+          <div class="details" v-for="detail in statDetails" :key="detail.key">
+            <div class="detail-key">{{ detail.key }}</div>
+            <div class="detail-value">{{ detail.value }}</div>
+          </div>
+        </div>
       </div>
       <div class="summary">
         <div class="summary-key">Skills</div>
-        <div class="summary-value"></div>
+        <div class="summary-value" v-if="showSkillDetails">Detailed Skills</div>
+        <div class="summary-value" v-else>
+          <div class="skill-details" v-for="skill in skills" :key="skill.name">
+            <div class="skill-element"><base-element :element="skill.skillElement"></base-element></div>
+            <div class="skill-name">{{ skill.name }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +49,8 @@ import { defineComponent, Prop } from 'vue'
 
 interface Props {
   monster: DetailedMonsterResponse;
+  showTalents: boolean,
+  showSkillDetails: boolean
 }
 
 interface Details {
@@ -50,7 +63,9 @@ const AccountMonsterDetails = defineComponent({
     SpriteCanvas
   },
   props: {
-    monster: { required: true } as Prop<DetailedMonsterResponse>
+    monster: { required: true } as Prop<DetailedMonsterResponse>,
+    showTalents: { default: false } as Prop<boolean>,
+    showSkillDetails: { default: false } as Prop<boolean>
   },
   setup(props: Props) {
     const state = SpriteStateEnum.IDLE;
@@ -75,10 +90,54 @@ const AccountMonsterDetails = defineComponent({
       }
     ];
 
+    // TODO: add showing of talents
+
+    const { stats, skills } = props.monster
+    const statDetails: Details[] = [
+      {
+        key: 'Health',
+        value: stats.health
+      },
+      {
+        key: 'Health Regen',
+        value: stats.healthRegen + '%'
+      },
+      {
+        key: 'Mana',
+        value: stats.mana
+      },
+      {
+        key: 'Mana Regen',
+        value: stats.manaRegen + '%'
+      },
+      {
+        key: 'Offense',
+        value: stats.offense
+      },
+      {
+        key: 'Defense',
+        value: stats.defense
+      },
+      {
+        key: 'Crit Rate',
+        value: stats.critRate + '%'
+      },
+      {
+        key: 'Speed',
+        value: stats.speed
+      },
+      {
+        key: 'Crit Damage',
+        value: stats.critDamage + '%'
+      }
+    ]
+
     return {
       state,
       sprites,
-      overviewDetails
+      overviewDetails,
+      statDetails,
+      skills
     }
   },
 })
@@ -112,7 +171,7 @@ export default AccountMonsterDetails;
     }
 
     .summary {
-      margin: 10px 0;
+      margin: 10px 0 15px 0;
       display: flex;
       align-items: flex-start;
 
@@ -124,19 +183,30 @@ export default AccountMonsterDetails;
         display: flex;
         flex-wrap: wrap;
         width: calc(100% - 50px);
-        justify-content: space-between;
 
         .details {
           display: flex;
           flex-basis: 50%;
           margin-bottom: 5px;
+        }
 
-          > * {
-            width: 50%;
-          }
+        .detail-key {
+          color: rgba(255, 255, 255, 0.75);
+          width: 130px;
+        }
 
-          .detail-key {
-            color: rgba(255, 255, 255, 0.75);
+        .detail-value {
+          width: 130px;
+        }
+
+        .skill-details {
+          display: flex;
+          flex-basis: 50%;
+          margin-bottom: 5px;
+
+          .skill-name {
+            align-self: flex-end;
+            margin-left: 10px;
           }
         }
       }

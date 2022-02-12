@@ -65,7 +65,7 @@ export default AccountModule;
 
   .ps {
     padding: 20px;
-    width: calc(100% - 315px);
+    width: 900px;
   }
 
   .account-menu {
