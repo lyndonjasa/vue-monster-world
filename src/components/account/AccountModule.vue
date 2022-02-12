@@ -62,7 +62,8 @@ export default AccountModule;
   height: calc(100% - 175px);
 
   .account-route-view {
-    width: calc(100% - 275px);
+    padding: 20px;
+    width: calc(100% - 315px);
   }
 
   .account-menu {
