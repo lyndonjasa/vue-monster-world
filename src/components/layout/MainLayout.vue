@@ -106,6 +106,12 @@ export default MainLayout;
       .view-item {
         min-height: calc(100% - 40px);
         min-width: 100%;
+        display: flex;
+        align-items: stretch;
+
+        > * {
+          flex: 1;
+        }
       }
     }
   }

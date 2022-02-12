@@ -1,5 +1,7 @@
 <template>
-  <div class="account-module-wrapper"></div>
+  <div class="account-module-wrapper">
+    Account Module Wrapper
+  </div>
 </template>
 
 <script lang="ts">
@@ -32,6 +34,3 @@ const AccountModule = defineComponent({
 
 export default AccountModule;
 </script>
-
-<style lang="scss" scoped>
-</style>
