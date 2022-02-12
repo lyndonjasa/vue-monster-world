@@ -2,37 +2,60 @@
   <base-div-loader v-if="showLoader"></base-div-loader>
   <div class="home-module-wrapper" v-else>
     <p class="home-title">PARTY COMPOSITION:</p>
-    <div class="account-party">
+    <div class="account-party" v-if="!selectedMonster">
       <account-monster-details v-for="monster in monsterParty" 
         :key="monster._id"
         :monster="monster"
-        :enableSelection="true">
+        :enableSelection="true"
+        @select-monster="loadMonsterDetail">
+      </account-monster-details>
+    </div>
+    <div class="account-monster-detail" v-else>
+      <p class="back-button" @click="selectedMonster = undefined">
+        <fa-icon :icon="faAnglesLeft" title="Back" />
+        Back
+      </p>
+      <account-monster-details
+        v-if="selectedMonster"
+        :monster="selectedMonster"
+        :enableSelection="false"
+        :showDetailedView="true">
       </account-monster-details>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { delayAction } from '@/helpers/delay.helper';
 import useAccount from '@/hooks/http-hooks/useAccount';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { defineComponent, ref } from 'vue'
 import AccountMonsterDetails from '../monsters/AccountMonsterDetails.vue';
+import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 
 const HomeModule = defineComponent({
   components: {
     AccountMonsterDetails
   },
   setup() {
-    const { getAccountParty } = useAccount();
+    const { getAccountParty, getAccountMonsterDetail } = useAccount();
     const monsterParty = ref<DetailedMonsterResponse[]>([]);
+    const selectedMonster = ref<DetailedMonsterResponse>(undefined);
+
     const showLoader = ref<boolean>(false);
 
-    const showDetails = ref<boolean>(false);
     const loadParty = async () => {
       showLoader.value = true
       monsterParty.value = await getAccountParty();
-      // await delayAction(1000);
       showLoader.value = false
+    }
+
+    const loadMonsterDetail = async (monsterId: string) => {
+      showLoader.value = true
+      selectedMonster.value = await getAccountMonsterDetail(monsterId);
+      console.log(selectedMonster.value);
+      await delayAction(1000);
+      showLoader.value = false;
     }
 
     loadParty();
@@ -40,7 +63,9 @@ const HomeModule = defineComponent({
     return {
       monsterParty,
       showLoader,
-      showDetails
+      selectedMonster,
+      loadMonsterDetail,
+      faAnglesLeft
     }
   }
 })
@@ -49,6 +74,26 @@ export default HomeModule;
 </script>
 
 <style lang="scss" scoped>
+.home-module-wrapper {
+  align-self: flex-start;
+  justify-self: flex-start;
+  flex: 1;
+
+  .account-monster-detail {
+    margin-top: 20px;
+
+    .back-button {
+      font-size: 18px;
+      cursor: pointer;
+      filter: brightness(0.75);
+
+      &:hover {
+        filter: brightness(1);
+      }
+    }
+  }
+}
+
 .home-title {
   font-size: 20px;
 }

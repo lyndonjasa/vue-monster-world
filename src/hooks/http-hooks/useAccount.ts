@@ -28,11 +28,16 @@ const useAccount = () => {
     return monsterService.getAccountMonsterParty(accountId.value);
   }
 
+  const getAccountMonsterDetail = (monsterId: string) => {
+    return monsterService.getAccountMonster(accountId.value, monsterId);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
     getAccountDetails,
-    getAccountParty
+    getAccountParty,
+    getAccountMonsterDetail
   }
 }
 

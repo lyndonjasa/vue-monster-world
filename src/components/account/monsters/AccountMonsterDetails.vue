@@ -10,7 +10,7 @@
         :class="{ 'clickable' : enableSelection }"
         :title="enableSelection ? 'Click to view details' : ''">
         {{ monster.computedName }}
-        <span class="expand-icon">... <fa-icon :icon="faUpRightAndDownLeftFromCenter" /></span>
+        <span class="expand-icon" v-if="enableSelection">... <fa-icon :icon="faUpRightAndDownLeftFromCenter" /></span>
       </p>
       <div class="summary">
         <div class="summary-key">Overview</div>
@@ -33,7 +33,47 @@
       </div>
       <div class="summary">
         <div class="summary-key">Skills</div>
-        <div class="summary-value" v-if="showDetailedView">Detailed Skills</div>
+        <div class="summary-value" v-if="showDetailedView">
+          <template v-for="skill in monster.skills" :key="skill.name">
+            <div class="details flex-100 mb-15">
+              <div class="skill-element"><base-element :element="skill.skillElement"></base-element></div>
+              <div class="skill-name">{{ skill.name }}</div>
+            </div>
+            <div class="details">
+              <div class="detail-key">Power</div>
+              <div class="detail-value">{{ skill.power }}</div>
+            </div>
+            <div class="details">
+              <div class="detail-key">Cost</div>
+              <div class="detail-value">{{ skill.cost }}</div>
+            </div>
+            <div class="details">
+              <div class="detail-key">Type</div>
+              <div class="detail-value">{{ skillHelper.toSkillTypeString(skill.skillType) }}</div>
+            </div>
+            <div class="details">
+              <div class="detail-key">Target</div>
+              <div class="detail-value">{{ skillHelper.toTargetString(skill.skillTarget) }}</div>
+            </div>
+            <template v-if="skill.status">
+              <div class="details">
+                <div class="detail-key">Effect</div>
+                <div class="detail-value">{{ skillHelper.toBuffString(skill.status.buff) }}</div>
+              </div>
+              <div class="details">
+                <div class="detail-key">Effect Target</div>
+                <div class="detail-value">{{ skill.status.target == 5 ? skillHelper.toTargetString(skill.status.target) : skillHelper.toTargetString(skill.skillTarget) }}</div>
+              </div>
+               <div class="details">
+                <div class="detail-key">Effect Chance</div>
+                <div class="detail-value">{{ skill.status.chance }}%</div>
+              </div>
+            </template>
+            <div class="skill-description">
+              {{ skill.description }}.
+            </div>
+          </template>
+        </div>
         <div class="summary-value" v-else>
           <div class="skill-details" v-for="skill in skills" :key="skill.name">
             <div class="skill-element"><base-element :element="skill.skillElement"></base-element></div>
@@ -53,6 +93,7 @@ import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.respo
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { computed, defineComponent, Prop } from 'vue'
 import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons'
+import * as skillHelper from '@/helpers/skill.helper'
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean
@@ -192,6 +233,7 @@ const AccountMonsterDetails = defineComponent({
       statDetails,
       skills,
       onMonsterSelect,
+      skillHelper,
       faUpRightAndDownLeftFromCenter
     }
   },
@@ -252,6 +294,10 @@ export default AccountMonsterDetails;
           display: flex;
           flex-basis: 50%;
           margin-bottom: 5px;
+
+          &.flex-100 {
+            flex-basis: 100%;
+          }
         }
 
         .detail-key {
@@ -267,14 +313,33 @@ export default AccountMonsterDetails;
           display: flex;
           flex-basis: 50%;
           margin-bottom: 5px;
+        }
+        
+        .skill-name {
+          align-self: flex-end;
+          margin-left: 10px;
+        }
 
-          .skill-name {
-            align-self: flex-end;
-            margin-left: 10px;
-          }
+        .detailed-skill-summary {
+          display: flex;
+          flex: 100%;
+          margin-bottom: 25px;
         }
       }
     }
+  }
+
+  .mb-15 {
+    margin-bottom: 15px !important;
+  }
+
+  .skill-description {
+    margin-top: 10px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   }
 }
 </style>

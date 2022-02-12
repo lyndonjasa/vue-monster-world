@@ -66,6 +66,13 @@ export default AccountModule;
   .ps {
     padding: 20px;
     width: 900px;
+
+    .account-route-view {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
   }
 
   .account-menu {

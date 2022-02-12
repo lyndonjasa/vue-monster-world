@@ -27,6 +27,10 @@ const getAccountMonsterParty = (accountId: string): Promise<DetailedMonsterRespo
   return axios.get(`${baseAccountRoute}/${accountId}/party`).then(r => r.data)
 }
 
+const getAccountMonster = (accountId: string, monsterId: string): Promise<DetailedMonsterResponse> => {
+  return axios.get(`${baseAccountRoute}/${accountId}/monsters/${monsterId}`).then(r => r.data)
+}
+
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
   // character id will be supplied in the future
 
@@ -41,7 +45,7 @@ const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> =>
   return await Promise.resolve(monsterData);
 }
 
-const getEnemyParty  = async (): Promise<BattleMonster[]> => {
+const getEnemyParty = async (): Promise<BattleMonster[]> => {
   // temporary code for getting enemy team
 
   const { sprites } = useSpriteFactory(spriteData);
@@ -56,7 +60,8 @@ export default {
   getMonsterParty,
   getEnemyParty,
   getStarterPacks,
-  getAccountMonsterParty
+  getAccountMonsterParty,
+  getAccountMonster
 }
 
 const attackSkill: Skill = {
