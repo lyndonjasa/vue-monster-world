@@ -2,13 +2,15 @@
   <div class="account-module-wrapper" v-if="account">
     <account-details :account="account"></account-details>
     <div class="account-module-body">
-      <div class="account-route-view app-transluscent-div">
-        <router-view></router-view>
-      </div>
+      <perfect-scrollbar>
+        <div class="account-route-view app-transluscent-div">
+          <router-view></router-view>
+        </div>
+      </perfect-scrollbar>
       <div class="account-menu app-transluscent-div">
         <account-menu></account-menu>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -61,7 +63,7 @@ export default AccountModule;
   justify-content: space-between;
   height: calc(100% - 175px);
 
-  .account-route-view {
+  .ps {
     padding: 20px;
     width: calc(100% - 315px);
   }

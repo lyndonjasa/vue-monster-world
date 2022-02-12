@@ -8,7 +8,9 @@ import BaseScreenLoader from './BaseScreenLoader.vue';
 import BaseDivLoader from './BaseDivLoader.vue';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import PerfectScrollbar from "vue3-perfect-scrollbar";
 import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 export const registerBaseComponents = (app: App) => {
   addIconLibrary();
@@ -21,6 +23,7 @@ export const registerBaseComponents = (app: App) => {
   app.component('base-screen-loader', BaseScreenLoader);
   app.component('base-div-loader', BaseDivLoader)
   app.component('fa-icon', FontAwesomeIcon)
+  app.use(PerfectScrollbar);
 }
 
 const addIconLibrary = (): void => {

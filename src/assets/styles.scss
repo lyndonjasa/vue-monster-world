@@ -3,9 +3,18 @@
   margin: 0;
 }
 
-.app-transluscent-div {
+.app-transluscent-div, .ps {
   background-color: rgba(20, 17, 36, 0.85);
   color: white;
+}
+
+.ps__rail-y {
+  width: 8px !important;
+  background-color: transparent !important;
+}
+
+.ps__rail-y:hover, .ps__rail-y:focus {
+  background: transparent !important;
 }
 
 .app-generic-btn {
