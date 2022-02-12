@@ -109,8 +109,8 @@ export default MainLayout;
       align-items: center;
 
       .view-item {
-        min-height: calc(100% - 40px);
-        min-width: 100%;
+        height: calc(100% - 40px);
+        width: 100%;
         display: flex;
         align-items: stretch;
 

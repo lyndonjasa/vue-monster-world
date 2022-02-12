@@ -16,7 +16,7 @@ import SpriteCanvas from '@/components/battle/SpriteCanvas.vue';
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { defineComponent, Prop, ref } from 'vue'
+import { defineComponent, Prop } from 'vue'
 
 interface Props {
   monster: DetailedMonsterResponse;
@@ -49,6 +49,7 @@ export default AccountMonsterDetails;
   border: 1px solid white;
   border-radius: 3px;
   padding: 10px;
+  margin-bottom: 15px;
 
   .monster-sprite {
     width: 240px;
