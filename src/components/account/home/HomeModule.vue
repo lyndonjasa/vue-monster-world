@@ -2,10 +2,13 @@
   <base-div-loader v-if="showLoader"></base-div-loader>
   <div class="home-module-wrapper" v-else>
     <p class="home-title">PARTY COMPOSITION:</p>
-    <account-monster-details v-for="monster in monsterParty" 
-      :key="monster._id"
-      :monster="monster">
-    </account-monster-details>
+    <div class="account-party">
+      <account-monster-details v-for="monster in monsterParty" 
+        :key="monster._id"
+        :monster="monster"
+        :enableSelection="true">
+      </account-monster-details>
+    </div>
   </div>
 </template>
 

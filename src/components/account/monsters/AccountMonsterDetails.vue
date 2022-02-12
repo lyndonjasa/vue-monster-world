@@ -6,7 +6,9 @@
         :sprite="sprites[0]"></sprite-canvas>
     </div>
     <div class="monster-details">
-      <p class="monster-name">{{ monster.computedName }}</p>
+      <p class="monster-name" v-on="enableSelection ? { click: onMonsterSelect } : {}"
+        :class="{ 'clickable' : enableSelection }"
+        :title="enableSelection ? 'Click to view details' : ''">{{ monster.computedName }}</p>
       <div class="summary">
         <div class="summary-key">Overview</div>
         <div class="summary-value">
@@ -27,7 +29,7 @@
       </div>
       <div class="summary">
         <div class="summary-key">Skills</div>
-        <div class="summary-value" v-if="showSkillDetails">Detailed Skills</div>
+        <div class="summary-value" v-if="showDetailedView">Detailed Skills</div>
         <div class="summary-value" v-else>
           <div class="skill-details" v-for="skill in skills" :key="skill.name">
             <div class="skill-element"><base-element :element="skill.skillElement"></base-element></div>
@@ -47,10 +49,14 @@ import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.respo
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import { defineComponent, Prop } from 'vue'
 
-interface Props {
+interface Emits {
+  'onSelect-monster'(monsterId: string): boolean
+}
+
+interface Props extends Emits {
   monster: DetailedMonsterResponse;
-  showTalents: boolean,
-  showSkillDetails: boolean
+  showDetailedView: boolean;
+  enableSelection: boolean;
 }
 
 interface Details {
@@ -64,10 +70,13 @@ const AccountMonsterDetails = defineComponent({
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,
-    showTalents: { default: false } as Prop<boolean>,
-    showSkillDetails: { default: false } as Prop<boolean>
+    showDetailedView: { default: false } as Prop<boolean>,
+    enableSelection: { default: false } as Prop<boolean>
   },
-  setup(props: Props) {
+  emits: {
+    'select-monster': (monsterId: string) => monsterId !== undefined
+  },
+  setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
@@ -90,7 +99,7 @@ const AccountMonsterDetails = defineComponent({
       },
       {
         key: 'To Next Level',
-        value: props.monster.expToLevel
+        value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel
       }
     ];
 
@@ -136,12 +145,17 @@ const AccountMonsterDetails = defineComponent({
       }
     ]
 
+    const onMonsterSelect = (): void => {
+      context.emit('select-monster', props.monster._id);
+    }
+
     return {
       state,
       sprites,
       overviewDetails,
       statDetails,
-      skills
+      skills,
+      onMonsterSelect
     }
   },
 })
@@ -161,8 +175,12 @@ export default AccountMonsterDetails;
     width: 240px;
     min-height: 150px;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     margin-right: 20px;
+
+    .sprite-canvas-container {
+      margin: 0 auto !important;
+    }
   }
 
   .monster-details {
@@ -172,6 +190,11 @@ export default AccountMonsterDetails;
 
     .monster-name {
       font-weight: bold;
+
+      &.clickable {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
 
     .summary {
