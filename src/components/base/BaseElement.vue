@@ -1,10 +1,11 @@
 <template>
-  <img :src="elementIcon" />
+  <img :src="elementIcon" :title="elementTitle" />
 </template>
 
 <script lang="ts">
 import { ElementEnum } from "@/models/skills/element.enum";
 import { computed, defineComponent, Prop } from "vue";
+import { toElementString } from '@/helpers/element.helper'
 
 interface Props {
   element: number;
@@ -41,8 +42,11 @@ const BaseElement = defineComponent({
       return require(`@/assets/icons/elements/${icon}.png`)
     })
 
+    const elementTitle = toElementString(props.element);
+
     return {
-      elementIcon
+      elementIcon,
+      elementTitle
     }
   }
 })
