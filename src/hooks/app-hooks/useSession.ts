@@ -31,6 +31,7 @@ const useSession = () => {
 
   return {
     clearSession,
+    clearAccount,
     hasUserSession,
     hasAccountSession,
     sessionUserId,

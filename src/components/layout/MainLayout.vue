@@ -3,14 +3,14 @@
     <div class="main-layout-container">
       <div class="navigation-bar app-transluscent-div">
         <div class="nav-items">
-          <router-link class="nav-item" to="/">ACCOUNT</router-link>
+          <router-link class="nav-item" to="/account">ACCOUNT</router-link>
           <router-link class="nav-item" to="/items">ITEMS</router-link>
           <router-link class="nav-item" to="/bestiary">BESTIARY</router-link>
           <router-link class="nav-item" to="/dungeons">DUNGEONS</router-link>
           <router-link class="nav-item" to="/help">HELP</router-link>
         </div>
         <div class="change-account">
-          <fa-icon :icon="faPeopleArrowsLeftRight" title="Switch Account" @click="reroute('/accounts')" />
+          <fa-icon :icon="faPeopleArrowsLeftRight" title="Switch Account" @click="onSwitchAccount" />
         </div>
       </div>
       <div class="route-view-container">
@@ -26,18 +26,21 @@
 import { defineComponent } from 'vue'
 import { faPeopleArrowsLeftRight } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'vue-router'
+import useSession from '@/hooks/app-hooks/useSession';
 
 const MainLayout = defineComponent({
   setup() {
     const router = useRouter();
+    const { clearAccount } = useSession();
 
-    const reroute = (route: string) => {
-      router.push(route);
-    } 
+    const onSwitchAccount = () => {
+      clearAccount();
+      router.push('/accounts');
+    }
 
     return {
       faPeopleArrowsLeftRight,
-      reroute
+      onSwitchAccount
     }
   }
 })
