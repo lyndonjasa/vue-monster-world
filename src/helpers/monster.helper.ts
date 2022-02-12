@@ -52,3 +52,7 @@ export const convertToModelForBattle = (model: DetailedMonster[], team: MonsterT
     }
   })
 }
+
+export const getMonsterThumbnail = (name: string) => {
+  return require(`@/assets/thumbs/${name.replace(/\s+/g, '')}.jpg`);
+}

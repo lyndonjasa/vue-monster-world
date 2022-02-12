@@ -1,4 +1,5 @@
 export class AccountDetails {
+  _id: string;
   accountName: string;
   currency: number;
   unlockedMonsters: string[];
