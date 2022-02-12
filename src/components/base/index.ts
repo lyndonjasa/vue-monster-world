@@ -5,6 +5,7 @@ import BaseModal from './BaseModal.vue';
 import BaseMonsterThumbnail from './BaseMonsterThumbnail.vue'
 import BaseModalLoader from './BaseModalLoader.vue'
 import BaseScreenLoader from './BaseScreenLoader.vue';
+import BaseDivLoader from './BaseDivLoader.vue';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +19,7 @@ export const registerBaseComponents = (app: App) => {
   app.component('base-monster-thumbnail', BaseMonsterThumbnail)
   app.component('base-modal-loader', BaseModalLoader)
   app.component('base-screen-loader', BaseScreenLoader);
+  app.component('base-div-loader', BaseDivLoader)
   app.component('fa-icon', FontAwesomeIcon)
 }
 

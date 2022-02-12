@@ -8,7 +8,7 @@
       :spriteState="sprite.getState(state)">
     </sprite-canvas>
   </div>
-  <div class="loading-text">
+  <div class="loading-text" v-if="showLoadingText">
     NOW LOADING <span class="loading-dots" :class="{ 'toggle': toggleDots }">. . .</span>
   </div>
 </template>
@@ -25,7 +25,8 @@ const LoaderSprite = defineComponent({
     SpriteCanvas
   },
   props: {
-    state: { required: true } as Prop<SpriteStateEnum>
+    state: { required: true } as Prop<SpriteStateEnum>,
+    showLoadingText: { default: true } as Prop<boolean>
   },
   setup() {
     const toggleDots = ref<boolean>(false);

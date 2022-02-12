@@ -1,5 +1,6 @@
 import { CreateAccountRequest } from "@/http/requests/create-account.request";
 import accountService from "@/services/account.service"
+import monsterService from "@/services/monster.service";
 import useAppStateCore from "../store-hooks/useAppStateCore";
 
 const useAccount = () => {
@@ -23,10 +24,15 @@ const useAccount = () => {
     return accountService.getAccountDetails(accountId.value);
   }
 
+  const getAccountParty = () => {
+    return monsterService.getAccountMonsterParty(accountId.value);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
-    getAccountDetails
+    getAccountDetails,
+    getAccountParty
   }
 }
 
