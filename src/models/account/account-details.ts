@@ -6,10 +6,12 @@ export class AccountDetails {
   party: MonsterParty[];
 }
 
-interface MonsterParty {
+export interface MonsterParty {
+  _id: string;
   level: number;
   monster: {
     name: string;
     element: number;
   }
+  cardBonus: number;
 }

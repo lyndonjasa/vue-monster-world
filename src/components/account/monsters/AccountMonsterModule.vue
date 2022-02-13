@@ -46,7 +46,12 @@
           <div class="back-button" @click="selectedMonster = undefined">
             <fa-icon :icon="faAnglesLeft" /> Back
           </div>
-          <account-monster-details :monster="selectedMonster" :showDetailedView="true"></account-monster-details>
+          <account-monster-details 
+            :monster="selectedMonster" :showDetailedView="true"
+            :showParty="!inParty(selectedMonster._id)"
+            :showEvolve="selectedMonster.stage != 'Ultra' && selectedMonster.stage != 'Mega'"
+            :showCard="!inParty(selectedMonster._id)">
+          </account-monster-details>
         </div>
       </template>
     </div>
@@ -60,10 +65,11 @@ import useAccount from '@/hooks/http-hooks/useAccount';
 import { SearchMonsterRequest } from '@/http/requests/search-monster.request';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SearchMonsterCriteria } from '@/models/monster/search-monster-criteria';
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, inject, ref } from 'vue'
 import AccountMonsterDetails from './AccountMonsterDetails.vue';
 import SearchMonsterForm from './SearchMonsterForm.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
+import { CurrentAccount } from '@/injections/account.injection';
 
 const AccountMonstersModule = defineComponent({
   components: {
@@ -72,6 +78,8 @@ const AccountMonstersModule = defineComponent({
   },
   setup() {
     const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
+    const account = inject(CurrentAccount);
+    console.log(account.value);
 
     const page = ref<number>(1);
     const pageSize = ref<number>(10);
@@ -115,7 +123,11 @@ const AccountMonstersModule = defineComponent({
       await delayAction(1000);
       showLoader.value = false;
       searchFormValue.value = value;
-    } 
+    }
+
+    const inParty = (monsterId: string) => {
+      return account.value.party.some(p => p._id === monsterId);
+    }
 
     const onMonsterSelect = async (monsterId: string) => {
       showLoader.value = true;
@@ -133,7 +145,8 @@ const AccountMonstersModule = defineComponent({
       monsters,
       showLoader,
       selectedMonster,
-      faAnglesLeft
+      faAnglesLeft,
+      inParty
     }
   }
 })
@@ -213,8 +226,13 @@ export default AccountMonstersModule;
   }
 
   .back-button {
+    color: rgba($color: #fff, $alpha: 0.75);
     font-size: 20px;
     cursor: pointer;
+
+    &:hover {
+      color: rgba($color: #fff, $alpha: 1.0);
+    }
   }
 }
 </style>

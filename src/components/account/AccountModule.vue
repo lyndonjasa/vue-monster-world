@@ -21,7 +21,7 @@ import AccountDetails from './AccountDetails.vue'
 import AccountMenu from './AccountMenu.vue';
 import { AccountDetails as Account } from '@/models/account/account-details';
 import { defineComponent, provide, ref } from 'vue'
-import { ReloadAccountKey } from '@/injections/account.injection'
+import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection'
 
 const AccountModule = defineComponent({
   components: {
@@ -44,6 +44,7 @@ const AccountModule = defineComponent({
       }
     }
     provide(ReloadAccountKey, loadAccount);
+    provide(CurrentAccount, account);
     
     loadAccount();
 
