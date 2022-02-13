@@ -8,6 +8,7 @@ export const AccountRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/account',
+    redirect: '/account/home',
     component: () => import('./AccountModule.vue'),
     children: [
       {

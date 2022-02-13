@@ -1,8 +1,15 @@
 <template>
   <div class="account-inventory-wrapper wrapper-div">
     <div class="inventory-menu">
-      <div class="app-ingame-btn card-menu-btn">Cards</div>
-      <div class="app-ingame-btn card-menu-btn">Items</div>
+      <router-link 
+        v-for="r in menuRoutes"
+        :to="r.route"
+        :key="r.name"
+        custom v-slot="{ navigate, isActive }">
+        <div class="card-menu-btn app-ingame-btn" :class="{ 'active': isActive }" @click="navigate">
+          {{ r.name }}
+        </div>
+      </router-link>
     </div>
     <div class="inventory-body">
       <router-view></router-view>
@@ -13,7 +20,28 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+interface RouteDetails {
+  route: string;
+  name: string;
+}
+
 const InventoryModule = defineComponent({
+  setup() {
+    const menuRoutes: RouteDetails[] = [
+      {
+        route: '/account/inventory/cards',
+        name: 'Cards'
+      },
+      {
+        route: '/account/inventory/items',
+        name: 'Items'
+      }
+    ];
+
+    return {
+      menuRoutes
+    }
+  }
 })
 
 export default InventoryModule;

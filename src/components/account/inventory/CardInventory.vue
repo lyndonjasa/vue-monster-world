@@ -1,8 +1,8 @@
 <template>
   <base-div-loader v-if="showLoader"></base-div-loader>
   <div class="account-cards-wrapper wrapper-div" v-else>
-    <p class="card-title wrapper-title">ACCOUNT CARD INVENTORY:</p>
-    <div class="card-inventory">
+    <p class="card-title wrapper-title">ACCOUNT CARDS INVENTORY:</p>
+    <div class="card-inventory" v-if="cardInventory.cards.length > 0">
       <div class="account-card" 
         v-for="card in cardInventory.cards" 
         :key="card.monsterName"
@@ -16,11 +16,13 @@
         </div>
       </div>
     </div>
+    <div class="empty-inventory-message" v-else>
+      Account has empty records of monster cards
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { delayAction } from '@/helpers/delay.helper';
 import { getMonsterThumbnail } from '@/helpers/monster.helper';
 import useAccount from '@/hooks/http-hooks/useAccount';
 import { CardInventoryResponse } from '@/http/responses';
@@ -35,10 +37,7 @@ const CardsModule = defineComponent({
     const loadCards = async () => {
       showLoader.value = true;
       cardInventory.value = await getAccountCards();
-
       cardInventory.value.cards.sort((a, b) => a.monsterName.localeCompare(b.monsterName));
-
-      await delayAction(1000);
       showLoader.value = false;
     }
     
@@ -57,6 +56,11 @@ export default CardsModule;
 
 <style lang="scss" scoped>
 .account-cards-wrapper {
+
+  .empty-inventory-message {
+    font-size: 16px;
+    margin-top: 10px;
+  }
 
   .card-inventory {
     margin-top: 25px;
