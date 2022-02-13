@@ -6,7 +6,7 @@
         <input type="text" class="monster-name-input" maxlength="20" v-model="monsterName" />
       </div>
       <div class="form-action">
-        <div class="app-ingame-btn action-btn">Search</div>
+        <div class="app-ingame-btn action-btn" @click="onSearch">Search</div>
         <div class="app-ingame-btn action-btn" @click="onFormReset">Reset</div>
       </div>
     </div>
@@ -65,6 +65,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { SearchMonsterCriteria } from '@/models/monster/search-monster-criteria';
 
 interface KeyValuePair {
   key: string;
@@ -72,7 +73,10 @@ interface KeyValuePair {
 }
 
 const SearchMonsterForm = defineComponent({
-  setup() {
+  emits: {
+    'search': (criteria: SearchMonsterCriteria) => criteria != undefined
+  },
+  setup(_, context) {
     const monsterName = ref<string>();
 
     const elements = ref<string[]>([]);
@@ -94,14 +98,14 @@ const SearchMonsterForm = defineComponent({
       { key: 'Ultra', value: 'Ultra' }
     ]
 
-    const sortBy = ref<string>('None');
+    const sortBy = ref<'None' | 'Name' | 'Level'>('None');
     const sortByOptions: KeyValuePair[] = [
       { key: 'None', value: 'None' },
       { key: 'Name', value: 'Name' },
       { key: 'Level', value: 'Level' }
     ]
 
-    const sortDirection = ref<string>('ASC');
+    const sortDirection = ref<'ASC' | 'DESC'>('ASC');
     const sortDirectionOptions: KeyValuePair[] = [
       { key: 'Ascending', value: 'ASC' },
       { key: 'Descending', value: 'DESC' }
@@ -115,6 +119,18 @@ const SearchMonsterForm = defineComponent({
       monsterName.value = undefined;
     }
 
+    const onSearch = () => {
+      const searchCriteria: SearchMonsterCriteria = {
+        searchText: monsterName.value,
+        elements: elements.value,
+        stages: stages.value,
+        sortProperty: sortBy.value,
+        sortDirection: sortDirection.value
+      }
+
+      context.emit('search', searchCriteria)
+    }
+
     return {
       elements,
       elementFilters,
@@ -125,7 +141,8 @@ const SearchMonsterForm = defineComponent({
       sortDirection,
       sortDirectionOptions,
       monsterName,
-      onFormReset
+      onFormReset,
+      onSearch
     }
   },
 })
