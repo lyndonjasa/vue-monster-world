@@ -19,7 +19,9 @@
         v-if="selectedMonster"
         :monster="selectedMonster"
         :enableSelection="false"
-        :showDetailedView="true">
+        :showDetailedView="true"
+        :showEvolve="canEvolve"
+        :showCard="false">
       </account-monster-details>
     </div>
   </div>
@@ -29,7 +31,7 @@
 import { delayAction } from '@/helpers/delay.helper';
 import useAccount from '@/hooks/http-hooks/useAccount';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import AccountMonsterDetails from '../monsters/AccountMonsterDetails.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 
@@ -50,6 +52,13 @@ const HomeModule = defineComponent({
       showLoader.value = false
     }
 
+    const canEvolve = computed(() => {
+      if (!selectedMonster.value) return false
+
+      const allowedEvolutions = ['Rookie', 'Champion', 'Ultimate'];
+      return allowedEvolutions.includes(selectedMonster.value.stage);
+    })
+
     const loadMonsterDetail = async (monsterId: string) => {
       showLoader.value = true
       selectedMonster.value = await getAccountMonsterDetail(monsterId);
@@ -65,6 +74,7 @@ const HomeModule = defineComponent({
       showLoader,
       selectedMonster,
       loadMonsterDetail,
+      canEvolve,
       faAnglesLeft
     }
   }

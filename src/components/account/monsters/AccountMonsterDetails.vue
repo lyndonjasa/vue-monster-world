@@ -1,8 +1,8 @@
 <template>
   <div class="account-monster-details">
-    <div class="detail-actions" v-if="showDetailedView">
-      <div class="app-ingame-btn action">Convert</div>
-      <div class="app-ingame-btn action">Evolve</div>
+    <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard)">
+      <div class="app-ingame-btn action" v-if="showCard">Convert</div>
+      <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
     </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
@@ -107,6 +107,8 @@ interface Props extends Emits {
   monster: DetailedMonsterResponse;
   showDetailedView: boolean;
   enableSelection: boolean;
+  showEvolve: boolean;
+  showCard: boolean;
 }
 
 interface Details {
@@ -122,7 +124,9 @@ const AccountMonsterDetails = defineComponent({
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,
     showDetailedView: { default: false } as Prop<boolean>,
-    enableSelection: { default: false } as Prop<boolean>
+    enableSelection: { default: false } as Prop<boolean>,
+    showEvolve: { default: true } as Prop<boolean>,
+    showCard: { default: true } as Prop<boolean>
   },
   emits: {
     'select-monster': (monsterId: string) => monsterId !== undefined
@@ -260,6 +264,7 @@ export default AccountMonsterDetails;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
+    margin-right: 15px;
     
     .action {
       margin-left: 15px;
