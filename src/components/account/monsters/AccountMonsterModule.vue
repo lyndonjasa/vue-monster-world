@@ -1,42 +1,86 @@
 <template>
   <div class="account-monsters-wrapper wrapper-div">
-    <search-monster-form @search="onSearch"></search-monster-form>
-    <div class="page-controls" v-show="totalCount > 0">
-      <div class="page-control">
-        Page: &nbsp;
-        <select>
-          <option v-for="i in numberOfPages" :key="i" :value="i">{{ i }}</option>
-        </select>
+    <template v-if="!selectedMonster">
+      <search-monster-form @search="onSearch"></search-monster-form>
+      <div class="page-controls">
+        <div class="page-control">
+          Page: &nbsp;
+          <select>
+            <option v-for="i in numberOfPages" :key="i" :value="i">{{ i }}</option>
+          </select>
+        </div>
+        <div class="page-control">
+          Page Size: &nbsp;
+          <select>
+            <option v-for="i in pageSizeOptions" :key="i" :value="i">{{ i }}</option>
+          </select>
+        </div>
       </div>
-      <div class="page-control">
-        Page Size: &nbsp;
-        <select>
-          <option v-for="i in pageSizeOptions" :key="i" :value="i">{{ i }}</option>
-        </select>
+    </template>
+    <div class="account-monsters-container">
+      <div class="loader-container" v-if="showLoader">
+        <base-div-loader></base-div-loader>
       </div>
+      <template v-if="!showLoader && !selectedMonster">
+        <div class="account-monsters" v-if="monsters.length > 0">
+          <div class="account-monster" v-for="monster in monsters" :key="monster._id">
+            <div class="monster-thumbnail">
+              <base-monster-thumbnail :src="getMonsterThumbnail(monster.name)" />
+            </div>
+            <div class="monster-details">
+              <p class="monster-name">{{ monster.computedName }}</p>
+              <p class="monster-level">
+                <base-element :element="monster.element" />
+                Lvl. {{ monster.level }}
+              </p>
+              <p class="view-details" @click="onMonsterSelect(monster._id)">...View Details</p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-monsters-message" v-else>
+          No monsters found
+        </div>  
+      </template>
+      <template v-if="!showLoader && selectedMonster">
+        <div class="account-monster-detail">
+          <div class="back-button" @click="selectedMonster = undefined">
+            <fa-icon :icon="faAnglesLeft" /> Back
+          </div>
+          <account-monster-details :monster="selectedMonster" :showDetailedView="true"></account-monster-details>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { delayAction } from '@/helpers/delay.helper';
+import { getMonsterThumbnail } from '@/helpers/monster.helper';
 import useAccount from '@/hooks/http-hooks/useAccount';
 import { SearchMonsterRequest } from '@/http/requests/search-monster.request';
+import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SearchMonsterCriteria } from '@/models/monster/search-monster-criteria';
 import { computed, defineComponent, ref } from 'vue'
+import AccountMonsterDetails from './AccountMonsterDetails.vue';
 import SearchMonsterForm from './SearchMonsterForm.vue';
+import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 
 const AccountMonstersModule = defineComponent({
   components: {
-    SearchMonsterForm
+    SearchMonsterForm,
+    AccountMonsterDetails
   },
   setup() {
-    const { getAccountMonsters } = useAccount();
+    const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
 
     const page = ref<number>(1);
     const pageSize = ref<number>(10);
     const totalCount = ref<number>(0);
-
     const pageSizeOptions = [10, 30, 50];
+    const showLoader = ref<boolean>(false);
+
+    const monsters = ref<DetailedMonsterResponse[]>([]);
+    const selectedMonster = ref<DetailedMonsterResponse>(undefined);
 
     const numberOfPages = computed(() => {
       if (totalCount.value < pageSize.value) return 1;
@@ -63,17 +107,33 @@ const AccountMonstersModule = defineComponent({
         }
       }
 
+      showLoader.value = true;
       const result = await getAccountMonsters(searchCriteria);
       totalCount.value = result.totalCount;
+      monsters.value = result.monsters;
 
+      await delayAction(1000);
+      showLoader.value = false;
       searchFormValue.value = value;
     } 
 
+    const onMonsterSelect = async (monsterId: string) => {
+      showLoader.value = true;
+      selectedMonster.value = await getAccountMonsterDetail(monsterId);
+      showLoader.value = false;
+    }
+
     return {
       onSearch,
+      getMonsterThumbnail,
+      onMonsterSelect,
       totalCount,
       numberOfPages,
-      pageSizeOptions
+      pageSizeOptions,
+      monsters,
+      showLoader,
+      selectedMonster,
+      faAnglesLeft
     }
   }
 })
@@ -82,10 +142,14 @@ export default AccountMonstersModule;
 </script>
 
 <style lang="scss" scoped>
+.account-monsters-wrapper {
+  height: 100%;
+}
+
 .page-controls {
   display: flex;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  margin: 5px 0;
+  margin: 7px 0 5px 0;
   padding: 10px;
   border-radius: 5px;
 
@@ -102,6 +166,55 @@ export default AccountMonstersModule;
         background: rgba(0, 0, 0, 0.8);
       }
     }
+  }
+}
+
+.account-monsters-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: calc(100% - 215px);
+
+  .account-monsters {
+    flex: 1;
+    display: flex;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    padding: 20px;
+
+    .account-monster {
+      flex-basis: 20%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+
+      .monster-details {
+        margin-top: 10px;
+        flex-basis: 100%;
+        text-align: center;
+
+        .view-details {
+          margin-top: 5px;
+          color: rgba(255, 255, 255, 0.5);
+          cursor: pointer;
+
+          &:hover {
+            color: rgba(255, 255, 255, 1);
+          }
+        }
+      }
+    }
+  }
+
+  .empty-monsters-message {
+    font-size: 20px;
+    align-self: center;
+  }
+
+  .back-button {
+    font-size: 20px;
+    cursor: pointer;
   }
 }
 </style>

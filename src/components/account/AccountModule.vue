@@ -3,7 +3,7 @@
     <account-details :account="account"></account-details>
     <div class="account-module-body">
       <perfect-scrollbar>
-        <div class="account-route-view app-transluscent-div">
+        <div class="account-route-view">
           <router-view></router-view>
         </div>
       </perfect-scrollbar>
