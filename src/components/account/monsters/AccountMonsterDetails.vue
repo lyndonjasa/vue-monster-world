@@ -1,7 +1,7 @@
 <template>
   <div class="account-monster-details">
     <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty || showRemove)">
-      <div class="app-ingame-btn action" v-if="showParty">Switch to Party</div>
+      <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard">Convert</div>
       <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
@@ -114,7 +114,7 @@ import { ReloadAccountKey } from '@/injections/account.injection';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
-  'onRemove-monster': any
+  'onUpdate-monster': any
 }
 
 interface Props extends Emits {
@@ -148,12 +148,12 @@ const AccountMonsterDetails = defineComponent({
   },
   emits: {
     'select-monster': (monsterId: string) => monsterId !== undefined,
-    'remove-monster': null
+    'update-monster': null
   },
   setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
     const { showModalLoader } = useLoaders();
-    const { removeFromParty } = useAccount();
+    const { removeFromParty, addToParty } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
     const reloadParty = inject(ReloadAccountKey);
@@ -213,7 +213,15 @@ const AccountMonsterDetails = defineComponent({
       await removeFromParty(props.monster._id);
       await reloadParty();
       showModalLoader.value = false;
-      context.emit('remove-monster')
+      context.emit('update-monster')
+    }
+
+    const onMonsterAdd = async () => {
+      showModalLoader.value = true;
+      await addToParty(props.monster._id);
+      await reloadParty();
+      showModalLoader.value = false;
+      context.emit('update-monster')
     }
 
     return {
@@ -225,7 +233,8 @@ const AccountMonsterDetails = defineComponent({
       onMonsterSelect,
       skillHelper,
       faUpRightAndDownLeftFromCenter,
-      onMonsterRemove
+      onMonsterRemove,
+      onMonsterAdd
     }
   },
 })
