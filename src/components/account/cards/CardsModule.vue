@@ -35,7 +35,8 @@ const CardsModule = defineComponent({
     const loadCards = async () => {
       showLoader.value = true;
       cardInventory.value = await getAccountCards();
-      
+
+      cardInventory.value.cards.sort((a, b) => a.monsterName.localeCompare(b.monsterName));
 
       await delayAction(1000);
       showLoader.value = false;
