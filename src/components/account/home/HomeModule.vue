@@ -1,7 +1,7 @@
 <template>
   <base-div-loader v-if="showLoader"></base-div-loader>
   <div class="home-module-wrapper wrapper-div" v-else>
-    <p class="home-title">PARTY COMPOSITION:</p>
+    <p class="home-title wrapper-title">PARTY COMPOSITION:</p>
     <div class="account-party" v-if="!selectedMonster">
       <account-monster-details v-for="monster in monsterParty" 
         :key="monster._id"
@@ -99,9 +99,5 @@ export default HomeModule;
       }
     }
   }
-}
-
-.home-title {
-  font-size: 20px;
 }
 </style>

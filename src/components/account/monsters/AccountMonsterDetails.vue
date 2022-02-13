@@ -152,7 +152,7 @@ const AccountMonsterDetails = defineComponent({
         detailedOnly: true
       },
       {
-        key: 'Evolution',
+        key: 'Stage',
         value: props.monster.stage,
         detailedOnly: true
       },
@@ -162,6 +162,14 @@ const AccountMonsterDetails = defineComponent({
         detailedOnly: true
       }
     ];
+
+    if (props.monster.evolution) {
+      overviewDetailsValue.push({
+        key: 'Evolves To',
+        value: props.monster.evolution,
+        detailedOnly: true
+      });
+    }
 
     const overviewDetails = computed((): Details[] => {
       if (!props.showDetailedView) {

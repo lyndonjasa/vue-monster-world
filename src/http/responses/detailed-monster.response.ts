@@ -17,4 +17,5 @@ export class DetailedMonsterResponse {
   skills: SkillResponse[];
   sprite: SpriteAnimation
   stage: string;
+  evolution?: string;
 }
