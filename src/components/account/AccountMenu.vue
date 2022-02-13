@@ -2,7 +2,7 @@
   <div class="account-menu-wrapper">
     <p class="account-menu-title">Account Menu</p>
     <div class="menu-items-container">
-      <div class="menu-item" 
+      <div class="menu-item app-ingame-btn" 
         v-for="r in routes" 
         :key="r.name"
         :class="{ 'active': isActive(r.route) }"
@@ -75,18 +75,7 @@ export default AccountMenu;
   }
 
   .menu-item {
-    text-transform: uppercase;
-    font-size: 20px;
-    text-align: center;
-    padding: 13px 0px;
-    border: 2px solid white;
     margin: 10px;
-    filter: brightness(0.5);
-    cursor: pointer;
-
-    &.active {
-      filter: brightness(1);
-    }
   }
 }
 </style>

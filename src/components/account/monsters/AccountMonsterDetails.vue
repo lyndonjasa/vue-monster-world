@@ -1,5 +1,9 @@
 <template>
   <div class="account-monster-details">
+    <div class="detail-actions" v-if="showDetailedView">
+      <div class="app-ingame-btn action">Convert</div>
+      <div class="app-ingame-btn action">Evolve</div>
+    </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
         :isEnemy="false"
@@ -245,10 +249,23 @@ export default AccountMonsterDetails;
 <style lang="scss" scoped>
 .account-monster-details {
   display: flex;
+  flex-wrap: wrap;
   border: 1px solid white;
   border-radius: 3px;
   padding: 20px 10px;
   margin-bottom: 15px;
+
+  .detail-actions {
+    flex: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    
+    .action {
+      margin-left: 15px;
+      padding: 10px 15px;
+    }
+  }
 
   .monster-sprite {
     width: 240px;

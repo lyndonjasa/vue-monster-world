@@ -51,6 +51,20 @@
   z-index: 2;
 }
 
+.app-ingame-btn {
+  text-transform: uppercase;
+  font-size: 20px;
+  text-align: center;
+  padding: 13px 0px;
+  border: 2px solid white;
+  filter: brightness(0.5);
+  cursor: pointer;
+}
+
+.app-ingame-btn.active, .app-ingame-btn:hover {
+  filter: brightness(1);
+}
+
 @font-face {
   font-family: Plaguard;
   src: url('./fonts/Plaguard-ZVnjx.otf') format('opentype');
