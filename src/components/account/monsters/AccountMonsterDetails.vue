@@ -1,7 +1,8 @@
 <template>
   <div class="account-monster-details">
-    <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty)">
+    <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty || showRemove)">
       <div class="app-ingame-btn action" v-if="showParty">Switch to Party</div>
+      <div class="app-ingame-btn action" v-if="showRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard">Convert</div>
       <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
     </div>
@@ -119,6 +120,7 @@ interface Props extends Emits {
   showEvolve: boolean;
   showCard: boolean;
   showParty: boolean;
+  showRemove: boolean;
 }
 
 interface Details {
@@ -137,7 +139,8 @@ const AccountMonsterDetails = defineComponent({
     enableSelection: { default: false } as Prop<boolean>,
     showEvolve: { default: true } as Prop<boolean>,
     showCard: { default: true } as Prop<boolean>,
-    showParty: { default: false } as Prop<boolean>
+    showParty: { default: false } as Prop<boolean>,
+    showRemove: { default: false } as Prop<boolean>
   },
   emits: {
     'select-monster': (monsterId: string) => monsterId !== undefined

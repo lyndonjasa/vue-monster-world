@@ -50,6 +50,7 @@
             :monster="selectedMonster" :showDetailedView="true"
             :showParty="!inParty(selectedMonster._id)"
             :showEvolve="selectedMonster.stage != 'Ultra' && selectedMonster.stage != 'Mega'"
+            :showRemove="inParty(selectedMonster._id) && enableRemove"
             :showCard="!inParty(selectedMonster._id)">
           </account-monster-details>
         </div>
@@ -79,6 +80,10 @@ const AccountMonstersModule = defineComponent({
   setup() {
     const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
     const account = inject(CurrentAccount);
+
+    const enableRemove = computed(() => {
+      return account.value.party.length > 1;
+    })
 
     const page = ref<number>(1);
     const pageSize = ref<number>(10);
@@ -160,6 +165,7 @@ const AccountMonstersModule = defineComponent({
       page,
       pageSize,
       searchFormValue,
+      enableRemove,
       inParty
     }
   }

@@ -21,7 +21,8 @@
         :enableSelection="false"
         :showDetailedView="true"
         :showEvolve="canEvolve"
-        :showCard="false">
+        :showCard="false"
+        :showRemove="enableRemove">
       </account-monster-details>
     </div>
   </div>
@@ -67,6 +68,10 @@ const HomeModule = defineComponent({
       showLoader.value = false;
     }
 
+    const enableRemove = computed(() => {
+      return monsterParty.value.length > 1
+    });
+
     loadParty();
 
     return {
@@ -74,6 +79,7 @@ const HomeModule = defineComponent({
       showLoader,
       selectedMonster,
       loadMonsterDetail,
+      enableRemove,
       canEvolve,
       faAnglesLeft
     }
