@@ -97,6 +97,12 @@
       </div>
     </div>
   </div>
+  <switch-party-modal 
+    v-if="showSwitchPartyModal" 
+    :party="currentParty" 
+    @close="showSwitchPartyModal = false"
+    @switch="switchToParty">
+  </switch-party-modal>
 </template>
     
 <script lang="ts">
@@ -105,12 +111,13 @@ import { toElementString } from '@/helpers/element.helper';
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { computed, defineComponent, inject, Prop } from 'vue'
+import { computed, defineComponent, inject, Prop, ref } from 'vue'
 import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons'
 import * as skillHelper from '@/helpers/skill.helper'
 import useAccount from '@/hooks/http-hooks/useAccount';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
-import { ReloadAccountKey } from '@/injections/account.injection';
+import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection';
+import SwitchPartyModal from './SwitchPartyModal.vue';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -135,7 +142,8 @@ interface Details {
 
 const AccountMonsterDetails = defineComponent({
   components: {
-    SpriteCanvas
+    SpriteCanvas,
+    SwitchPartyModal
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,
@@ -153,10 +161,15 @@ const AccountMonsterDetails = defineComponent({
   setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
     const { showModalLoader } = useLoaders();
-    const { removeFromParty, addToParty } = useAccount();
+    const { removeFromParty, addToParty, switchParty } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
     const reloadParty = inject(ReloadAccountKey);
+    const account = inject(CurrentAccount);
+
+    const currentParty = computed(() => {
+      return account.value.party
+    })
 
     const overviewDetailsValue: Details[] = [
       { key: 'Level', value: props.monster.level, detailedOnly: false },
@@ -216,9 +229,27 @@ const AccountMonsterDetails = defineComponent({
       context.emit('update-monster')
     }
 
+    const showSwitchPartyModal = ref<boolean>(false);
     const onMonsterAdd = async () => {
+      if (account.value.party.length < 3) {
+        addMonsterToParty();
+      } else {
+        showSwitchPartyModal.value = true;
+      }
+    }
+
+    const addMonsterToParty = async () => {
       showModalLoader.value = true;
       await addToParty(props.monster._id);
+      await reloadParty();
+      showModalLoader.value = false;
+      context.emit('update-monster')
+    }
+
+    const switchToParty = async (switchedMonsterId: string) => {
+      showSwitchPartyModal.value = false;
+      showModalLoader.value = true;
+      await switchParty(props.monster._id, switchedMonsterId);
       await reloadParty();
       showModalLoader.value = false;
       context.emit('update-monster')
@@ -234,7 +265,10 @@ const AccountMonsterDetails = defineComponent({
       skillHelper,
       faUpRightAndDownLeftFromCenter,
       onMonsterRemove,
-      onMonsterAdd
+      onMonsterAdd,
+      switchToParty,
+      currentParty,
+      showSwitchPartyModal
     }
   },
 })
