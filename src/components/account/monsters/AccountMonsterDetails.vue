@@ -2,7 +2,7 @@
   <div class="account-monster-details">
     <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty || showRemove)">
       <div class="app-ingame-btn action" v-if="showParty">Switch to Party</div>
-      <div class="app-ingame-btn action" v-if="showRemove">Remove From Party</div>
+      <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard">Convert</div>
       <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
     </div>
@@ -97,6 +97,7 @@
       </div>
     </div>
   </div>
+  <base-modal-loader></base-modal-loader>
 </template>
     
 <script lang="ts">
@@ -105,12 +106,14 @@ import { toElementString } from '@/helpers/element.helper';
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { computed, defineComponent, Prop } from 'vue'
+import { computed, defineComponent, Prop, ref } from 'vue'
 import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons'
 import * as skillHelper from '@/helpers/skill.helper'
+import useAccount from '@/hooks/http-hooks/useAccount';
 
 interface Emits {
-  'onSelect-monster'(monsterId: string): boolean
+  'onSelect-monster'(monsterId: string): boolean,
+  'onRemove-monster': any
 }
 
 interface Props extends Emits {
@@ -143,43 +146,22 @@ const AccountMonsterDetails = defineComponent({
     showRemove: { default: false } as Prop<boolean>
   },
   emits: {
-    'select-monster': (monsterId: string) => monsterId !== undefined
+    'select-monster': (monsterId: string) => monsterId !== undefined,
+    'remove-monster': null
   },
   setup(props: Props, context) {
+    const showLoader = ref<boolean>(false);
     const state = SpriteStateEnum.IDLE;
+    const { removeFromParty } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
     const overviewDetailsValue: Details[] = [
-      {
-        key: 'Level',
-        value: props.monster.level,
-        detailedOnly: false
-      },
-      {
-        key: 'Element',
-        value: toElementString(props.monster.element),
-        detailedOnly: false
-      },
-      {
-        key: 'Current Exp',
-        value: props.monster.currentExp,
-        detailedOnly: true
-      },
-      {
-        key: 'Stage',
-        value: props.monster.stage,
-        detailedOnly: true
-      },
-      {
-        key: 'To Next Level',
-        value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel,
-        detailedOnly: true
-      },
-      {
-        key: 'Talent Points',
-        value: props.monster.talentPoints,
-        detailedOnly: true
-      }
+      { key: 'Level', value: props.monster.level, detailedOnly: false },
+      { key: 'Element', value: toElementString(props.monster.element), detailedOnly: false },
+      { key: 'Current Exp', value: props.monster.currentExp, detailedOnly: true },
+      { key: 'Stage', value: props.monster.stage, detailedOnly: true },
+      { key: 'To Next Level', value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel, detailedOnly: true },
+      { key: 'Talent Points', value: props.monster.talentPoints, detailedOnly: true }
     ];
 
     if (props.monster.evolution) {
@@ -198,55 +180,17 @@ const AccountMonsterDetails = defineComponent({
       }
     })
 
-    // TODO: add showing of talents
-
     const { stats, skills } = props.monster
     const statDetailsValue: Details[] = [
-      {
-        key: 'Health',
-        value: stats.health,
-        detailedOnly: false
-      },
-      {
-        key: 'Health Regen',
-        value: stats.healthRegen + '%',
-        detailedOnly: true
-      },
-      {
-        key: 'Mana',
-        value: stats.mana,
-        detailedOnly: false
-      },
-      {
-        key: 'Mana Regen',
-        value: stats.manaRegen + '%',
-        detailedOnly: true
-      },
-      {
-        key: 'Offense',
-        value: stats.offense,
-        detailedOnly: true
-      },
-      {
-        key: 'Defense',
-        value: stats.defense,
-        detailedOnly: true
-      },
-      {
-        key: 'Crit Rate',
-        value: stats.critRate + '%',
-        detailedOnly: true
-      },
-      {
-        key: 'Speed',
-        value: stats.speed,
-        detailedOnly: true
-      },
-      {
-        key: 'Crit Damage',
-        value: stats.critDamage + '%',
-        detailedOnly: true
-      }
+      { key: 'Health', value: stats.health, detailedOnly: false },
+      { key: 'Health Regen', value: stats.healthRegen + '%', detailedOnly: true },
+      { key: 'Mana', value: stats.mana, detailedOnly: false },
+      { key: 'Mana Regen', value: stats.manaRegen + '%', detailedOnly: true },
+      { key: 'Offense', value: stats.offense, detailedOnly: true },
+      { key: 'Defense', value: stats.defense, detailedOnly: true },
+      { key: 'Crit Rate', value: stats.critRate + '%', detailedOnly: true },
+      { key: 'Speed', value: stats.speed, detailedOnly: true },
+      { key: 'Crit Damage', value: stats.critDamage + '%', detailedOnly: true }
     ]
 
     const statDetails = computed((): Details[] => {
@@ -261,6 +205,10 @@ const AccountMonsterDetails = defineComponent({
       context.emit('select-monster', props.monster._id);
     }
 
+    const onMonsterRemove = (): void => {
+      showLoader.value = true;
+    }
+
     return {
       state,
       sprites,
@@ -269,7 +217,9 @@ const AccountMonsterDetails = defineComponent({
       skills,
       onMonsterSelect,
       skillHelper,
-      faUpRightAndDownLeftFromCenter
+      faUpRightAndDownLeftFromCenter,
+      showLoader,
+      onMonsterRemove
     }
   },
 })

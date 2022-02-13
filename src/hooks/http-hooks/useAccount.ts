@@ -47,6 +47,14 @@ const useAccount = () => {
     return monsterService.searchAccountMonsters(accountId.value, request);
   }
 
+  const removeFromParty = async (monsterId: string) => {
+    const currentParty = await getAccountParty();
+    const monsterParty = currentParty.map(cp => cp._id);
+    const remainingIds = monsterParty.filter(mp => mp !== monsterId);
+
+    await monsterService.updateMonsterParty(accountId.value, remainingIds);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -55,7 +63,8 @@ const useAccount = () => {
     getAccountMonsterDetail,
     getAccountCards,
     getAccountInventory,
-    getAccountMonsters
+    getAccountMonsters,
+    removeFromParty
   }
 }
 
