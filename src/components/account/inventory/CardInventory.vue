@@ -64,7 +64,7 @@ export default CardsModule;
     flex-wrap: wrap;
 
     .account-card {
-      flex-basis: 20%;
+      flex-basis: 25%;
       display: flex;
       justify-content: center;
       margin-bottom: 35px;

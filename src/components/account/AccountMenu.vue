@@ -2,20 +2,22 @@
   <div class="account-menu-wrapper">
     <p class="account-menu-title">Account Menu</p>
     <div class="menu-items-container">
-      <div class="menu-item app-ingame-btn" 
-        v-for="r in routes" 
+      <router-link 
+        v-for="r in routes"
+        :to="r.route"
         :key="r.name"
-        :class="{ 'active': isActive(r.route) }"
-        @click="reroute(r.route)">
-        {{ r.name }}
-      </div>
+        custom v-slot="{ navigate, isActive }">
+        <div class="menu-item app-ingame-btn" :class="{ 'active': isActive }" @click="navigate">
+          {{ r.name }}
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 interface MenuRoute {
   name: string;
@@ -24,21 +26,16 @@ interface MenuRoute {
 
 const AccountMenu = defineComponent({
   setup() {
-    const route = useRoute();
     const router = useRouter();
 
     const routes: MenuRoute[] = [
       {
         name: 'Home',
-        route: '/account'
+        route: '/account/home'
       },
       {
         name: 'Monsters',
         route: '/account/monsters'
-      },
-      {
-        name: 'Cards',
-        route: '/account/cards'
       },
       {
         name: 'Inventory',
@@ -46,16 +43,11 @@ const AccountMenu = defineComponent({
       }
     ]
 
-    const isActive = (selectedRoute: string) => {
-      return route.path === selectedRoute
-    }
-
     const reroute = (selectedRoute: string) => {
       router.push(selectedRoute);
     }
 
     return {
-      isActive,
       reroute,
       routes
     }

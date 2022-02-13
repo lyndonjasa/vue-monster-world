@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
+import CardInventory from './inventory/CardInventory.vue'
 
 export const AccountRoutes: RouteRecordRaw[] = [
   {
@@ -10,7 +11,7 @@ export const AccountRoutes: RouteRecordRaw[] = [
     component: () => import('./AccountModule.vue'),
     children: [
       {
-        path: '',
+        path: 'home',
         component: () => import('./home/HomeModule.vue')
       },
       {
@@ -18,12 +19,15 @@ export const AccountRoutes: RouteRecordRaw[] = [
         component: () => import('./monsters/AccountMonsterModule.vue')
       },
       {
-        path: 'cards',
-        component: () => import('./cards/CardsModule.vue')
-      },
-      {
         path: 'inventory',
-        component: () => import('./inventory/InventoryModule.vue')
+        redirect: '/account/inventory/cards',
+        component: () => import('./inventory/InventoryModule.vue'),
+        children: [
+          {
+            path: 'cards',
+            component: CardInventory
+          },
+        ]
       }
     ]
   }
