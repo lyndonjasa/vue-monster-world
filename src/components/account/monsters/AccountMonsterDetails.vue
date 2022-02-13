@@ -97,7 +97,6 @@
       </div>
     </div>
   </div>
-  <base-modal-loader></base-modal-loader>
 </template>
     
 <script lang="ts">
@@ -106,10 +105,12 @@ import { toElementString } from '@/helpers/element.helper';
 import useSpriteFactory from '@/hooks/useSpriteFactory';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
-import { computed, defineComponent, Prop, ref } from 'vue'
+import { computed, defineComponent, inject, Prop } from 'vue'
 import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons'
 import * as skillHelper from '@/helpers/skill.helper'
 import useAccount from '@/hooks/http-hooks/useAccount';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
+import { ReloadAccountKey } from '@/injections/account.injection';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -150,10 +151,12 @@ const AccountMonsterDetails = defineComponent({
     'remove-monster': null
   },
   setup(props: Props, context) {
-    const showLoader = ref<boolean>(false);
     const state = SpriteStateEnum.IDLE;
+    const { showModalLoader } = useLoaders();
     const { removeFromParty } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
+
+    const reloadParty = inject(ReloadAccountKey);
 
     const overviewDetailsValue: Details[] = [
       { key: 'Level', value: props.monster.level, detailedOnly: false },
@@ -205,8 +208,12 @@ const AccountMonsterDetails = defineComponent({
       context.emit('select-monster', props.monster._id);
     }
 
-    const onMonsterRemove = (): void => {
-      showLoader.value = true;
+    const onMonsterRemove = async () => {
+      showModalLoader.value = true;
+      await removeFromParty(props.monster._id);
+      await reloadParty();
+      showModalLoader.value = false;
+      context.emit('remove-monster')
     }
 
     return {
@@ -218,7 +225,6 @@ const AccountMonsterDetails = defineComponent({
       onMonsterSelect,
       skillHelper,
       faUpRightAndDownLeftFromCenter,
-      showLoader,
       onMonsterRemove
     }
   },

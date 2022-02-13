@@ -22,7 +22,8 @@
         :showDetailedView="true"
         :showEvolve="canEvolve"
         :showCard="false"
-        :showRemove="enableRemove">
+        :showRemove="enableRemove"
+        @remove-monster="onMonsterRemoval">
       </account-monster-details>
     </div>
   </div>
@@ -63,7 +64,6 @@ const HomeModule = defineComponent({
     const loadMonsterDetail = async (monsterId: string) => {
       showLoader.value = true
       selectedMonster.value = await getAccountMonsterDetail(monsterId);
-      console.log(selectedMonster.value);
       await delayAction(1000);
       showLoader.value = false;
     }
@@ -72,6 +72,11 @@ const HomeModule = defineComponent({
       return monsterParty.value.length > 1
     });
 
+    const onMonsterRemoval = () => {
+      selectedMonster.value = undefined
+      loadParty();
+    }
+
     loadParty();
 
     return {
@@ -79,6 +84,7 @@ const HomeModule = defineComponent({
       showLoader,
       selectedMonster,
       loadMonsterDetail,
+      onMonsterRemoval,
       enableRemove,
       canEvolve,
       faAnglesLeft
