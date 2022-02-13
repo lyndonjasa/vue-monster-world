@@ -1,6 +1,6 @@
 <template>
   <base-div-loader v-if="showLoader"></base-div-loader>
-  <div class="home-module-wrapper" v-else>
+  <div class="home-module-wrapper wrapper-div" v-else>
     <p class="home-title">PARTY COMPOSITION:</p>
     <div class="account-party" v-if="!selectedMonster">
       <account-monster-details v-for="monster in monsterParty" 
@@ -85,9 +85,6 @@ export default HomeModule;
 
 <style lang="scss" scoped>
 .home-module-wrapper {
-  align-self: flex-start;
-  justify-self: flex-start;
-  flex: 1;
 
   .account-monster-detail {
     margin-top: 20px;

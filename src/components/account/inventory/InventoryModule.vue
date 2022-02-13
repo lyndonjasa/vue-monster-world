@@ -1,5 +1,7 @@
 <template>
-  Account Inventory Module
+  <div class="account-inventory-wrapper wrapper-div">
+    Account Inventory Module
+  </div>
 </template>
 
 <script lang="ts">

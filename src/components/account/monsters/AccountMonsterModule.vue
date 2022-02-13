@@ -1,5 +1,7 @@
 <template>
-  Account Monsters Module
+  <div class="account-monsters-wrapper wrapper-div">
+    Account Monsters Module
+  </div>
 </template>
 
 <script lang="ts">

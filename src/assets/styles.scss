@@ -65,6 +65,12 @@
   filter: brightness(1);
 }
 
+.wrapper-div {
+  align-self: flex-start;
+  justify-self: flex-start;
+  flex: 1;
+}
+
 @font-face {
   font-family: Plaguard;
   src: url('./fonts/Plaguard-ZVnjx.otf') format('opentype');
