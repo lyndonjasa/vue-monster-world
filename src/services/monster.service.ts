@@ -32,7 +32,7 @@ const getAccountMonster = (accountId: string, monsterId: string): Promise<Detail
   return axios.get(`${baseAccountRoute}/${accountId}/monsters/${monsterId}`).then(r => r.data)
 }
 
-const searchAccountMonsters = (accountId: string, request: SearchMonsterRequest): Promise<DetailedMonsterResponse[]> => {
+const searchAccountMonsters = (accountId: string, request: SearchMonsterRequest): Promise<{ totalCount: number, monsters: DetailedMonsterResponse[]}> => {
   return axios.post(`${baseAccountRoute}/${accountId}/monsters`, request).then(r => r.data);
 }
 

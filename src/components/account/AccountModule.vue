@@ -37,7 +37,6 @@ const AccountModule = defineComponent({
       showScreenLoader.value = true;
       try {
         account.value = await getAccountDetails();
-        console.log(account.value);
       } catch (error) {
         console.log(error)
       } finally {
