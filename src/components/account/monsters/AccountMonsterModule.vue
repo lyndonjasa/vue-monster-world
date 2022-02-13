@@ -2,16 +2,16 @@
   <div class="account-monsters-wrapper wrapper-div">
     <template v-if="!selectedMonster">
       <search-monster-form @search="onSearch"></search-monster-form>
-      <div class="page-controls">
+      <div class="page-controls" v-if="searchFormValue">
         <div class="page-control">
           Page: &nbsp;
-          <select>
+          <select v-model="page">
             <option v-for="i in numberOfPages" :key="i" :value="i">{{ i }}</option>
           </select>
         </div>
         <div class="page-control">
           Page Size: &nbsp;
-          <select>
+          <select v-model="pageSize">
             <option v-for="i in pageSizeOptions" :key="i" :value="i">{{ i }}</option>
           </select>
         </div>
@@ -65,7 +65,7 @@ import useAccount from '@/hooks/http-hooks/useAccount';
 import { SearchMonsterRequest } from '@/http/requests/search-monster.request';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { SearchMonsterCriteria } from '@/models/monster/search-monster-criteria';
-import { computed, defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, ref, watch } from 'vue'
 import AccountMonsterDetails from './AccountMonsterDetails.vue';
 import SearchMonsterForm from './SearchMonsterForm.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
@@ -98,6 +98,10 @@ const AccountMonstersModule = defineComponent({
       if (remainder > 0) pages += 1;
 
       return pages
+    })
+
+    watch([page, pageSize], () => {
+      onSearch(searchFormValue.value);
     })
 
     const searchFormValue = ref<SearchMonsterCriteria>(undefined);
@@ -146,6 +150,9 @@ const AccountMonstersModule = defineComponent({
       showLoader,
       selectedMonster,
       faAnglesLeft,
+      page,
+      pageSize,
+      searchFormValue,
       inParty
     }
   }
