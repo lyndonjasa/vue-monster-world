@@ -79,7 +79,6 @@ const AccountMonstersModule = defineComponent({
   setup() {
     const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
     const account = inject(CurrentAccount);
-    console.log(account.value);
 
     const page = ref<number>(1);
     const pageSize = ref<number>(10);
@@ -104,7 +103,13 @@ const AccountMonstersModule = defineComponent({
       onSearch(searchFormValue.value);
     })
 
-    const searchFormValue = ref<SearchMonsterCriteria>(undefined);
+    const searchFormValue = ref<SearchMonsterCriteria>({
+      searchText: undefined,
+      elements: [],
+      stages: [],
+      sortProperty: 'None',
+      sortDirection: 'ASC'
+    });
 
     const onSearch = async (value: SearchMonsterCriteria) => {
       const searchCriteria: SearchMonsterRequest = {
@@ -128,6 +133,8 @@ const AccountMonstersModule = defineComponent({
       showLoader.value = false;
       searchFormValue.value = value;
     }
+
+    onSearch(searchFormValue.value);
 
     const inParty = (monsterId: string) => {
       return account.value.party.some(p => p._id === monsterId);

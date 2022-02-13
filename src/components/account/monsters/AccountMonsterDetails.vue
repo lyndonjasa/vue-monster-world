@@ -36,6 +36,14 @@
           </div>
         </div>
       </div>
+      <div class="summary" v-if="showDetailedView && monster.talents.length > 0">
+        <div class="summary-key">Talents</div>
+        <div class="summary-value">
+          <div class="skill-details" v-for="talent in monster.talents" :key="talent">
+            <div class="skill-name">{{ talent }}</div>
+          </div>
+        </div>
+      </div>
       <div class="summary">
         <div class="summary-key">Skills</div>
         <div class="summary-value" v-if="showDetailedView">
@@ -162,6 +170,11 @@ const AccountMonsterDetails = defineComponent({
       {
         key: 'To Next Level',
         value: props.monster.expToLevel === 0 ? '----' : props.monster.expToLevel,
+        detailedOnly: true
+      },
+      {
+        key: 'Talent Points',
+        value: props.monster.talentPoints,
         detailedOnly: true
       }
     ];
