@@ -38,9 +38,27 @@
         </div>
         <div class="monster-sort filter-option">
           <p class="sort-name">Sort By</p>
+          <div class="filter-values">
+            <div class="sort-options" v-for="option in sortByOptions" :key="option.key">
+              <input type="radio" 
+                :name="option.key"
+                :value="option.value"
+                v-model="sortBy">
+                {{ option.key }}
+            </div>
+          </div>
         </div>
         <div class="monster-sort filter-option">
           <p class="sort-name">Sort Direction</p>
+          <div class="filter-values">
+            <div class="sort-options" v-for="option in sortDirectionOptions" :key="option.key">
+              <input type="radio" 
+                :name="option.key"
+                :value="option.value"
+                v-model="sortDirection">
+                {{ option.key }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -76,11 +94,28 @@ const AccountMonstersModule = defineComponent({
       { key: 'Ultra', value: 'Ultra' }
     ]
 
+    const sortBy = ref<string>('None');
+    const sortByOptions: KeyValuePair[] = [
+      { key: 'None', value: 'None' },
+      { key: 'Name', value: 'Name' },
+      { key: 'Level', value: 'Level' }
+    ]
+
+    const sortDirection = ref<string>('ASC');
+    const sortDirectionOptions: KeyValuePair[] = [
+      { key: 'Ascending', value: 'ASC' },
+      { key: 'Descending', value: 'DESC' }
+    ]
+
     return {
       elements,
       elementFilters,
       stages,
-      stageFilters
+      stageFilters,
+      sortBy,
+      sortByOptions,
+      sortDirection,
+      sortDirectionOptions
     }
   }
 })
@@ -137,20 +172,17 @@ export default AccountMonstersModule;
       margin: 5px 0;
     }
 
-    .monster-filter {
+    .filter-name, .sort-name {
+      width: 120px;
+      margin-right: 20px;
+    }
 
-      .filter-name {
-        width: 120px;
-        margin-right: 20px;
-      }
+    .filter-values {
+      display: flex;
+    }
 
-      .filter-values {
-        display: flex;
-
-          .filter-value {
-          margin: 0 5px;
-        }
-      }
+    .filter-value, .sort-options {
+      margin: 0 5px;
     }
   }
 }
