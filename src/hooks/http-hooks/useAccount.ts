@@ -1,4 +1,5 @@
 import { CreateAccountRequest } from "@/http/requests/create-account.request";
+import { SearchMonsterRequest } from "@/http/requests/search-monster.request";
 import accountService from "@/services/account.service"
 import cardService from "@/services/card.service";
 import itemService from "@/services/item.service";
@@ -42,6 +43,10 @@ const useAccount = () => {
     return itemService.getAccountItems(accountId.value);
   }
 
+  const getAccountMonsters = (request: SearchMonsterRequest) => {
+    return monsterService.searchAccountMonsters(accountId.value, request);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -49,7 +54,8 @@ const useAccount = () => {
     getAccountParty,
     getAccountMonsterDetail,
     getAccountCards,
-    getAccountInventory
+    getAccountInventory,
+    getAccountMonsters
   }
 }
 

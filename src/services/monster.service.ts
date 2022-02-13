@@ -1,6 +1,7 @@
 import { spriteData } from "@/hooks/test-sprite-data";
 import useEnvironment from "@/hooks/useEnvironment";
 import useSpriteFactory from "@/hooks/useSpriteFactory";
+import { SearchMonsterRequest } from "@/http/requests/search-monster.request";
 import { StarterPackResponse } from "@/http/responses";
 import { DetailedMonsterResponse } from "@/http/responses/detailed-monster.response";
 import { BuffInstanceEnum } from "@/models/battle/buff-instance.enum";
@@ -29,6 +30,10 @@ const getAccountMonsterParty = (accountId: string): Promise<DetailedMonsterRespo
 
 const getAccountMonster = (accountId: string, monsterId: string): Promise<DetailedMonsterResponse> => {
   return axios.get(`${baseAccountRoute}/${accountId}/monsters/${monsterId}`).then(r => r.data)
+}
+
+const searchAccountMonsters = (accountId: string, request: SearchMonsterRequest): Promise<DetailedMonsterResponse[]> => {
+  return axios.post(`${baseAccountRoute}/${accountId}/monsters`, request).then(r => r.data);
 }
 
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
@@ -61,7 +66,8 @@ export default {
   getEnemyParty,
   getStarterPacks,
   getAccountMonsterParty,
-  getAccountMonster
+  getAccountMonster,
+  searchAccountMonsters
 }
 
 const attackSkill: Skill = {
