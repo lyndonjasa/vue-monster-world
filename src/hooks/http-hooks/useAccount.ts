@@ -1,6 +1,7 @@
 import { CreateAccountRequest } from "@/http/requests/create-account.request";
 import accountService from "@/services/account.service"
 import cardService from "@/services/card.service";
+import itemService from "@/services/item.service";
 import monsterService from "@/services/monster.service";
 import useAppStateCore from "../store-hooks/useAppStateCore";
 
@@ -37,13 +38,18 @@ const useAccount = () => {
     return cardService.getAccountCards(accountId.value);
   }
 
+  const getAccountInventory = () => {
+    return itemService.getAccountItems(accountId.value);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
     getAccountDetails,
     getAccountParty,
     getAccountMonsterDetail,
-    getAccountCards
+    getAccountCards,
+    getAccountInventory
   }
 }
 

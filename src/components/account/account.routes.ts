@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
 import CardInventory from './inventory/CardInventory.vue'
+import ItemsInventory from './inventory/ItemsInventory.vue'
 
 export const AccountRoutes: RouteRecordRaw[] = [
   {
@@ -28,6 +29,10 @@ export const AccountRoutes: RouteRecordRaw[] = [
             path: 'cards',
             component: CardInventory
           },
+          {
+            path: 'items',
+            component: ItemsInventory
+          }
         ]
       }
     ]
