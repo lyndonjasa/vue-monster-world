@@ -14,8 +14,13 @@ const useErrors = () => {
     }
   })
 
+  const throwMessage = (message: string) => {
+    store.commit(ErrorMutationTypes.setErrorMessage, message);
+  }
+
   return {
-    errorMessage
+    errorMessage,
+    throwMessage
   }
 }
 

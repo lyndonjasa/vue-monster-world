@@ -178,7 +178,7 @@ const AccountMonsterDetails = defineComponent({
       switchParty,
       convertMonsterToCard } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
-    const { errorMessage } = useErrors();
+    const { throwMessage } = useErrors();
 
     const reloadParty = inject(ReloadAccountKey);
     const account = inject(CurrentAccount);
@@ -287,7 +287,7 @@ const AccountMonsterDetails = defineComponent({
     }
 
     const onMonsterEvolve = async () => {
-      errorMessage.value = 'This is a test error'
+      throwMessage('This is a test error');
     }
 
     return {
