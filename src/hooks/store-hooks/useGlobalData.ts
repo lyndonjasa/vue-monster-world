@@ -32,10 +32,12 @@ const useGlobaData = () => {
   }
 
   const loadGlobalData = async () => {
-    const evolutionData = await globalDataService.loadEvolutions();
-    evolutionStore.commit(EvolutionMutationTypes.setEvolutions, evolutionData);
+    const [evolutionData, monsterData] = await Promise.all([
+      globalDataService.loadEvolutions(),
+      globalDataService.loadMonsters()
+    ])
 
-    const monsterData = await globalDataService.loadMonsters();
+    evolutionStore.commit(EvolutionMutationTypes.setEvolutions, evolutionData);
     baseMonsterStore.commit(MonsterMutationTypes.setMonsters, monsterData);
 
     reloadAccountCards();

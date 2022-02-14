@@ -13,7 +13,6 @@ import { Skill } from "@/models/skills/skill";
 import { SkillTypeEnum } from "@/models/skills/skill-type.enum";
 import { TargetEnum } from "@/models/skills/target.enum";
 import { TalentEnum } from "@/models/talents/talent.enum";
-import { IBaseMonster } from "@/state-management/monsters/base-monster.interface";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 

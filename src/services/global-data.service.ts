@@ -10,7 +10,7 @@ const loadEvolutions = (): Promise<IEvolution[]> => {
 }
 
 const loadMonsters = (): Promise<IBaseMonster[]> => {
-  return axios.get(`${apiBaseUrl}`).then(r => r.data)
+  return axios.get(`${apiBaseUrl}/monsters`).then(r => r.data)
 }
 
 export default {
