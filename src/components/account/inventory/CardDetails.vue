@@ -2,7 +2,7 @@
   <div class="card-details">
     <div class="card-thumbnail">
       <base-monster-thumbnail :src="thumbnail" :title="`${card.quantity} ${card.monsterName} card(s)`" />
-      <div class="card-quantity">{{ card.quantity }}</div>
+      <div class="card-quantity" v-if="!hideQuantity">{{ card.quantity }}</div>
     </div>
     <p class="card-name">{{ card.monsterName }}</p>
   </div>
@@ -14,12 +14,14 @@ import { ICard } from '@/http/responses/card-inventory.response'
 import { computed, defineComponent, Prop } from 'vue'
 
 interface Props {
-  card: ICard
+  card: ICard,
+  hideQuantity: boolean
 }
 
 const CardDetails = defineComponent({
   props: {
-    card: { required: true } as Prop<ICard>
+    card: { required: true } as Prop<ICard>,
+    hideQuantity: { default: false } as Prop<boolean>
   },
   setup(props: Props) {
     const thumbnail = computed(() => {

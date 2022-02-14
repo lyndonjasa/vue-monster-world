@@ -27,16 +27,21 @@
   border: none;
 }
 
+.app-generic-btn:hover {
+  background-color: #19ACCD;
+}
+
+.app-generic-btn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
 .app-text-header {
   text-align: center;
   font-family: "Plaguard";
   font-size: 24px;
   padding-bottom: 15px;
   border-bottom: 2px solid white;
-}
-
-.app-generic-btn:hover {
-  background-color: #19ACCD;
 }
 
 .app-modal-overlay {

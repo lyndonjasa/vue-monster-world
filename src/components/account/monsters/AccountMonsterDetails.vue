@@ -4,7 +4,7 @@
       <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard" @click="showCardModal = true">Convert</div>
-      <div class="app-ingame-btn action" v-if="showEvolve" @click="onMonsterEvolve">Evolve</div>
+      <div class="app-ingame-btn action" v-if="showEvolve" @click="showAscensionModal = true">Evolve</div>
     </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
@@ -110,6 +110,13 @@
     @accept="onCardConvert" 
     @close="showCardModal = false">
   </base-modal>
+  <monster-ascension-modal
+    v-if="showAscensionModal"
+    :requiredCards="monsterStage.cardPrerequisite || monsterStage.maxCardBonus"
+    :type="monsterStage.cardPrerequisite ? 'evolve' : 'ascend'"
+    :monster="monster"
+    @close="showAscensionModal = false">
+  </monster-ascension-modal>
 </template>
     
 <script lang="ts">
@@ -128,6 +135,7 @@ import SwitchPartyModal from './SwitchPartyModal.vue';
 import { delayAction } from '@/helpers/delay.helper';
 import useErrors from '@/hooks/store-hooks/useErrors';
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';
+import MonsterAscensionModal from './MonsterAscensionModal.vue';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -154,7 +162,8 @@ interface Details {
 const AccountMonsterDetails = defineComponent({
   components: {
     SpriteCanvas,
-    SwitchPartyModal
+    SwitchPartyModal,
+    MonsterAscensionModal
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,
@@ -181,6 +190,10 @@ const AccountMonsterDetails = defineComponent({
     const { sprites } = useSpriteFactory([props.monster.sprite]);
     const { throwMessage } = useErrors();
     const { evolutions } = useGlobaData();
+
+    const monsterStage = computed(() => {
+      return evolutions.value.find(e => e.name === props.monster.stage)
+    })
 
     const reloadParty = inject(ReloadAccountKey);
     const account = inject(CurrentAccount);
@@ -288,14 +301,9 @@ const AccountMonsterDetails = defineComponent({
       context.emit('card-converted');
     }
 
-    const requiredMonsterCard = computed(() => {
-      const evolution = evolutions.value.find(e => e.name === props.monster.stage);
-
-      return `This process will consume ${evolution.cardPrerequisite} ${props.monster.name} card(s) and is irreversible. 
-              Do you want to continue evolving this monster?`
-    })
+    const showAscensionModal = ref<boolean>(false);
     const onMonsterEvolve = async () => {
-      throwMessage(requiredMonsterCard.value);
+      console.log('test');
     }
 
     return {
@@ -315,7 +323,9 @@ const AccountMonsterDetails = defineComponent({
       cardConvertMessage,
       showCardModal,
       onCardConvert,
-      onMonsterEvolve
+      onMonsterEvolve,
+      showAscensionModal,
+      monsterStage
     }
   },
 })

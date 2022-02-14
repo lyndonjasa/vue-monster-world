@@ -1,10 +1,9 @@
 <template>
-  <base-div-loader v-if="showLoader"></base-div-loader>
-  <div class="account-cards-wrapper wrapper-div" v-else>
+  <div class="account-cards-wrapper wrapper-div">
     <p class="card-title wrapper-title">ACCOUNT CARDS INVENTORY:</p>
-    <div class="card-inventory" v-if="cardInventory.cards.length > 0">
+    <div class="card-inventory" v-if="cards.length > 0">
       <div class="account-card" 
-        v-for="card in cardInventory.cards" 
+        v-for="card in cards" 
         :key="card.monsterName"
         :class="{ 'empty': card.quantity < 1 }">
         <card-details :card="card"></card-details>
@@ -17,9 +16,8 @@
 </template>
 
 <script lang="ts">
-import useAccount from '@/hooks/http-hooks/useAccount';
-import { CardInventoryResponse } from '@/http/responses';
-import { defineComponent, ref } from 'vue'
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
+import { defineComponent } from 'vue'
 import CardDetails from './CardDetails.vue';
 
 const CardsModule = defineComponent({
@@ -27,22 +25,10 @@ const CardsModule = defineComponent({
     CardDetails
   },
   setup() {
-    const { getAccountCards } = useAccount();
-    const showLoader = ref<boolean>(false);
-    const cardInventory = ref<CardInventoryResponse>(undefined);
-
-    const loadCards = async () => {
-      showLoader.value = true;
-      cardInventory.value = await getAccountCards();
-      cardInventory.value.cards.sort((a, b) => a.monsterName.localeCompare(b.monsterName));
-      showLoader.value = false;
-    }
-    
-    loadCards();
+    const { cards } = useGlobaData();
 
     return {
-      showLoader,
-      cardInventory
+      cards
     }
   }
 })
