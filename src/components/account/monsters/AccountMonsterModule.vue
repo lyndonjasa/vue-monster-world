@@ -27,6 +27,7 @@
             <div class="monster-thumbnail">
               <base-monster-thumbnail :src="getMonsterThumbnail(monster.name)" />
             </div>
+            <div class="party-indicator" v-if="inParty(monster._id)">P</div>
             <div class="monster-details">
               <p class="monster-name">{{ monster.computedName }}</p>
               <p class="monster-level">
@@ -226,6 +227,19 @@ export default AccountMonstersModule;
       justify-content: center;
       flex-wrap: wrap;
       margin-bottom: 25px;
+
+      .party-indicator {
+        position: absolute;
+        background-color: rgba(255, 0, 0, 0.75);
+        padding: 5px 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999px;
+        font-size: 13px;
+        margin-top: -10px;
+        margin-left: 55px;
+      }
 
       .monster-details {
         margin-top: 10px;
