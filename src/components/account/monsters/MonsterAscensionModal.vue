@@ -72,7 +72,7 @@ const MonsterAscensionModal = defineComponent({
       const card = cards.value.find(c => c.monsterName === props.monster.name)
 
       return {
-        monsterName: props.monster.name,
+        monsterName: props.monster.computedName,
         quantity: card ? card.quantity : 0
       }
     })
