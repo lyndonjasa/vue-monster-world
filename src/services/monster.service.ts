@@ -40,6 +40,10 @@ const updateMonsterParty = (accountId: string, monsterIds: string[]): Promise<vo
   return axios.put(`${baseAccountRoute}/${accountId}/party`, monsterIds).then(r => r.data);
 }
 
+const evolveMonster = (accountId: string, monsterId: string): Promise<void> => {
+  return axios.put(`${baseAccountRoute}/${accountId}/monsters/${monsterId}`).then(r => r.data);
+}
+
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
   // character id will be supplied in the future
 
@@ -72,7 +76,8 @@ export default {
   getAccountMonsterParty,
   getAccountMonster,
   searchAccountMonsters,
-  updateMonsterParty
+  updateMonsterParty,
+  evolveMonster
 }
 
 const attackSkill: Skill = {

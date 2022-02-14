@@ -77,6 +77,11 @@ const HomeModule = defineComponent({
       loadParty();
     }
 
+    const onMonsterEvolution = async (id: string) => {
+      selectedMonster.value = await getAccountMonsterDetail(id);
+      loadParty();
+    }
+
     loadParty();
 
     return {
@@ -87,7 +92,8 @@ const HomeModule = defineComponent({
       onMonsterRemoval,
       enableRemove,
       canEvolve,
-      faAnglesLeft
+      faAnglesLeft,
+      onMonsterEvolution
     }
   }
 })

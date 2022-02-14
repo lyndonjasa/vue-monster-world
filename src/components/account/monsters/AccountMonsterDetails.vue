@@ -313,6 +313,7 @@ const AccountMonsterDetails = defineComponent({
     const showAscensionModal = ref<boolean>(false);
     const onMonsterEvolve = async () => {
       showAscensionModal.value = false;
+      reloadParty();
       context.emit('monster-evolved', props.monster._id)
     }
 

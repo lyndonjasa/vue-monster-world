@@ -76,6 +76,10 @@ const useAccount = () => {
     return cardService.convertToCard(accountId.value, monsterId);
   }
 
+  const evolveMonster = (monsterId: string) => {
+    return monsterService.evolveMonster(accountId.value, monsterId);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -88,7 +92,8 @@ const useAccount = () => {
     removeFromParty,
     addToParty,
     switchParty,
-    convertMonsterToCard
+    convertMonsterToCard,
+    evolveMonster
   }
 }
 
