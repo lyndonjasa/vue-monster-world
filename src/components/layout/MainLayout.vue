@@ -27,12 +27,15 @@ import { defineComponent } from 'vue'
 import { faPeopleArrowsLeftRight } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'vue-router'
 import useSession from '@/hooks/app-hooks/useSession';
+import useGlobalData from '@/hooks/store-hooks/useGlobalData';
 
 const MainLayout = defineComponent({
   setup() {
     const router = useRouter();
     const { clearAccount } = useSession();
+    const { loadGlobalData } = useGlobalData();
 
+    loadGlobalData();
     const onSwitchAccount = () => {
       clearAccount();
       router.push('/accounts');
