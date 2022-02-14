@@ -1,22 +1,33 @@
 <template>
-  <base-modal 
-    :message="errorMessage"
+  <base-modal
+    v-if="displayedError"
+    :message="displayedError"
     acceptText="OK"
-    closeText="Close">
+    closeText="Close"
+    @close="closeModal"
+    @accept="closeModal">
   </base-modal>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import useErrors from '@/hooks/store-hooks/useErrors';
 
 const BaseErrorModal = defineComponent({
   setup() {
-    const errorMessage = computed(() => {
-      return 'This is the error message'
+    const { errorMessage } = useErrors();
+
+    const displayedError = computed(() => {
+      return errorMessage.value
     })
 
+    const closeModal = () => {
+      errorMessage.value = undefined;
+    }
+
     return {
-      errorMessage
+      displayedError,
+      closeModal
     }
   },
 })
