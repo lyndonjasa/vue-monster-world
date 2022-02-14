@@ -47,11 +47,13 @@
             <fa-icon :icon="faAnglesLeft" /> Back
           </div>
           <account-monster-details 
-            :monster="selectedMonster" :showDetailedView="true"
+            :monster="selectedMonster" 
+            :showDetailedView="true"
             :showParty="!inParty(selectedMonster._id)"
             :showEvolve="selectedMonster.stage != 'Ultra' && selectedMonster.stage != 'Mega'"
             :showRemove="inParty(selectedMonster._id) && enableRemove"
-            :showCard="!inParty(selectedMonster._id)">
+            :showCard="!inParty(selectedMonster._id)"
+            @card-converted="selectedMonster = undefined; reloadGrid()">
           </account-monster-details>
         </div>
       </template>
@@ -60,7 +62,6 @@
 </template>
 
 <script lang="ts">
-import { delayAction } from '@/helpers/delay.helper';
 import { getMonsterThumbnail } from '@/helpers/monster.helper';
 import useAccount from '@/hooks/http-hooks/useAccount';
 import { SearchMonsterRequest } from '@/http/requests/search-monster.request';
@@ -105,7 +106,7 @@ const AccountMonstersModule = defineComponent({
     })
 
     watch([page, pageSize], () => {
-      onSearch(searchFormValue.value);
+      reloadGrid();
     })
 
     const searchFormValue = ref<SearchMonsterCriteria>({
@@ -134,7 +135,6 @@ const AccountMonstersModule = defineComponent({
       totalCount.value = result.totalCount;
       monsters.value = result.monsters;
 
-      await delayAction(1000);
       showLoader.value = false;
       searchFormValue.value = value;
     }
@@ -149,6 +149,10 @@ const AccountMonstersModule = defineComponent({
       showLoader.value = true;
       selectedMonster.value = await getAccountMonsterDetail(monsterId);
       showLoader.value = false;
+    }
+
+    const reloadGrid = () => {
+      onSearch(searchFormValue.value);
     }
 
     return {
@@ -166,7 +170,8 @@ const AccountMonstersModule = defineComponent({
       pageSize,
       searchFormValue,
       enableRemove,
-      inParty
+      inParty,
+      reloadGrid
     }
   }
 })

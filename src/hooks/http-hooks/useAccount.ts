@@ -72,6 +72,10 @@ const useAccount = () => {
     await monsterService.updateMonsterParty(accountId.value, monsterParty);
   }
 
+  const convertMonsterToCard = (monsterId: string) => {
+    return cardService.convertToCard(accountId.value, monsterId);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -83,7 +87,8 @@ const useAccount = () => {
     getAccountMonsters,
     removeFromParty,
     addToParty,
-    switchParty
+    switchParty,
+    convertMonsterToCard
   }
 }
 

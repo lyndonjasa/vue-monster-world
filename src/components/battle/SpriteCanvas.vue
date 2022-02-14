@@ -35,7 +35,6 @@ const SpriteCanvas = defineComponent({
 
     const canvasId = computed((): string => {
       const position = props.isEnemy ? 'right' : 'left'
-      console.log(props.id);
       const id = props.id || props.sprite.name
 
       return `canvas-${position}-${id}`

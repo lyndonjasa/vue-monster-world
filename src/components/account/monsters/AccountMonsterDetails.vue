@@ -129,7 +129,8 @@ import { delayAction } from '@/helpers/delay.helper';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
-  'onUpdate-monster': any
+  'onUpdate-monster': any,
+  'onCard-converted': any
 }
 
 interface Props extends Emits {
@@ -164,12 +165,17 @@ const AccountMonsterDetails = defineComponent({
   },
   emits: {
     'select-monster': (monsterId: string) => monsterId !== undefined,
-    'update-monster': null
+    'update-monster': null,
+    'card-converted': null
   },
   setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
     const { showModalLoader } = useLoaders();
-    const { removeFromParty, addToParty, switchParty } = useAccount();
+    const { 
+      removeFromParty, 
+      addToParty, 
+      switchParty,
+      convertMonsterToCard } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
 
     const reloadParty = inject(ReloadAccountKey);
@@ -272,6 +278,10 @@ const AccountMonsterDetails = defineComponent({
       showCardModal.value = false;
       await delayAction(500);
       showModalLoader.value = true;
+      await convertMonsterToCard(props.monster._id);
+      showModalLoader.value = false;
+
+      context.emit('card-converted');
     }
 
     return {
