@@ -6,6 +6,7 @@
       :spriteState="currentState"
       :isEnemy="isEnemy"
       :blink="blinkingTarget == monsterId"
+      :id="monsterId"
       @reset-to-idle="resetToIdle"
     >
     </app-sprite-canvas>

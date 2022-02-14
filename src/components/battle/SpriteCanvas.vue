@@ -19,6 +19,7 @@ interface Props {
   spriteState: SpriteStateConfig,
   isEnemy: boolean,
   blink: boolean
+  id: string;
 }
 
 const SpriteCanvas = defineComponent({
@@ -26,15 +27,18 @@ const SpriteCanvas = defineComponent({
     sprite: { required: true, type: Object as PropType<Sprite> },
     spriteState: { required: true, type: Object as PropType<SpriteStateConfig> },
     isEnemy: { required: true, type: Boolean },
-    blink: Boolean
+    blink: Boolean,
+    id: { required: false, type: String }
   },
   setup(props: Props, context) {
     const { spriteScale } = useEnvironment();
 
     const canvasId = computed((): string => {
       const position = props.isEnemy ? 'right' : 'left'
+      console.log(props.id);
+      const id = props.id || props.sprite.name
 
-      return `canvas-${position}-${props.sprite.name}`
+      return `canvas-${position}-${id}`
     })
     const width = computed((): number => {
       return props.sprite.width * props.sprite.scale * spriteScale

@@ -3,13 +3,14 @@
     <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty || showRemove)">
       <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
-      <div class="app-ingame-btn action" v-if="showCard">Convert</div>
+      <div class="app-ingame-btn action" v-if="showCard" @click="showCardModal = true">Convert</div>
       <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
     </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
         :isEnemy="false"
-        :sprite="sprites[0]"></sprite-canvas>
+        :sprite="sprites[0]"
+        :id="monster._id"></sprite-canvas>
     </div>
     <div class="monster-details">
       <p class="monster-name" v-on="enableSelection ? { click: onMonsterSelect } : {}"
@@ -103,6 +104,12 @@
     @close="showSwitchPartyModal = false"
     @switch="switchToParty">
   </switch-party-modal>
+  <base-modal
+    v-if="showCardModal"
+    :message="cardConvertMessage" 
+    @accept="onCardConvert" 
+    @close="showCardModal = false">
+  </base-modal>
 </template>
     
 <script lang="ts">
@@ -118,6 +125,7 @@ import useAccount from '@/hooks/http-hooks/useAccount';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
 import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection';
 import SwitchPartyModal from './SwitchPartyModal.vue';
+import { delayAction } from '@/helpers/delay.helper';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -169,6 +177,10 @@ const AccountMonsterDetails = defineComponent({
 
     const currentParty = computed(() => {
       return account.value.party
+    })
+
+    const cardConvertMessage = computed(() => {
+      return 'Card conversion is irreversible. Are you sure you want to convert this monster to card?'
     })
 
     const overviewDetailsValue: Details[] = [
@@ -255,6 +267,13 @@ const AccountMonsterDetails = defineComponent({
       context.emit('update-monster')
     }
 
+    const showCardModal = ref<boolean>(false);
+    const onCardConvert = async () => {
+      showCardModal.value = false;
+      await delayAction(500);
+      showModalLoader.value = true;
+    }
+
     return {
       state,
       sprites,
@@ -268,7 +287,10 @@ const AccountMonsterDetails = defineComponent({
       onMonsterAdd,
       switchToParty,
       currentParty,
-      showSwitchPartyModal
+      showSwitchPartyModal,
+      cardConvertMessage,
+      showCardModal,
+      onCardConvert
     }
   },
 })
