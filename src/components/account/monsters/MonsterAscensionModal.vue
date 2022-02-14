@@ -38,6 +38,7 @@
             :blink="blinkAnimation"
             :isEnemy="false"
           ></sprite-canvas>
+          <button class="app-generic-btn" v-if="!blinkAnimation" @click="onModalClose">Close</button>
         </div>
       </div>
     </div>
@@ -88,7 +89,7 @@ const MonsterAscensionModal = defineComponent({
               Do you want this monster to ${props.type}?`
     })
 
-    const blinkAnimation = ref<boolean>(false);
+    const blinkAnimation = ref<boolean>(true);
     const state = SpriteStateEnum.IDLE;
 
     const sprites = ref<Sprite[]>([]);
@@ -103,11 +104,11 @@ const MonsterAscensionModal = defineComponent({
       
       sprites.value = animations;
 
-      await delayAction(2000);
+      await delayAction(3000);
       // TODO: add call for evolving monster
       showAnimation.value = false;
       blinkAnimation.value = true;
-      await delayAction(2000);
+      await delayAction(3000);
       blinkAnimation.value = false;
     }
 
@@ -190,6 +191,14 @@ export default MonsterAscensionModal
           font-size: 30px;
         }
       }
+    }
+  }
+
+  .evolution-animation {
+    text-align: center;
+
+    button {
+      margin-top: 25px;
     }
   }
 
