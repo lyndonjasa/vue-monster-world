@@ -28,7 +28,7 @@ const LoaderSprite = defineComponent({
     state: { required: true } as Prop<SpriteStateEnum>,
     showLoadingText: { default: true } as Prop<boolean>
   },
-  setup() {
+  setup(props) {
     const toggleDots = ref<boolean>(false);
 
     setInterval(() => toggleDots.value = !toggleDots.value, 750)

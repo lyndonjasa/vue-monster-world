@@ -30,17 +30,17 @@ const AccountModule = defineComponent({
   },
   setup() {
     const { getAccountDetails } = useAccount();
-    const { showScreenLoader } = useLoaders();
+    const { showModalLoader } = useLoaders();
     const account = ref<Account>(undefined);
 
     const loadAccount = async () => {
-      showScreenLoader.value = true;
+      showModalLoader.value = true;
       try {
         account.value = await getAccountDetails();
       } catch (error) {
         console.log(error)
       } finally {
-        showScreenLoader.value = false;
+        showModalLoader.value = false;
       }
     }
     provide(ReloadAccountKey, loadAccount);

@@ -44,6 +44,7 @@ const useGlobaData = () => {
   return {
     evolutions,
     cards,
+    baseMonsters,
     loadGlobalData,
     reloadAccountCards
   }

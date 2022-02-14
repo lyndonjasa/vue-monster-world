@@ -13,6 +13,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref, w
 import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateConfig } from '@/models/sprites/sprite-state-config';
 import useEnvironment from '@/hooks/useEnvironment';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   sprite: Sprite;
@@ -35,7 +36,7 @@ const SpriteCanvas = defineComponent({
 
     const canvasId = computed((): string => {
       const position = props.isEnemy ? 'right' : 'left'
-      const id = props.id || props.sprite.name
+      const id = props.id || uuidv4();
 
       return `canvas-${position}-${id}`
     })

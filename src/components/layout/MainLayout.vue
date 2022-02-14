@@ -28,14 +28,25 @@ import { faPeopleArrowsLeftRight } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'vue-router'
 import useSession from '@/hooks/app-hooks/useSession';
 import useGlobalData from '@/hooks/store-hooks/useGlobalData';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
+import { delayAction } from '@/helpers/delay.helper';
 
 const MainLayout = defineComponent({
   setup() {
     const router = useRouter();
     const { clearAccount } = useSession();
+    const { showScreenLoader } = useLoaders();
     const { loadGlobalData } = useGlobalData();
 
-    loadGlobalData();
+    const loadAppData = async () => {
+      showScreenLoader.value = true;
+      await loadGlobalData();
+      await delayAction(3000);
+      showScreenLoader.value = false;
+    }
+
+    loadAppData();
+    
     const onSwitchAccount = () => {
       clearAccount();
       router.push('/accounts');
