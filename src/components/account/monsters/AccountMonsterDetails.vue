@@ -127,6 +127,7 @@ import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection
 import SwitchPartyModal from './SwitchPartyModal.vue';
 import { delayAction } from '@/helpers/delay.helper';
 import useErrors from '@/hooks/store-hooks/useErrors';
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -179,6 +180,7 @@ const AccountMonsterDetails = defineComponent({
       convertMonsterToCard } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
     const { throwMessage } = useErrors();
+    const { evolutions } = useGlobaData();
 
     const reloadParty = inject(ReloadAccountKey);
     const account = inject(CurrentAccount);
@@ -286,8 +288,14 @@ const AccountMonsterDetails = defineComponent({
       context.emit('card-converted');
     }
 
+    const requiredMonsterCard = computed(() => {
+      const evolution = evolutions.value.find(e => e.name === props.monster.stage);
+
+      return `This process will consume ${evolution.cardPrerequisite} ${props.monster.name} card(s) and is irreversible. 
+              Do you want to continue evolving this monster?`
+    })
     const onMonsterEvolve = async () => {
-      throwMessage('This is a test error');
+      throwMessage(requiredMonsterCard.value);
     }
 
     return {

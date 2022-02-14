@@ -3,7 +3,7 @@ export class CardInventoryResponse {
   cards: ICard[]
 }
 
-interface ICard {
+export interface ICard {
   monsterName: string;
   quantity: number;
 }
