@@ -141,7 +141,7 @@ export default SpriteCanvas;
 
 @keyframes blinker {
   50% {
-    opacity: 0;
+    filter: brightness(0);
   }
 }
 </style>

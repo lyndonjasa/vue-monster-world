@@ -1,10 +1,10 @@
 import { Stats } from "@/models/monster/stats";
-import { Sprite } from "@/models/sprites/sprite";
+import { SpriteAnimation } from "@/models/sprites/sprite-animation";
 
 export interface IBaseMonster {
   baseStats: Stats;
   statGain: Stats;
-  sprite: Sprite;
+  sprite: SpriteAnimation;
   _id: string;
   name: string;
   element: number;

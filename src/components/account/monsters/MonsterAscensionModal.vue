@@ -2,24 +2,42 @@
   <teleport to="div#app">
     <div class="app-modal-overlay">
       <div class="modal-wrapper">
-        <div class="modal-body">
-          <p>{{ message }}</p>
-          <div class="monster-evolution">
-            <div class="required-cards">
-              <card-details :card="currentCard" />
-            </div>
-            <div class="ascension-result">
-             <card-details :card="currentCard" :hideQuantity="true" />
-             <div class="change-result-icon">
-               <fa-icon :icon="faAnglesRight" />
-             </div>
-             <card-details :card="resultCard" :hideQuantity="true" />
+        <template v-if="sprites.length < 1">
+          <div class="modal-body">
+            <p>{{ message }}</p>
+            <div class="monster-evolution">
+              <div class="required-cards">
+                <card-details :card="currentCard" />
+              </div>
+              <div class="ascension-result">
+              <card-details :card="currentCard" :hideQuantity="true" />
+              <div class="change-result-icon">
+                <fa-icon :icon="faAnglesRight" />
+              </div>
+              <card-details :card="resultCard" :hideQuantity="true" />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-actions">
-          <button class="app-generic-btn" :disabled="disableProceed">Proceed</button>
-          <button class="app-generic-btn" @click="onModalClose">Cancel</button>
+          <div class="modal-actions">
+            <button class="app-generic-btn" @click="evolveMonster">Proceed</button>
+            <button class="app-generic-btn" @click="onModalClose">Cancel</button>
+          </div>
+        </template>
+        <div class="evolution-animation" v-if="sprites.length > 0">
+          <sprite-canvas
+            v-if="showAnimation"
+            :sprite="sprites[0]"
+            :spriteState="sprites[0].getState(state)"
+            :blink="true"
+            :isEnemy="false"
+          ></sprite-canvas>
+          <sprite-canvas
+            v-if="!showAnimation"
+            :sprite="sprites[1]"
+            :spriteState="sprites[1].getState(state)"
+            :blink="blinkAnimation"
+            :isEnemy="false"
+          ></sprite-canvas>
         </div>
       </div>
     </div>
@@ -30,9 +48,14 @@
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 import { ICard } from '@/http/responses/card-inventory.response';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
-import { computed, defineComponent, Prop } from 'vue';
+import { computed, defineComponent, Prop, ref } from 'vue';
 import CardDetails from '../inventory/CardDetails.vue';
 import { faAnglesRight } from '@fortawesome/free-solid-svg-icons'
+import useSpriteFactory from '@/hooks/useSpriteFactory';
+import { Sprite } from '@/models/sprites/sprite';
+import { SpriteStateEnum } from '@/models/sprites/sprite-state';
+import SpriteCanvas from '@/components/battle/SpriteCanvas.vue';
+import { delayAction } from '@/helpers/delay.helper';
 
 interface Emits {
   'onClose': any
@@ -46,7 +69,8 @@ interface Props extends Emits {
 
 const MonsterAscensionModal = defineComponent({
   components: {
-    CardDetails
+    CardDetails,
+    SpriteCanvas
   },
   props: {
     requiredCards: { required: true } as Prop<number>,
@@ -57,12 +81,35 @@ const MonsterAscensionModal = defineComponent({
     'close': null
   },
   setup(props: Props, context) {
-    const { cards } = useGlobaData();
+    const { cards, baseMonsters } = useGlobaData();
 
     const message = computed(() => {
       return `This process will consume ${props.requiredCards} ${props.monster.name} card(s) and is irreversible. 
               Do you want this monster to ${props.type}?`
     })
+
+    const blinkAnimation = ref<boolean>(false);
+    const state = SpriteStateEnum.IDLE;
+
+    const sprites = ref<Sprite[]>([]);
+    const showAnimation = ref<boolean>(true);
+
+    const evolveMonster = async () => {
+      const oldMonster = baseMonsters.value.find(m => m.name === props.monster.name);
+      const newMonster = baseMonsters.value.find(m => m.name === props.monster.evolution);
+
+      const rawSprites = [oldMonster.sprite, newMonster.sprite]
+      const { sprites: animations } = useSpriteFactory(rawSprites);
+      
+      sprites.value = animations;
+
+      await delayAction(2000);
+      // TODO: add call for evolving monster
+      showAnimation.value = false;
+      blinkAnimation.value = true;
+      await delayAction(2000);
+      blinkAnimation.value = false;
+    }
 
     const onModalClose = () => {
       context.emit('close');
@@ -97,10 +144,15 @@ const MonsterAscensionModal = defineComponent({
     return {
       message,
       onModalClose,
+      evolveMonster,
       currentCard,
       resultCard,
       faAnglesRight,
-      disableProceed
+      disableProceed,
+      blinkAnimation,
+      sprites,
+      showAnimation,
+      state
     }
   }
 })
