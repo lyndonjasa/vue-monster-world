@@ -5,6 +5,7 @@
   </div>
   <app-footer></app-footer>
   <base-modal-loader></base-modal-loader>
+  <base-error-modal></base-error-modal>
   <base-screen-loader></base-screen-loader>
 </template>
 

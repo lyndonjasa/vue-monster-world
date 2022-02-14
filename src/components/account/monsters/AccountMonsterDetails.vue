@@ -4,7 +4,7 @@
       <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard" @click="showCardModal = true">Convert</div>
-      <div class="app-ingame-btn action" v-if="showEvolve">Evolve</div>
+      <div class="app-ingame-btn action" v-if="showEvolve" @click="onMonsterEvolve">Evolve</div>
     </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
@@ -126,6 +126,7 @@ import useLoaders from '@/hooks/store-hooks/useLoaders';
 import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection';
 import SwitchPartyModal from './SwitchPartyModal.vue';
 import { delayAction } from '@/helpers/delay.helper';
+import useErrors from '@/hooks/store-hooks/useErrors';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -177,6 +178,7 @@ const AccountMonsterDetails = defineComponent({
       switchParty,
       convertMonsterToCard } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
+    const { errorMessage } = useErrors();
 
     const reloadParty = inject(ReloadAccountKey);
     const account = inject(CurrentAccount);
@@ -284,6 +286,10 @@ const AccountMonsterDetails = defineComponent({
       context.emit('card-converted');
     }
 
+    const onMonsterEvolve = async () => {
+      errorMessage.value = 'This is a test error'
+    }
+
     return {
       state,
       sprites,
@@ -300,7 +306,8 @@ const AccountMonsterDetails = defineComponent({
       showSwitchPartyModal,
       cardConvertMessage,
       showCardModal,
-      onCardConvert
+      onCardConvert,
+      onMonsterEvolve
     }
   },
 })

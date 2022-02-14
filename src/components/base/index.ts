@@ -6,6 +6,7 @@ import BaseMonsterThumbnail from './BaseMonsterThumbnail.vue'
 import BaseModalLoader from './BaseModalLoader.vue'
 import BaseScreenLoader from './BaseScreenLoader.vue';
 import BaseDivLoader from './BaseDivLoader.vue';
+import BaseErrorModal from './BaseErrorModal.vue';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import PerfectScrollbar from "vue3-perfect-scrollbar";
@@ -22,6 +23,7 @@ export const registerBaseComponents = (app: App) => {
   app.component('base-modal-loader', BaseModalLoader)
   app.component('base-screen-loader', BaseScreenLoader);
   app.component('base-div-loader', BaseDivLoader)
+  app.component('base-error-modal', BaseErrorModal);
   app.component('fa-icon', FontAwesomeIcon)
   app.use(PerfectScrollbar);
 }
