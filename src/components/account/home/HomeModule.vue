@@ -23,7 +23,8 @@
         :showEvolve="canEvolve"
         :showCard="false"
         :showRemove="enableRemove"
-        @update-monster="onMonsterRemoval">
+        @update-monster="onMonsterRemoval"
+        @monster-evolved="onMonsterEvolution">
       </account-monster-details>
     </div>
   </div>

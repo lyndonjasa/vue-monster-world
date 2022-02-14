@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="modal-actions">
-            <button class="app-generic-btn" @click="evolveMonster">Proceed</button>
+            <button class="app-generic-btn" :disabled="disableProceed" @click="evolveMonster">Proceed</button>
             <button class="app-generic-btn" @click="onModalClose">Cancel</button>
           </div>
         </template>
@@ -57,6 +57,8 @@ import { Sprite } from '@/models/sprites/sprite';
 import { SpriteStateEnum } from '@/models/sprites/sprite-state';
 import SpriteCanvas from '@/components/battle/SpriteCanvas.vue';
 import { delayAction } from '@/helpers/delay.helper';
+import useAccount from '@/hooks/http-hooks/useAccount';
+import useErrors from '@/hooks/store-hooks/useErrors';
 
 interface Emits {
   'onClose': any,
@@ -84,7 +86,9 @@ const MonsterAscensionModal = defineComponent({
     'evolved': null
   },
   setup(props: Props, context) {
+    const { evolveMonster: ascendMonster } = useAccount();
     const { cards, baseMonsters } = useGlobaData();
+    const { throwMessage } = useErrors();
 
     const message = computed(() => {
       return `This process will consume ${props.requiredCards} ${props.monster.name} card(s) and is irreversible. 
@@ -106,12 +110,17 @@ const MonsterAscensionModal = defineComponent({
       
       sprites.value = animations;
 
-      await delayAction(3000);
-      // TODO: add call for evolving monster
-      showAnimation.value = false;
-      blinkAnimation.value = true;
-      await delayAction(3000);
-      blinkAnimation.value = false;
+      try {
+        await delayAction(3000);
+        await ascendMonster(props.monster._id);
+        showAnimation.value = false;
+        blinkAnimation.value = true;
+        await delayAction(3000);
+        blinkAnimation.value = false;
+      } catch (error) {
+        throwMessage(error.response.data);
+        context.emit('close');
+      }
     }
 
     const onModalClose = () => {

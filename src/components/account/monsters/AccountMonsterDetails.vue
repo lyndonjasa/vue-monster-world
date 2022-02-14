@@ -192,7 +192,7 @@ const AccountMonsterDetails = defineComponent({
       convertMonsterToCard } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
     const { throwMessage } = useErrors();
-    const { evolutions } = useGlobaData();
+    const { evolutions, reloadAccountCards } = useGlobaData();
 
     const monsterStage = computed(() => {
       return evolutions.value.find(e => e.name === props.monster.stage)
@@ -301,6 +301,7 @@ const AccountMonsterDetails = defineComponent({
       showModalLoader.value = true;
       try {
         await convertMonsterToCard(props.monster._id);
+        reloadAccountCards();
       } catch (error) {
         throwMessage(error.response.data);
       } finally {

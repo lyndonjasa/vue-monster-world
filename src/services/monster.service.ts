@@ -41,7 +41,7 @@ const updateMonsterParty = (accountId: string, monsterIds: string[]): Promise<vo
 }
 
 const evolveMonster = (accountId: string, monsterId: string): Promise<void> => {
-  return axios.put(`${baseAccountRoute}/${accountId}/monsters/${monsterId}`).then(r => r.data);
+  return axios.put(`${baseAccountRoute}/${accountId}/monsters/${monsterId}/evolve`).then(r => r.data);
 }
 
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
