@@ -54,7 +54,8 @@
             :showEvolve="selectedMonster.stage != 'Ultra' && selectedMonster.stage != 'Mega'"
             :showRemove="inParty(selectedMonster._id) && enableRemove"
             :showCard="!inParty(selectedMonster._id)"
-            @card-converted="selectedMonster = undefined; reloadGrid()">
+            @card-converted="selectedMonster = undefined; reloadGrid()"
+            @monster-evolved="reloadGrid($event)">
           </account-monster-details>
         </div>
       </template>
@@ -73,6 +74,7 @@ import AccountMonsterDetails from './AccountMonsterDetails.vue';
 import SearchMonsterForm from './SearchMonsterForm.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 import { CurrentAccount } from '@/injections/account.injection';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 
 const AccountMonstersModule = defineComponent({
   components: {
@@ -82,6 +84,7 @@ const AccountMonstersModule = defineComponent({
   setup() {
     const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
     const account = inject(CurrentAccount);
+    const { showModalLoader } = useLoaders();
 
     const enableRemove = computed(() => {
       return account.value.party.length > 1;
@@ -152,7 +155,13 @@ const AccountMonstersModule = defineComponent({
       showLoader.value = false;
     }
 
-    const reloadGrid = () => {
+    const reloadGrid = async (id?: string ) => {
+      if (id) {
+        showModalLoader.value = true;
+        selectedMonster.value = await getAccountMonsterDetail(id);
+        showModalLoader.value = false;
+      }
+      
       onSearch(searchFormValue.value);
     }
 

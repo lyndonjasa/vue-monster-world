@@ -38,7 +38,7 @@
             :blink="blinkAnimation"
             :isEnemy="false"
           ></sprite-canvas>
-          <button class="app-generic-btn" v-if="!blinkAnimation" @click="onModalClose">Close</button>
+          <button class="app-generic-btn" v-if="!blinkAnimation" @click="notifyEvolution">Close</button>
         </div>
       </div>
     </div>
@@ -59,7 +59,8 @@ import SpriteCanvas from '@/components/battle/SpriteCanvas.vue';
 import { delayAction } from '@/helpers/delay.helper';
 
 interface Emits {
-  'onClose': any
+  'onClose': any,
+  'onEvolved': any
 }
 
 interface Props extends Emits {
@@ -79,7 +80,8 @@ const MonsterAscensionModal = defineComponent({
     monster: { required: true } as Prop<DetailedMonsterResponse>
   },
   emits: {
-    'close': null
+    'close': null,
+    'evolved': null
   },
   setup(props: Props, context) {
     const { cards, baseMonsters } = useGlobaData();
@@ -114,6 +116,10 @@ const MonsterAscensionModal = defineComponent({
 
     const onModalClose = () => {
       context.emit('close');
+    }
+
+    const notifyEvolution = () => {
+      context.emit('evolved');
     }
 
     const currentCard = computed((): ICard => {
@@ -153,7 +159,8 @@ const MonsterAscensionModal = defineComponent({
       blinkAnimation,
       sprites,
       showAnimation,
-      state
+      state,
+      notifyEvolution
     }
   }
 })

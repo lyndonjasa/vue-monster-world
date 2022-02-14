@@ -115,7 +115,8 @@
     :requiredCards="monsterStage.cardPrerequisite || monsterStage.maxCardBonus"
     :type="monsterStage.cardPrerequisite ? 'evolve' : 'ascend'"
     :monster="monster"
-    @close="showAscensionModal = false">
+    @close="showAscensionModal = false"
+    @evolved="onMonsterEvolve">
   </monster-ascension-modal>
 </template>
     
@@ -140,7 +141,8 @@ import MonsterAscensionModal from './MonsterAscensionModal.vue';
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
   'onUpdate-monster': any,
-  'onCard-converted': any
+  'onCard-converted': any,
+  'onMonster-evolved'(monsterId: string): boolean
 }
 
 interface Props extends Emits {
@@ -177,7 +179,8 @@ const AccountMonsterDetails = defineComponent({
   emits: {
     'select-monster': (monsterId: string) => monsterId !== undefined,
     'update-monster': null,
-    'card-converted': null
+    'card-converted': null,
+    'monster-evolved': (monsterId: string) => monsterId !== undefined
   },
   setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
@@ -294,16 +297,23 @@ const AccountMonsterDetails = defineComponent({
     const onCardConvert = async () => {
       showCardModal.value = false;
       await delayAction(500);
+      
       showModalLoader.value = true;
-      await convertMonsterToCard(props.monster._id);
-      showModalLoader.value = false;
+      try {
+        await convertMonsterToCard(props.monster._id);
+      } catch (error) {
+        throwMessage(error.response.data);
+      } finally {
+        showModalLoader.value = false;
+      }
 
       context.emit('card-converted');
     }
 
     const showAscensionModal = ref<boolean>(false);
     const onMonsterEvolve = async () => {
-      console.log('test');
+      showAscensionModal.value = false;
+      context.emit('monster-evolved', props.monster._id)
     }
 
     return {
