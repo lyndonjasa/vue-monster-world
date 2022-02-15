@@ -15,11 +15,9 @@
 </template>
 
 <script lang="ts">
-import useAccount from '@/hooks/http-hooks/useAccount';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
 import AccountDetails from './AccountDetails.vue'
 import AccountMenu from './AccountMenu.vue';
-import { AccountDetails as Account } from '@/models/account/account-details';
 import { defineComponent, provide, ref } from 'vue'
 import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection'
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';

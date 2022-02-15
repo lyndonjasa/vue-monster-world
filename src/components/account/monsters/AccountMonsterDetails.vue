@@ -4,7 +4,7 @@
       <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard" @click="showCardModal = true">Convert</div>
-      <div class="app-ingame-btn action" v-if="showEvolve" @click="showAscensionModal = true">Evolve</div>
+      <div class="app-ingame-btn action" v-if="showEvolve" @click="showAscensionModal = true">{{ monsterStage.cardPrerequisite ? 'Evolve' : 'Ascend' }}</div>
     </div>
     <div class="monster-sprite">
       <sprite-canvas :spriteState="sprites[0].getState(state)"
@@ -112,7 +112,7 @@
   </base-modal>
   <monster-ascension-modal
     v-if="showAscensionModal"
-    :requiredCards="monsterStage.cardPrerequisite || monsterStage.maxCardBonus"
+    :requiredCards="monsterStage.cardPrerequisite || 1"
     :type="monsterStage.cardPrerequisite ? 'evolve' : 'ascend'"
     :monster="monster"
     @close="showAscensionModal = false"

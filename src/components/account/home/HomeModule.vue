@@ -20,7 +20,7 @@
         :monster="selectedMonster"
         :enableSelection="false"
         :showDetailedView="true"
-        :showEvolve="canEvolve"
+        :showEvolve="true"
         :showCard="false"
         :showRemove="enableRemove"
         @update-monster="onMonsterRemoval"
@@ -55,13 +55,6 @@ const HomeModule = defineComponent({
       showLoader.value = false
     }
 
-    const canEvolve = computed(() => {
-      if (!selectedMonster.value) return false
-
-      const allowedEvolutions = ['Rookie', 'Champion', 'Ultimate'];
-      return allowedEvolutions.includes(selectedMonster.value.stage);
-    })
-
     const loadMonsterDetail = async (monsterId: string) => {
       showLoader.value = true
       selectedMonster.value = await getAccountMonsterDetail(monsterId);
@@ -92,7 +85,6 @@ const HomeModule = defineComponent({
       loadMonsterDetail,
       onMonsterRemoval,
       enableRemove,
-      canEvolve,
       faAnglesLeft,
       onMonsterEvolution
     }
