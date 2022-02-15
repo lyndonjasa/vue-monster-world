@@ -149,7 +149,6 @@ interface Props extends Emits {
   monster: DetailedMonsterResponse;
   showDetailedView: boolean;
   enableSelection: boolean;
-  showEvolve: boolean;
   showCard: boolean;
   showParty: boolean;
   showRemove: boolean;
@@ -171,7 +170,6 @@ const AccountMonsterDetails = defineComponent({
     monster: { required: true } as Prop<DetailedMonsterResponse>,
     showDetailedView: { default: false } as Prop<boolean>,
     enableSelection: { default: false } as Prop<boolean>,
-    showEvolve: { default: true } as Prop<boolean>,
     showCard: { default: true } as Prop<boolean>,
     showParty: { default: false } as Prop<boolean>,
     showRemove: { default: false } as Prop<boolean>
@@ -196,6 +194,14 @@ const AccountMonsterDetails = defineComponent({
 
     const monsterStage = computed(() => {
       return evolutions.value.find(e => e.name === props.monster.stage)
+    })
+
+    const showEvolve = computed(() => {
+      if (monsterStage.value.maxCardBonus === 0) {
+        return true
+      }
+      
+      return monsterStage.value.maxCardBonus > props.monster.appliedCards
     })
 
     const reloadParty = inject(ReloadAccountKey);
@@ -337,7 +343,8 @@ const AccountMonsterDetails = defineComponent({
       onCardConvert,
       onMonsterEvolve,
       showAscensionModal,
-      monsterStage
+      monsterStage,
+      showEvolve
     }
   },
 })

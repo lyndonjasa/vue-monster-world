@@ -20,7 +20,6 @@
         :monster="selectedMonster"
         :enableSelection="false"
         :showDetailedView="true"
-        :showEvolve="true"
         :showCard="false"
         :showRemove="enableRemove"
         @update-monster="onMonsterRemoval"
