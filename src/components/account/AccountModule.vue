@@ -22,6 +22,7 @@ import AccountMenu from './AccountMenu.vue';
 import { AccountDetails as Account } from '@/models/account/account-details';
 import { defineComponent, provide, ref } from 'vue'
 import { CurrentAccount, ReloadAccountKey } from '@/injections/account.injection'
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 
 const AccountModule = defineComponent({
   components: {
@@ -29,20 +30,15 @@ const AccountModule = defineComponent({
     AccountMenu
   },
   setup() {
-    const { getAccountDetails } = useAccount();
     const { showModalLoader } = useLoaders();
-    const account = ref<Account>(undefined);
+    const { accountDetails: account, reloadAccount } = useGlobaData();
 
     const loadAccount = async () => {
       showModalLoader.value = true;
-      try {
-        account.value = await getAccountDetails();
-      } catch (error) {
-        console.log(error)
-      } finally {
-        showModalLoader.value = false;
-      }
+      await reloadAccount();
+      showModalLoader.value = false;
     }
+
     provide(ReloadAccountKey, loadAccount);
     provide(CurrentAccount, account);
     
