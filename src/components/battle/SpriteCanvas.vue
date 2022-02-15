@@ -47,7 +47,7 @@ const SpriteCanvas = defineComponent({
       return props.sprite.height * props.sprite.scale * spriteScale
     })
     const spriteSrc = computed(() => {
-      return require(`@/assets/digimon-sprites/${props.sprite.name}.png`)
+      return require(`@/assets/digimon-sprites/${props.sprite.name.replaceAll(' ', '')}.png`)
     })
 
     const canvas = ref<HTMLCanvasElement>(undefined);

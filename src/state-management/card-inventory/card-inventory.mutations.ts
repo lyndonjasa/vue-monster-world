@@ -12,6 +12,6 @@ export interface CardInventoryMutations {
 
 export const cardInventoryMutations: MutationTree<ICardInventoryState> & CardInventoryMutations = {
   [CardInventoryMutationTypes.setCards]: (state: ICardInventoryState, payload: ICard[]) => {
-    state.cards = payload;
+    state.cards = payload.sort((a, b) => a.monsterName.localeCompare(b.monsterName));
   }
 }
