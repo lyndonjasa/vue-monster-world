@@ -7,6 +7,8 @@ import { EvolutionMutationTypes } from "@/state-management/evolution/evolution.m
 import { useEvolutionStore } from "@/state-management/evolution/evolution.store";
 import { MonsterMutationTypes } from "@/state-management/monsters/monster.mutations";
 import { useBaseMonsterStore } from "@/state-management/monsters/monster.store";
+import { TalentMutationTypes } from "@/state-management/talents/talent.mutations";
+import { useTalentStore } from "@/state-management/talents/talent.store";
 import { computed } from "vue";
 import useAccount from "../http-hooks/useAccount";
 
@@ -15,6 +17,7 @@ const useGlobaData = () => {
   const cardInventoryStore = useCardInventoryStore();
   const baseMonsterStore = useBaseMonsterStore();
   const accountStore = useAccountStore();
+  const talentStore = useTalentStore();
   const { getAccountCards, getAccountDetails } = useAccount();
 
   const evolutions = computed(() => {
@@ -33,6 +36,10 @@ const useGlobaData = () => {
     return baseMonsterStore.getters.baseMonsters;
   })
 
+  const talents = computed(() => {
+    return talentStore.getters.talents;
+  })
+
   const reloadAccount = async () => {
     const accountDetails = await getAccountDetails();
     accountStore.commit(AccountMutationTypes.setAccountDetails, accountDetails);
@@ -44,13 +51,15 @@ const useGlobaData = () => {
   }
 
   const loadGlobalData = async () => {
-    const [evolutionData, monsterData] = await Promise.all([
+    const [evolutionData, monsterData, talentData] = await Promise.all([
       globalDataService.loadEvolutions(),
-      globalDataService.loadMonsters()
+      globalDataService.loadMonsters(),
+      globalDataService.loadTalents()
     ])
 
     evolutionStore.commit(EvolutionMutationTypes.setEvolutions, evolutionData);
     baseMonsterStore.commit(MonsterMutationTypes.setMonsters, monsterData);
+    talentStore.commit(TalentMutationTypes.setTalents, talentData)
 
     await reloadAccountCards();
     await reloadAccount();
