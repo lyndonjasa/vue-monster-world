@@ -6,4 +6,5 @@ export class CardInventoryResponse {
 export interface ICard {
   monsterName: string;
   quantity: number;
+  cardDisplayName?: string;
 }

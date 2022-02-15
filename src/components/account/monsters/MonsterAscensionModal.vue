@@ -7,7 +7,7 @@
             <p>{{ message }}</p>
             <div class="monster-evolution">
               <div class="required-cards">
-                <card-details :card="currentCard" />
+                <card-details :card="requestedCard" />
               </div>
               <div class="ascension-result">
               <card-details :card="currentCard" :hideQuantity="true" />
@@ -131,12 +131,22 @@ const MonsterAscensionModal = defineComponent({
       context.emit('evolved');
     }
 
+    const requestedCard = computed((): ICard => {
+      const card = cards.value.find(c => c.monsterName === props.monster.name)
+
+      return {
+        monsterName: props.monster.name,
+        quantity: card ? card.quantity : 0
+      }
+    })
+
     const currentCard = computed((): ICard => {
       const card = cards.value.find(c => c.monsterName === props.monster.name)
 
       return {
-        monsterName: props.monster.computedName,
-        quantity: card ? card.quantity : 0
+        monsterName: props.monster.name,
+        quantity: card ? card.quantity : 0,
+        cardDisplayName: props.monster.computedName
       }
     })
 
@@ -145,22 +155,30 @@ const MonsterAscensionModal = defineComponent({
     })
 
     const resultCard = computed((): ICard => {
-      if (props.monster.evolution) {
+      if (props.type == 'evolve') {
         const card = cards.value.find(c => c.monsterName === props.monster.evolution)
 
         return {
           monsterName: props.monster.evolution,
           quantity: card ? card.quantity : 0
         }
-      }
+      } else {
+        const targetBonus = props.monster.appliedCards + 1
+        const card = cards.value.find(c => c.monsterName === props.monster.name)
 
-      return undefined
+        return {
+          monsterName: props.monster.name,
+          quantity: card ? card.quantity : 0,
+          cardDisplayName: `${props.monster.name} +${targetBonus}`
+        }
+      }
     })
 
     return {
       message,
       onModalClose,
       evolveMonster,
+      requestedCard,
       currentCard,
       resultCard,
       faAnglesRight,
@@ -198,7 +216,7 @@ export default MonsterAscensionModal
       justify-content: space-around;
 
       .ascension-result {
-        width: 230px;
+        min-width: 230px;
         display: flex;
         align-items: center;
         justify-content: space-between;

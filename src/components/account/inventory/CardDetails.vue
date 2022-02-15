@@ -4,7 +4,7 @@
       <base-monster-thumbnail :src="thumbnail" :title="`${card.quantity} ${card.monsterName} card(s)`" />
       <div class="card-quantity" v-if="!hideQuantity">{{ card.quantity }}</div>
     </div>
-    <p class="card-name">{{ card.monsterName }}</p>
+    <p class="card-name">{{ card.cardDisplayName || card.monsterName }}</p>
   </div>
 </template>
 

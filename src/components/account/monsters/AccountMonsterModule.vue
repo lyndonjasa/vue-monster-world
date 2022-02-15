@@ -51,7 +51,7 @@
             :monster="selectedMonster" 
             :showDetailedView="true"
             :showParty="!inParty(selectedMonster._id)"
-            :showEvolve="selectedMonster.stage != 'Ultra' && selectedMonster.stage != 'Mega'"
+            :showEvolve="true"
             :showRemove="inParty(selectedMonster._id) && enableRemove"
             :showCard="!inParty(selectedMonster._id)"
             @card-converted="selectedMonster = undefined; reloadGrid()"

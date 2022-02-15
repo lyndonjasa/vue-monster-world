@@ -18,4 +18,5 @@ export class DetailedMonsterResponse {
   sprite: SpriteAnimation
   stage: string;
   evolution?: string;
+  appliedCards: number;
 }
