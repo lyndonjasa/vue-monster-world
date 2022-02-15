@@ -75,6 +75,7 @@ import SearchMonsterForm from './SearchMonsterForm.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 import { CurrentAccount } from '@/injections/account.injection';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 
 const AccountMonstersModule = defineComponent({
   components: {
@@ -83,6 +84,7 @@ const AccountMonstersModule = defineComponent({
   },
   setup() {
     const { getAccountMonsters, getAccountMonsterDetail } = useAccount();
+    const { reloadAccountCards } = useGlobaData();
     const account = inject(CurrentAccount);
     const { showModalLoader } = useLoaders();
 
@@ -160,6 +162,7 @@ const AccountMonstersModule = defineComponent({
         showModalLoader.value = true;
         selectedMonster.value = await getAccountMonsterDetail(id);
         showModalLoader.value = false;
+        reloadAccountCards();
       }
       
       onSearch(searchFormValue.value);

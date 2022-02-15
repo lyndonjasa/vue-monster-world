@@ -2,7 +2,8 @@
   <teleport to="div#app">
     <div class="app-modal-overlay">
       <div class="modal-wrapper">
-        <template v-if="sprites.length < 1">
+        <base-div-loader v-if="showModalLoader" />
+        <template v-if="sprites.length < 1 && !showModalLoader">
           <div class="modal-body">
             <p>{{ message }}</p>
             <div class="monster-evolution">
@@ -19,7 +20,7 @@
             </div>
           </div>
           <div class="modal-actions">
-            <button class="app-generic-btn" :disabled="disableProceed" @click="evolveMonster">Proceed</button>
+            <button class="app-generic-btn" :disabled="disableProceed" @click="onAscension">Proceed</button>
             <button class="app-generic-btn" @click="onModalClose">Cancel</button>
           </div>
         </template>
@@ -86,7 +87,7 @@ const MonsterAscensionModal = defineComponent({
     'evolved': null
   },
   setup(props: Props, context) {
-    const { evolveMonster: ascendMonster } = useAccount();
+    const { evolveMonster, ascendMonster } = useAccount();
     const { cards, baseMonsters } = useGlobaData();
     const { throwMessage } = useErrors();
 
@@ -101,25 +102,39 @@ const MonsterAscensionModal = defineComponent({
     const sprites = ref<Sprite[]>([]);
     const showAnimation = ref<boolean>(true);
 
-    const evolveMonster = async () => {
-      const oldMonster = baseMonsters.value.find(m => m.name === props.monster.name);
-      const newMonster = baseMonsters.value.find(m => m.name === props.monster.evolution);
+    const showModalLoader = ref<boolean>(false);
+    const onAscension = async () => {
+      if (props.type === 'evolve') {
+        const oldMonster = baseMonsters.value.find(m => m.name === props.monster.name);
+        const newMonster = baseMonsters.value.find(m => m.name === props.monster.evolution);
 
-      const rawSprites = [oldMonster.sprite, newMonster.sprite]
-      const { sprites: animations } = useSpriteFactory(rawSprites);
-      
-      sprites.value = animations;
+        const rawSprites = [oldMonster.sprite, newMonster.sprite]
+        const { sprites: animations } = useSpriteFactory(rawSprites);
+        
+        sprites.value = animations;
 
-      try {
-        await delayAction(3000);
-        await ascendMonster(props.monster._id);
-        showAnimation.value = false;
-        blinkAnimation.value = true;
-        await delayAction(3000);
-        blinkAnimation.value = false;
-      } catch (error) {
-        throwMessage(error.response.data);
-        context.emit('close');
+        try {
+          await delayAction(3000);
+          await evolveMonster(props.monster._id);
+          showAnimation.value = false;
+          blinkAnimation.value = true;
+          await delayAction(3000);
+          blinkAnimation.value = false;
+        } catch (error) {
+          throwMessage(error.response.data);
+          context.emit('close');
+        }
+      } else {
+        try {
+          showModalLoader.value = true;
+          await ascendMonster(props.monster._id);
+          showModalLoader.value = false;
+          
+          notifyEvolution();
+        } catch (error) {
+          throwMessage(error.response.data);
+          context.emit('close');
+        }
       }
     }
 
@@ -177,7 +192,7 @@ const MonsterAscensionModal = defineComponent({
     return {
       message,
       onModalClose,
-      evolveMonster,
+      onAscension,
       requestedCard,
       currentCard,
       resultCard,
@@ -187,7 +202,8 @@ const MonsterAscensionModal = defineComponent({
       sprites,
       showAnimation,
       state,
-      notifyEvolution
+      notifyEvolution,
+      showModalLoader
     }
   }
 })

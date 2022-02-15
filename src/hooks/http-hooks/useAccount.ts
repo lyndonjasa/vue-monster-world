@@ -80,6 +80,10 @@ const useAccount = () => {
     return monsterService.evolveMonster(accountId.value, monsterId);
   }
 
+  const ascendMonster = (monsterId: string) => {
+    return monsterService.applyCardBonus(accountId.value, monsterId);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -93,7 +97,8 @@ const useAccount = () => {
     addToParty,
     switchParty,
     convertMonsterToCard,
-    evolveMonster
+    evolveMonster,
+    ascendMonster
   }
 }
 

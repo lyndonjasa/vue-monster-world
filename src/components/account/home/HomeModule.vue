@@ -37,6 +37,7 @@ import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.respo
 import { computed, defineComponent, ref } from 'vue'
 import AccountMonsterDetails from '../monsters/AccountMonsterDetails.vue';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 
 const HomeModule = defineComponent({
   components: {
@@ -44,6 +45,7 @@ const HomeModule = defineComponent({
   },
   setup() {
     const { getAccountParty, getAccountMonsterDetail } = useAccount();
+    const { reloadAccountCards } = useGlobaData();
     const monsterParty = ref<DetailedMonsterResponse[]>([]);
     const selectedMonster = ref<DetailedMonsterResponse>(undefined);
 
@@ -73,6 +75,7 @@ const HomeModule = defineComponent({
 
     const onMonsterEvolution = async (id: string) => {
       selectedMonster.value = await getAccountMonsterDetail(id);
+      reloadAccountCards();
       loadParty();
     }
 
