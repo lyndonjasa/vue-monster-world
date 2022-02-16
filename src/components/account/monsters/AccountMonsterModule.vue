@@ -158,13 +158,17 @@ const AccountMonstersModule = defineComponent({
 
     const reloadGrid = async (id?: string ) => {
       if (id) {
-        showModalLoader.value = true;
-        selectedMonster.value = await getAccountMonsterDetail(id);
-        showModalLoader.value = false;
+        reloadDetails(id);
         reloadAccountCards();
       }
       
       onSearch(searchFormValue.value);
+    }
+
+    const reloadDetails = async (id: string) => {
+      showModalLoader.value = true;
+      selectedMonster.value = await getAccountMonsterDetail(id);
+      showModalLoader.value = false;
     }
 
     return {
@@ -183,7 +187,8 @@ const AccountMonstersModule = defineComponent({
       searchFormValue,
       enableRemove,
       inParty,
-      reloadGrid
+      reloadGrid,
+      reloadDetails
     }
   }
 })

@@ -118,6 +118,9 @@
     @close="showAscensionModal = false"
     @evolved="onMonsterEvolve">
   </monster-ascension-modal>
+  <monster-talents-modal
+    :monster="monster"
+  />
 </template>
     
 <script lang="ts">
@@ -137,6 +140,7 @@ import { delayAction } from '@/helpers/delay.helper';
 import useErrors from '@/hooks/store-hooks/useErrors';
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 import MonsterAscensionModal from './MonsterAscensionModal.vue';
+import MonsterTalentsModal from './MonsterTalentsModal.vue';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -164,7 +168,8 @@ const AccountMonsterDetails = defineComponent({
   components: {
     SpriteCanvas,
     SwitchPartyModal,
-    MonsterAscensionModal
+    MonsterAscensionModal,
+    MonsterTalentsModal
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,

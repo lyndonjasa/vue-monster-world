@@ -70,6 +70,7 @@ const useGlobaData = () => {
     cards,
     baseMonsters,
     accountDetails,
+    talents,
     loadGlobalData,
     reloadAccountCards,
     reloadAccount
