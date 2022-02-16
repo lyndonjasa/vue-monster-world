@@ -37,7 +37,6 @@ import { TalentCategory } from '@/models/talents/talent-category.enum';
 import { ITalent } from '@/state-management/talents/talent.interface';
 import { computed, defineComponent, Prop } from 'vue'
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
-
 interface Emits {
   'onClose': any,
   'onTalent-updated': any

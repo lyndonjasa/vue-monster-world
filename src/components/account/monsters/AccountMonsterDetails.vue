@@ -1,6 +1,7 @@
 <template>
   <div class="account-monster-details">
-    <div class="detail-actions" v-if="showDetailedView && (showEvolve || showCard || showParty || showRemove)">
+    <div class="detail-actions" v-if="showDetailedView">
+      <div class="app-ingame-btn action" @click="showTalentsModal = true">Talents</div>
       <div class="app-ingame-btn action" v-if="showParty" @click="onMonsterAdd">Add to Party</div>
       <div class="app-ingame-btn action" v-if="showRemove" @click="onMonsterRemove">Remove From Party</div>
       <div class="app-ingame-btn action" v-if="showCard" @click="showCardModal = true">Convert</div>
@@ -119,6 +120,8 @@
     @evolved="onMonsterEvolve">
   </monster-ascension-modal>
   <monster-talents-modal
+    v-if="showTalentsModal"
+    @close="showTalentsModal = false"
     :monster="monster"
   />
 </template>
@@ -329,6 +332,8 @@ const AccountMonsterDetails = defineComponent({
       context.emit('monster-evolved', props.monster._id)
     }
 
+    const showTalentsModal = ref<boolean>(false);
+
     return {
       state,
       sprites,
@@ -349,7 +354,8 @@ const AccountMonsterDetails = defineComponent({
       onMonsterEvolve,
       showAscensionModal,
       monsterStage,
-      showEvolve
+      showEvolve,
+      showTalentsModal
     }
   },
 })

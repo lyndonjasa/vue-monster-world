@@ -10,12 +10,9 @@ import BaseErrorModal from './BaseErrorModal.vue';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import PerfectScrollbar from "vue3-perfect-scrollbar";
-import { faRightToBracket, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 export const registerBaseComponents = (app: App) => {
-  addIconLibrary();
-
   app.component('base-input', BaseInput)
   app.component('base-element', BaseElement)
   app.component('base-modal', BaseModal);
@@ -28,7 +25,6 @@ export const registerBaseComponents = (app: App) => {
   app.use(PerfectScrollbar);
 }
 
-const addIconLibrary = (): void => {
-  library.add(faRightToBracket);
-  library.add(faTrashCan);
+export const loadIconsToLibrary = (customIcons: any[]) => {
+  customIcons.forEach(ci => library.add(ci))
 }
