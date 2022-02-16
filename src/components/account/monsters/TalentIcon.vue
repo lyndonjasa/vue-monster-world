@@ -1,9 +1,9 @@
 <template>
   <div class="talent-icon-wrapper">
-    <div class="talent-icon-container">
+    <div class="talent-icon-container active" :class="categoryName.toLowerCase()">
       <object :data="svgPath" type="image/svg+xml" class="talent-svg"></object>
     </div>
-    <div class="talent-icon-overlay" :title="talent.name"></div>
+    <div class="talent-icon-overlay active" :title="talent.name"></div>
   </div>
 </template>
 
@@ -24,6 +24,23 @@ const TalentIcon = defineComponent({
     const svgPath = computed(() => {
       const category = getGroupName(props.talent.category);
       return require(`../../../assets/icons/talents/${category.toLowerCase()}/${props.talent.name}.svg`)
+    })
+
+    const categoryName = computed(() => {
+      switch (props.talent.category) {
+        case TalentCategory.OFFENSE:
+          return 'Offense'
+        case TalentCategory.HEALTH:
+          return 'Health'
+        case TalentCategory.MANA:
+          return 'Mana'
+        case TalentCategory.DEFENSE:
+          return 'Defense'
+        case TalentCategory.SPEED:
+          return 'Speed'
+        default:
+          throw 'Unsupported category'
+      }
     })
 
     const onTalentSelect = () => {
@@ -49,6 +66,7 @@ const TalentIcon = defineComponent({
 
     return {
       svgPath,
+      categoryName,
       onTalentSelect
     }
   }
@@ -61,6 +79,13 @@ export default TalentIcon
 .talent-icon-wrapper {
   height: 50px;
 
+  &:hover {
+    > * {
+      -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+    }
+  }
+
   .talent-icon-container {
     margin: auto;
     width: 30px;
@@ -68,6 +93,11 @@ export default TalentIcon
     height: 30px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 999px;
+
+    &.active {
+      -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+    }
 
     .talent-svg {
       width: 30px;
