@@ -1,5 +1,5 @@
 export interface ITalent {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   category: number;

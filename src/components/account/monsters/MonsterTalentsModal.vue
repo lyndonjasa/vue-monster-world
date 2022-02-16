@@ -7,6 +7,14 @@
             <p class="talent-tree-title">Talent Hierarchy</p>
             <div class="talent-group" v-for="talentGroup in talentGroups" :key="talentGroup.group">
               <p>{{ talentGroup.group }}</p>
+              <div class="talent" v-for="talent in talentGroup.talents" :key="talent._id">
+                <div class="downward-icon">
+                  <fa-icon :icon="faAnglesDown" />
+                </div>
+                <div class="talent-name">
+                  {{ talent.name }}
+                </div>
+              </div>
             </div>
           </div>
           <div class="talent-details-container">
@@ -28,6 +36,7 @@ import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.respo
 import { TalentCategory } from '@/models/talents/talent-category.enum';
 import { ITalent } from '@/state-management/talents/talent.interface';
 import { computed, defineComponent, Prop } from 'vue'
+import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
 
 interface Emits {
   'onClose': any,
@@ -90,7 +99,8 @@ const MonsterTalentsModal = defineComponent({
     return {
       onModalClose,
       onTalentUpdate,
-      talentGroups
+      talentGroups,
+      faAnglesDown
     }
   },
 })
@@ -124,6 +134,25 @@ export default MonsterTalentsModal;
       .talent-group {
         margin-top: 25px;
         width: 100px;
+
+        p {
+          margin-bottom: 25px;
+          text-transform: uppercase;
+        }
+
+        .talent:first-of-type {
+          .downward-icon {
+            display: none;
+          }
+        }
+
+        .talent  {
+          margin-top: 10px;
+
+          .downward-icon {
+            margin-bottom: 10px;
+          }
+        }
       }
     }
 
