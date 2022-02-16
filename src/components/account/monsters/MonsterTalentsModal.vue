@@ -12,6 +12,7 @@
                   <fa-icon :icon="faAnglesDown" />
                 </div>
                 <div class="talent-name">
+                  <talent-icon :talent="talent" />
                   {{ talent.name }}
                 </div>
               </div>
@@ -37,6 +38,7 @@ import { TalentCategory } from '@/models/talents/talent-category.enum';
 import { ITalent } from '@/state-management/talents/talent.interface';
 import { computed, defineComponent, Prop } from 'vue'
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
+import TalentIcon from './TalentIcon.vue';
 interface Emits {
   'onClose': any,
   'onTalent-updated': any
@@ -47,6 +49,9 @@ interface Props extends Emits {
 }
 
 const MonsterTalentsModal = defineComponent({
+  components: {
+    TalentIcon
+  },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>
   },

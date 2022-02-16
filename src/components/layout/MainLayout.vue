@@ -29,23 +29,18 @@ import { useRouter } from 'vue-router'
 import useSession from '@/hooks/app-hooks/useSession';
 import useGlobalData from '@/hooks/store-hooks/useGlobalData';
 import useLoaders from '@/hooks/store-hooks/useLoaders';
-import useTalentIconFactory from '@/hooks/app-hooks/useTalentIconFactory'
-import { loadIconsToLibrary } from '../base';
 
 const MainLayout = defineComponent({
   setup() {
     const router = useRouter();
     const { clearAccount } = useSession();
     const { showScreenLoader } = useLoaders();
-    const { loadGlobalData, talents } = useGlobalData();
+    const { loadGlobalData } = useGlobalData();
 
     const loadAppData = async () => {
       showScreenLoader.value = true;
       await loadGlobalData();
       showScreenLoader.value = false;
-
-      const { customIcons } = useTalentIconFactory(talents.value);
-      loadIconsToLibrary(customIcons);
     }
 
     loadAppData();

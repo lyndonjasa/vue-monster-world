@@ -8,7 +8,6 @@ import BaseScreenLoader from './BaseScreenLoader.vue';
 import BaseDivLoader from './BaseDivLoader.vue';
 import BaseErrorModal from './BaseErrorModal.vue';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import PerfectScrollbar from "vue3-perfect-scrollbar";
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
@@ -23,8 +22,4 @@ export const registerBaseComponents = (app: App) => {
   app.component('base-error-modal', BaseErrorModal);
   app.component('fa-icon', FontAwesomeIcon)
   app.use(PerfectScrollbar);
-}
-
-export const loadIconsToLibrary = (customIcons: any[]) => {
-  customIcons.forEach(ci => library.add(ci))
 }
