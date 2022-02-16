@@ -13,7 +13,6 @@
                 </div>
                 <div class="talent-name">
                   <talent-icon :talent="talent" />
-                  {{ talent.name }}
                 </div>
               </div>
             </div>
