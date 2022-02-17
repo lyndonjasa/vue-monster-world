@@ -109,6 +109,30 @@ export default TalentIcon
         -webkit-box-shadow: 0px 0px 15px 5px #ff4444; 
         box-shadow: 0px 0px 15px 5px #ff4444; 
       }
+
+      &.health {
+        background-color: #16e020;
+        -webkit-box-shadow: 0px 0px 15px 5px #16e020; 
+        box-shadow: 0px 0px 15px 5px #16e020; 
+      }
+
+      &.mana {
+        background-color: #35b5ff;
+        -webkit-box-shadow: 0px 0px 15px 5px #35b5ff; 
+        box-shadow: 0px 0px 15px 5px #35b5ff; 
+      }
+
+      &.defense {
+        background-color: #aa5500;
+        -webkit-box-shadow: 0px 0px 15px 5px #aa5500; 
+        box-shadow: 0px 0px 15px 5px #aa5500; 
+      }
+
+      &.speed {
+        background-color: #edfc1b;
+        -webkit-box-shadow: 0px 0px 15px 5px #edfc1b; 
+        box-shadow: 0px 0px 15px 5px #edfc1b; 
+      }
     }
 
     &.unlocked {
