@@ -23,20 +23,13 @@
       <div class="summary">
         <div class="summary-key">Overview</div>
         <div class="summary-value">
-          <div class="details" v-for="detail in overviewDetails" 
-            :key="detail.key">
-            <div class="detail-key">{{ detail.key }}</div>
-            <div class="detail-value">{{ detail.value }}</div>
-          </div>
+          <stat-details :details="overviewDetails"/>
         </div>
       </div>
       <div class="summary">
         <div class="summary-key">Stats</div>
         <div class="summary-value">
-          <div class="details" v-for="detail in statDetails" :key="detail.key">
-            <div class="detail-key">{{ detail.key }}</div>
-            <div class="detail-value">{{ detail.value }}</div>
-          </div>
+          <stat-details :details="statDetails" />
         </div>
       </div>
       <div class="summary" v-if="showDetailedView && monster.talents.length > 0">
@@ -55,38 +48,15 @@
               <div class="skill-element"><base-element :element="skill.skillElement"></base-element></div>
               <div class="skill-name">{{ skill.name }}</div>
             </div>
-            <div class="details">
-              <div class="detail-key">Power</div>
-              <div class="detail-value">{{ skill.power }}</div>
-            </div>
-            <div class="details">
-              <div class="detail-key">Cost</div>
-              <div class="detail-value">{{ skill.cost }}</div>
-            </div>
-            <div class="details">
-              <div class="detail-key">Type</div>
-              <div class="detail-value">{{ skillHelper.toSkillTypeString(skill.skillType) }}</div>
-            </div>
-            <div class="details">
-              <div class="detail-key">Target</div>
-              <div class="detail-value">{{ skillHelper.toTargetString(skill.skillTarget) }}</div>
-            </div>
+            <stat-details :details="skillDetails(skill)" />
             <template v-if="skill.status">
-              <div class="details">
-                <div class="detail-key">Effect</div>
-                <div class="detail-value">{{ skillHelper.toBuffString(skill.status.buff) }}</div>
-              </div>
-              <div class="details">
-                <div class="detail-key">Effect Target</div>
-                <div class="detail-value">{{ skill.status.target == 5 ? skillHelper.toTargetString(skill.status.target) : skillHelper.toTargetString(skill.skillTarget) }}</div>
-              </div>
-               <div class="details">
-                <div class="detail-key">Effect Chance</div>
-                <div class="detail-value">{{ skill.status.chance }}%</div>
-              </div>
+              <stat-details :details="skillStatusDetails(skill)" />
+            </template>
+            <template v-if="skill.penalty">
+              <stat-details :details="skillPenaltyDetails(skill)" />
             </template>
             <div class="skill-description">
-              {{ skill.description }}.
+              {{ skill.description }}
             </div>
           </template>
         </div>
@@ -144,6 +114,9 @@ import useErrors from '@/hooks/store-hooks/useErrors';
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 import MonsterAscensionModal from './MonsterAscensionModal.vue';
 import MonsterTalentsModal from './MonsterTalentsModal.vue';
+import StatDetails from './StatDetails.vue';
+import { SkillResponse } from '@/http/responses/skill.response';
+import { TargetEnum } from '@/models/skills/target.enum';
 
 interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
@@ -172,7 +145,8 @@ const AccountMonsterDetails = defineComponent({
     SpriteCanvas,
     SwitchPartyModal,
     MonsterAscensionModal,
-    MonsterTalentsModal
+    MonsterTalentsModal,
+    StatDetails
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>,
@@ -269,6 +243,30 @@ const AccountMonsterDetails = defineComponent({
       }
     })
 
+    const skillDetails = (skill: SkillResponse): Details[] => {
+      return [
+        { key: 'Power', value: skill.power, detailedOnly: true },
+        { key: 'Cost', value: skill.cost, detailedOnly: true },
+        { key: 'Type', value: skillHelper.toSkillTypeString(skill.skillType), detailedOnly: true },
+        { key: 'Target', value: skillHelper.toTargetString(skill.skillTarget), detailedOnly: true }
+      ]
+    }
+
+    const skillStatusDetails = (skill: SkillResponse): Details[] => {
+      return [
+        { key: 'Effect', value: skillHelper.toBuffString(skill.status.buff), detailedOnly: true },
+        { key: 'Effect Target', value: skill.status.target === TargetEnum.SELF ? skillHelper.toTargetString(TargetEnum.SELF) : skillHelper.toTargetString(skill.skillTarget), detailedOnly: true },
+        { key: 'Proc Chance', value: skill.status.chance + '%', detailedOnly: true }
+      ]
+    }
+
+    const skillPenaltyDetails = (skill: SkillResponse): Details[] => {
+      return [
+        { key: 'Penalty', value: skill.penalty.damagePercentage + '%', detailedOnly: true },
+        { key: 'Target', value: skillHelper.toTargetString(skill.penalty.target), detailedOnly: true }
+      ]
+    }
+
     const onMonsterSelect = (): void => {
       context.emit('select-monster', props.monster._id);
     }
@@ -341,7 +339,6 @@ const AccountMonsterDetails = defineComponent({
       statDetails,
       skills,
       onMonsterSelect,
-      skillHelper,
       faUpRightAndDownLeftFromCenter,
       onMonsterRemove,
       onMonsterAdd,
@@ -355,7 +352,10 @@ const AccountMonsterDetails = defineComponent({
       showAscensionModal,
       monsterStage,
       showEvolve,
-      showTalentsModal
+      showTalentsModal,
+      skillDetails,
+      skillStatusDetails,
+      skillPenaltyDetails
     }
   },
 })
@@ -433,15 +433,6 @@ export default AccountMonsterDetails;
           &.flex-100 {
             flex-basis: 100%;
           }
-        }
-
-        .detail-key {
-          color: rgba(255, 255, 255, 0.75);
-          width: 130px;
-        }
-
-        .detail-value {
-          width: 130px;
         }
 
         .skill-details {
