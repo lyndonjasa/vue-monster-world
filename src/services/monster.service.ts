@@ -238,7 +238,7 @@ const monsterData: BattleMonster[] = [
       }
     ],
     talents: [
-      TalentEnum.VAMPIRISM,
+      TalentEnum.VAMPIRISIM,
       TalentEnum.EFFICIENCY,
       TalentEnum.LETHARGY,
       TalentEnum.LIGHT_FOOTED,

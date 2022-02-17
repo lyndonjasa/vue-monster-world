@@ -323,7 +323,7 @@ const BattleField = defineComponent({
         } else { // damage
 
           // proc vampirism
-          if (hasTalent(actor, TalentEnum.VAMPIRISM)) {
+          if (hasTalent(actor, TalentEnum.VAMPIRISIM)) {
             regenerateHealth(actor, overallDamage * vampirismPercentage)
           }
 

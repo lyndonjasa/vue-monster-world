@@ -5,4 +5,5 @@ export interface ITalent {
   category: number;
   type: number;
   point: number;
+  prerequisite?: string;
 }

@@ -12,7 +12,9 @@
                   <fa-icon :icon="faAnglesDown" />
                 </div>
                 <div class="talent-name">
-                  <talent-icon :talent="talent" />
+                  <talent-icon :talent="talent" 
+                    :active="talentAcquired(talent.name)"
+                    :unlocked="prerequisiteAcquired(talent.prerequisite)" />
                 </div>
               </div>
             </div>
@@ -38,6 +40,7 @@ import { ITalent } from '@/state-management/talents/talent.interface';
 import { computed, defineComponent, Prop } from 'vue'
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
 import TalentIcon from './TalentIcon.vue';
+import { TalentEnum } from '@/models/talents/talent.enum';
 interface Emits {
   'onClose': any,
   'onTalent-updated': any
@@ -58,8 +61,20 @@ const MonsterTalentsModal = defineComponent({
     'close': null,
     'talent-updated': null
   },
-  setup(_: Props, context) {
+  setup(props: Props, context) {
     const { talents } = useGlobaData();
+
+    const talentAcquired = (talent: string) => {
+      const enumValue = TalentEnum[talent.toUpperCase().replace('-', '_')];
+      return props.monster.talents.includes(enumValue);
+    }
+
+    const prerequisiteAcquired = (preRequisite: string) => {
+      if (!preRequisite) return true;
+
+      const enumValue = TalentEnum[preRequisite.toUpperCase().replace('-', '_')];
+      return props.monster.talents.includes(enumValue);
+    }
 
     const talentGroups = computed((): { group: string, talents: ITalent[] }[] => {
       const talentCategories = talents.value.map(t => t.category).filter((v, i, s) => s.indexOf(v) === i);
@@ -102,6 +117,8 @@ const MonsterTalentsModal = defineComponent({
     return {
       onModalClose,
       onTalentUpdate,
+      talentAcquired,
+      prerequisiteAcquired,
       talentGroups,
       faAnglesDown
     }

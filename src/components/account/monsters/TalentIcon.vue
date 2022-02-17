@@ -1,9 +1,9 @@
 <template>
   <div class="talent-icon-wrapper">
-    <div class="talent-icon-container active" :class="categoryName.toLowerCase()">
+    <div class="talent-icon-container" :class="[categoryName.toLowerCase(), { 'active': active }, { 'unlocked': unlocked }]">
       <object :data="svgPath" type="image/svg+xml" class="talent-svg"></object>
     </div>
-    <div class="talent-icon-overlay active" :title="talent.name"></div>
+    <div class="talent-icon-overlay" :title="talent.name"></div>
   </div>
 </template>
 
@@ -13,12 +13,18 @@ import { ITalent } from '@/state-management/talents/talent.interface'
 import { computed, defineComponent, Prop } from 'vue'
 
 interface Props {
-  talent: ITalent
+  talent: ITalent,
+  active: boolean,
+  selected: boolean,
+  unlocked: boolean
 }
 
 const TalentIcon = defineComponent({
   props: {
-    talent: { required: true } as Prop<ITalent>
+    talent: { required: true } as Prop<ITalent>,
+    active: Boolean,
+    selected: Boolean,
+    unlocked: Boolean
   },
   setup(props: Props) {
     const svgPath = computed(() => {
@@ -96,7 +102,18 @@ export default TalentIcon
 
     &.active {
       -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
-      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5);
+
+      &.offense {
+        background-color: #ff4444;
+        -webkit-box-shadow: 0px 0px 15px 5px #ff4444; 
+        box-shadow: 0px 0px 15px 5px #ff4444; 
+      }
+    }
+
+    &.unlocked {
+      -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5); 
+      box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5);
     }
 
     .talent-svg {

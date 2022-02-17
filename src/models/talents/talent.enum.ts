@@ -8,7 +8,7 @@ export enum TalentEnum {
   // health
   RESOLUTE = 'Resolute',
   BLESSING = 'Blessing',
-  VAMPIRISM = 'Vampirism',
+  VAMPIRISIM = 'Vampirism',
   INVIGORATE = 'Invigorate',
   UNDYING = 'Undying',
   // mana
