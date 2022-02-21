@@ -3,7 +3,7 @@
     <div class="talent-icon-container" :class="[categoryName.toLowerCase(), { 'active': active }, { 'unlocked': unlocked }]">
       <object :data="svgPath" type="image/svg+xml" class="talent-svg"></object>
     </div>
-    <div class="talent-icon-overlay" :title="talent.name"></div>
+    <div class="talent-icon-overlay" v-if="!disableHover" :title="talent.name"></div>
   </div>
 </template>
 
@@ -16,7 +16,8 @@ interface Props {
   talent: ITalent,
   active: boolean,
   selected: boolean,
-  unlocked: boolean
+  unlocked: boolean,
+  disableHover: boolean
 }
 
 const TalentIcon = defineComponent({
@@ -24,7 +25,8 @@ const TalentIcon = defineComponent({
     talent: { required: true } as Prop<ITalent>,
     active: Boolean,
     selected: Boolean,
-    unlocked: Boolean
+    unlocked: Boolean,
+    disableHover: { default: false } as Prop<boolean>
   },
   setup(props: Props) {
     const svgPath = computed(() => {

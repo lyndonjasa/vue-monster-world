@@ -14,13 +14,14 @@
                 <div class="talent-name">
                   <talent-icon :talent="talent" 
                     :active="talentAcquired(talent.name)"
-                    :unlocked="prerequisiteAcquired(talent.prerequisite)" />
+                    :unlocked="prerequisiteAcquired(talent.prerequisite)"
+                    @click="selectedTalent = talent" />
                 </div>
               </div>
             </div>
           </div>
           <div class="talent-details-container">
-            Details Here
+            <talent-details :talent="selectedTalent" />
           </div>
         </div>
         <div class="modal-actions">
@@ -37,10 +38,11 @@ import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 import { DetailedMonsterResponse } from '@/http/responses/detailed-monster.response';
 import { TalentCategory } from '@/models/talents/talent-category.enum';
 import { ITalent } from '@/state-management/talents/talent.interface';
-import { computed, defineComponent, Prop } from 'vue'
+import { computed, defineComponent, Prop, ref } from 'vue'
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
 import TalentIcon from './TalentIcon.vue';
 import { TalentEnum } from '@/models/talents/talent.enum';
+import TalentDetails from './TalentDetails.vue';
 interface Emits {
   'onClose': any,
   'onTalent-updated': any
@@ -52,7 +54,8 @@ interface Props extends Emits {
 
 const MonsterTalentsModal = defineComponent({
   components: {
-    TalentIcon
+    TalentIcon,
+    TalentDetails
   },
   props: {
     monster: { required: true } as Prop<DetailedMonsterResponse>
@@ -63,6 +66,8 @@ const MonsterTalentsModal = defineComponent({
   },
   setup(props: Props, context) {
     const { talents } = useGlobaData();
+
+    const selectedTalent = ref<ITalent>(undefined);
 
     const talentAcquired = (talent: string) => {
       const enumValue = TalentEnum[talent.toUpperCase().replace('-', '_')];
@@ -120,7 +125,8 @@ const MonsterTalentsModal = defineComponent({
       talentAcquired,
       prerequisiteAcquired,
       talentGroups,
-      faAnglesDown
+      faAnglesDown,
+      selectedTalent
     }
   },
 })
@@ -141,6 +147,7 @@ export default MonsterTalentsModal;
   .modal-body {
     text-align: center;
     display: flex;
+    width: 800px;
 
     .talent-groups-container {
       display: flex;
@@ -177,7 +184,7 @@ export default MonsterTalentsModal;
     }
 
     .talent-details-container {
-      width: 150px;
+      width: 200px;
     }
   }
 
