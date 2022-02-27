@@ -13,7 +13,7 @@
                 </div>
                 <div class="talent-name">
                   <talent-icon :talent="talent" 
-                    :active="talentAcquired(talent.name)"
+                    :active="talentAcquired(talent.name) || talentActivated(talent.name)"
                     :unlocked="prerequisiteAcquired(talent.prerequisite)"
                     @click="selectedTalent = talent" />
                 </div>
@@ -21,7 +21,14 @@
             </div>
           </div>
           <div class="talent-details-container">
-            <talent-details :talent="selectedTalent" />
+            <talent-details 
+              :talent="selectedTalent"
+              :unlocked="selectedTalent ? prerequisiteAcquired(selectedTalent.name) : false"
+              :talentPoints="remainingTalentPoints"
+              :preloaded="selectedTalent ? talentAcquired(selectedTalent.name) : false"
+              :activated="selectedTalent ? talentActivated(selectedTalent.name) : false"
+              @activate-talent="onTalentActivate"
+              @deactivate-talent="onTalentDeactivate" />
           </div>
         </div>
         <div class="modal-actions">
@@ -68,17 +75,21 @@ const MonsterTalentsModal = defineComponent({
     const { talents } = useGlobaData();
 
     const selectedTalent = ref<ITalent>(undefined);
+    const activatedTalents = ref<ITalent[]>([]);
 
     const talentAcquired = (talent: string) => {
       const enumValue = TalentEnum[talent.toUpperCase().replace('-', '_')];
       return props.monster.talents.includes(enumValue);
     }
 
+    const talentActivated = (talent: string) => {
+      return activatedTalents.value.map(at => at.name).includes(talent);
+    }
+
     const prerequisiteAcquired = (preRequisite: string) => {
       if (!preRequisite) return true;
 
-      const enumValue = TalentEnum[preRequisite.toUpperCase().replace('-', '_')];
-      return props.monster.talents.includes(enumValue);
+      return talentAcquired(preRequisite) || talentActivated(preRequisite);
     }
 
     const talentGroups = computed((): { group: string, talents: ITalent[] }[] => {
@@ -113,6 +124,18 @@ const MonsterTalentsModal = defineComponent({
       context.emit('close');
     }
 
+    const onTalentActivate = (talent: ITalent) => {
+      activatedTalents.value.push(talent);
+    }
+
+    const onTalentDeactivate = (talent: ITalent) => {
+      activatedTalents.value = activatedTalents.value.filter(at => at.name !== talent.name);
+    }
+
+    const remainingTalentPoints = computed((): number => {
+      return props.monster.talentPoints - activatedTalents.value.map(at => at.points).reduce((a, b) => a + b, 0);
+    })
+
     const onTalentUpdate = () => {
       // TODO: add monster talent update here
 
@@ -124,9 +147,13 @@ const MonsterTalentsModal = defineComponent({
       onTalentUpdate,
       talentAcquired,
       prerequisiteAcquired,
+      talentActivated,
+      onTalentActivate,
+      onTalentDeactivate,
       talentGroups,
       faAnglesDown,
-      selectedTalent
+      selectedTalent,
+      remainingTalentPoints
     }
   },
 })
