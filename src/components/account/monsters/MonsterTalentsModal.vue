@@ -23,7 +23,7 @@
           <div class="talent-details-container">
             <talent-details 
               :talent="selectedTalent"
-              :unlocked="selectedTalent ? prerequisiteAcquired(selectedTalent.name) : false"
+              :unlocked="selectedTalent ? prerequisiteAcquired(selectedTalent.prerequisite) : false"
               :talentPoints="remainingTalentPoints"
               :preloaded="selectedTalent ? talentAcquired(selectedTalent.name) : false"
               :activated="selectedTalent ? talentActivated(selectedTalent.name) : false"
