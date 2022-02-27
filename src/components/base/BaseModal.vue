@@ -56,6 +56,7 @@ export default BaseModal;
   background-color: rgb(20, 17, 36);
   padding: 40px;
   max-width: 500px;
+  z-index: 5;
 
   .modal-body {
     text-align: center;

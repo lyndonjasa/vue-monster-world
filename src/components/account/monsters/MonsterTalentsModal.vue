@@ -32,12 +32,23 @@
           </div>
         </div>
         <div class="modal-actions">
-          <button class="app-generic-btn" @click="onTalentUpdate">Save</button>
+          <button class="app-generic-btn" @click="showSaveModal = true">Save</button>
+          <button class="app-generic-btn" @click="showResetModal = true">Reset</button>
           <button class="app-generic-btn" @click="onModalClose">Close</button>
         </div>
       </div>
     </div>
   </teleport>
+  <base-modal v-if="showSaveModal"
+    :message="saveMessage"
+    acceptText="Proceed"
+    closeText="Cancel"
+    @close="showSaveModal = false" />
+  <base-modal v-if="showResetModal"
+    :message="resetMessage"
+    acceptText="Proceed"
+    closeText="Cancel"
+    @close="showResetModal = false" />
 </template>
 
 <script lang="ts">
@@ -76,6 +87,13 @@ const MonsterTalentsModal = defineComponent({
 
     const selectedTalent = ref<ITalent>(undefined);
     const activatedTalents = ref<ITalent[]>([]);
+
+    const saveMessage = 'This process will consume talent points and is irreversible unless reset. Proceed?';
+    const resetMessage = `This process will refund all talent points and will consume 1 Talent Reset Scroll 
+                          present in your inventory. Proceed?`;
+
+    const showSaveModal = ref<boolean>(false);
+    const showResetModal = ref<boolean>(false);
 
     const talentAcquired = (talent: string) => {
       const enumValue = TalentEnum[talent.toUpperCase().replace('-', '_')];
@@ -153,7 +171,11 @@ const MonsterTalentsModal = defineComponent({
       talentGroups,
       faAnglesDown,
       selectedTalent,
-      remainingTalentPoints
+      remainingTalentPoints,
+      saveMessage,
+      showSaveModal,
+      resetMessage,
+      showResetModal
     }
   },
 })
