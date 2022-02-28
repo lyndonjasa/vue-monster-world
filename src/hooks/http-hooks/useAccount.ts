@@ -84,6 +84,14 @@ const useAccount = () => {
     return monsterService.applyCardBonus(accountId.value, monsterId);
   }
 
+  const updateMonsterTalents = (monsterId: string, talents: string[]) => {
+    return monsterService.updateTalents(accountId.value, monsterId, talents);
+  }
+
+  const resetMonsterTalents = (monsterId: string) => {
+    return monsterService.resetTalents(accountId.value, monsterId);
+  }
+
   return {
     deleteUserAccount,
     createUserAccount,
@@ -98,7 +106,9 @@ const useAccount = () => {
     switchParty,
     convertMonsterToCard,
     evolveMonster,
-    ascendMonster
+    ascendMonster,
+    updateMonsterTalents,
+    resetMonsterTalents
   }
 }
 

@@ -71,7 +71,7 @@ import TalentDetails from './TalentDetails.vue';
 
 interface Emits {
   'onClose': any,
-  'onTalent-updated': any,
+  'onTalent-updated'(talents: string[]): boolean,
   'onTalent-reset': any
 }
 
@@ -89,7 +89,7 @@ const MonsterTalentsModal = defineComponent({
   },
   emits: {
     'close': null,
-    'talent-updated': null,
+    'talent-updated': (talents: string[]) => talents.length > 0,
     'talent-reset': null
   },
   setup(props: Props, context) {
@@ -169,7 +169,7 @@ const MonsterTalentsModal = defineComponent({
     const onTalentUpdate = async () => {
       showSaveModal.value = false;
 
-      context.emit('talent-updated');
+      context.emit('talent-updated', activatedTalents.value.map(at => at.name));
     }
 
     const onTalentReset = async () => {

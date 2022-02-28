@@ -124,7 +124,8 @@ interface Emits {
   'onSelect-monster'(monsterId: string): boolean,
   'onUpdate-monster': any,
   'onCard-converted': any,
-  'onMonster-evolved'(monsterId: string): boolean
+  'onMonster-evolved'(monsterId: string): boolean,
+  'onMonster-updated'(monsterId: string): boolean
 }
 
 interface Props extends Emits {
@@ -162,7 +163,8 @@ const AccountMonsterDetails = defineComponent({
     'select-monster': (monsterId: string) => monsterId !== undefined,
     'update-monster': null,
     'card-converted': null,
-    'monster-evolved': (monsterId: string) => monsterId !== undefined
+    'monster-evolved': (monsterId: string) => monsterId !== undefined,
+    'monster-updated': (monsterId: string) => monsterId !== undefined
   },
   setup(props: Props, context) {
     const state = SpriteStateEnum.IDLE;
@@ -171,7 +173,9 @@ const AccountMonsterDetails = defineComponent({
       removeFromParty, 
       addToParty, 
       switchParty,
-      convertMonsterToCard } = useAccount();
+      convertMonsterToCard,
+      updateMonsterTalents,
+      resetMonsterTalents } = useAccount();
     const { sprites } = useSpriteFactory([props.monster.sprite]);
     const { throwMessage } = useErrors();
     const { evolutions, reloadAccountCards } = useGlobaData();
@@ -333,8 +337,19 @@ const AccountMonsterDetails = defineComponent({
     }
 
     const showTalentsModal = ref<boolean>(false);
-    const onMonsterTalentUpdate = () => {
+
+    const onMonsterTalentUpdate = async (talents: string[]) => {
       showTalentsModal.value = false;
+      showModalLoader.value = true;
+      try {
+        debugger
+        await updateMonsterTalents(props.monster._id, talents);
+        context.emit('monster-updated', props.monster._id);
+      } catch (error) {
+        throwMessage(error.response.data)
+      } finally {
+        showModalLoader.value = false;
+      }
     }
 
     const onMonsterTalentReset = () => {

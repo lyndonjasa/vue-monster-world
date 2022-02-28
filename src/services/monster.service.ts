@@ -48,6 +48,14 @@ const applyCardBonus = (accountId: string, monsterId: string): Promise<void> => 
   return axios.put(`${baseAccountRoute}/${accountId}/monsters/${monsterId}/bonus`).then(r => r.data);
 }
 
+const updateTalents = (accountId: string, monsterId: string, activatedTalents: string[]): Promise<void> => {
+  return axios.put(`${baseAccountRoute}/${accountId}/monsters/${monsterId}/talents`, activatedTalents).then(r => r.data);
+}
+
+const resetTalents = (accountId: string, monsterId: string): Promise<void> => {
+  return axios.delete(`${baseAccountRoute}/${accountId}/monsters/${monsterId}/talents`).then(r => r.data);
+}
+
 const getMonsterParty = async (characterId: string): Promise<BattleMonster[]> => {
   // character id will be supplied in the future
 
@@ -82,7 +90,9 @@ export default {
   searchAccountMonsters,
   updateMonsterParty,
   evolveMonster,
-  applyCardBonus
+  applyCardBonus,
+  updateTalents,
+  resetTalents
 }
 
 const attackSkill: Skill = {
