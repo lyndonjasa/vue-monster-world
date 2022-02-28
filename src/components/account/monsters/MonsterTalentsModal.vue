@@ -53,7 +53,8 @@
     :message="resetMessage"
     acceptText="Proceed"
     closeText="Cancel"
-    @close="showResetModal = false" />
+    @close="showResetModal = false"
+    @accept="onTalentReset" />
   <base-modal-loader v-if="showLoader" />
 </template>
 
@@ -70,7 +71,8 @@ import TalentDetails from './TalentDetails.vue';
 
 interface Emits {
   'onClose': any,
-  'onTalent-updated': any
+  'onTalent-updated': any,
+  'onTalent-reset': any
 }
 
 interface Props extends Emits {
@@ -87,7 +89,8 @@ const MonsterTalentsModal = defineComponent({
   },
   emits: {
     'close': null,
-    'talent-updated': null
+    'talent-updated': null,
+    'talent-reset': null
   },
   setup(props: Props, context) {
     const { talents } = useGlobaData();
@@ -169,6 +172,12 @@ const MonsterTalentsModal = defineComponent({
       context.emit('talent-updated');
     }
 
+    const onTalentReset = async () => {
+      showResetModal.value = false;
+
+      context.emit('talent-reset');
+    }
+
     return {
       onModalClose,
       onTalentUpdate,
@@ -177,6 +186,7 @@ const MonsterTalentsModal = defineComponent({
       talentActivated,
       onTalentActivate,
       onTalentDeactivate,
+      onTalentReset,
       talentGroups,
       faAnglesDown,
       selectedTalent,

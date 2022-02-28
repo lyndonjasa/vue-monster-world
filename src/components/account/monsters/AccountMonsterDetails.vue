@@ -93,6 +93,8 @@
     v-if="showTalentsModal"
     @close="showTalentsModal = false"
     :monster="monster"
+    @talent-updated="onMonsterTalentUpdate"
+    @talent-reset="onMonsterTalentReset"
   />
 </template>
     
@@ -331,6 +333,13 @@ const AccountMonsterDetails = defineComponent({
     }
 
     const showTalentsModal = ref<boolean>(false);
+    const onMonsterTalentUpdate = () => {
+      showTalentsModal.value = false;
+    }
+
+    const onMonsterTalentReset = () => {
+      showTalentsModal.value = false;
+    }
 
     return {
       state,
@@ -355,7 +364,9 @@ const AccountMonsterDetails = defineComponent({
       showTalentsModal,
       skillDetails,
       skillStatusDetails,
-      skillPenaltyDetails
+      skillPenaltyDetails,
+      onMonsterTalentUpdate,
+      onMonsterTalentReset
     }
   },
 })
