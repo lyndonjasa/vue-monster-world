@@ -55,7 +55,7 @@
             :showCard="!inParty(selectedMonster._id)"
             @card-converted="selectedMonster = undefined; reloadGrid()"
             @monster-evolved="reloadGrid($event)"
-            @monster-updated="reloadDetails($event)">
+            @monster-updated="reloadDetails">
           </account-monster-details>
         </div>
       </template>
@@ -167,7 +167,6 @@ const AccountMonstersModule = defineComponent({
     }
 
     const reloadDetails = async (id: string) => {
-      debugger
       showModalLoader.value = true;
       selectedMonster.value = await getAccountMonsterDetail(id);
       showModalLoader.value = false;

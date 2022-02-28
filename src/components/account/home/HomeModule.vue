@@ -23,7 +23,8 @@
         :showCard="false"
         :showRemove="enableRemove"
         @update-monster="onMonsterRemoval"
-        @monster-evolved="onMonsterEvolution">
+        @monster-evolved="onMonsterEvolution"
+        @monster-updated="reloadDetails">
       </account-monster-details>
     </div>
   </div>
@@ -73,9 +74,13 @@ const HomeModule = defineComponent({
     }
 
     const onMonsterEvolution = async (id: string) => {
-      selectedMonster.value = await getAccountMonsterDetail(id);
+      await reloadDetails(id);
       reloadAccountCards();
       loadParty();
+    }
+
+    const reloadDetails = async (id: string) => {
+      selectedMonster.value = await getAccountMonsterDetail(id);
     }
 
     loadParty();
@@ -88,7 +93,8 @@ const HomeModule = defineComponent({
       onMonsterRemoval,
       enableRemove,
       faAnglesLeft,
-      onMonsterEvolution
+      onMonsterEvolution,
+      reloadDetails
     }
   }
 })

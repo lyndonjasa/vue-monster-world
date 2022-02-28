@@ -228,24 +228,26 @@ const AccountMonsterDetails = defineComponent({
       }
     })
 
-    const { stats, skills } = props.monster
-    const statDetailsValue: Details[] = [
-      { key: 'Health', value: stats.health, detailedOnly: false },
-      { key: 'Health Regen', value: stats.healthRegen + '%', detailedOnly: true },
-      { key: 'Mana', value: stats.mana, detailedOnly: false },
-      { key: 'Mana Regen', value: stats.manaRegen + '%', detailedOnly: true },
-      { key: 'Offense', value: stats.offense, detailedOnly: true },
-      { key: 'Defense', value: stats.defense, detailedOnly: true },
-      { key: 'Crit Rate', value: stats.critRate + '%', detailedOnly: true },
-      { key: 'Speed', value: stats.speed, detailedOnly: true },
-      { key: 'Crit Damage', value: stats.critDamage + '%', detailedOnly: true }
-    ]
+    const { skills } = props.monster
+    const statDetailsValue = computed((): Details[] => {
+      return [
+        { key: 'Health', value: props.monster.stats.health, detailedOnly: false },
+        { key: 'Health Regen', value: props.monster.stats.healthRegen + '%', detailedOnly: true },
+        { key: 'Mana', value: props.monster.stats.mana, detailedOnly: false },
+        { key: 'Mana Regen', value: props.monster.stats.manaRegen + '%', detailedOnly: true },
+        { key: 'Offense', value: props.monster.stats.offense, detailedOnly: true },
+        { key: 'Defense', value: props.monster.stats.defense, detailedOnly: true },
+        { key: 'Crit Rate', value: props.monster.stats.critRate + '%', detailedOnly: true },
+        { key: 'Speed', value: props.monster.stats.speed, detailedOnly: true },
+        { key: 'Crit Damage', value: props.monster.stats.critDamage + '%', detailedOnly: true }
+      ]
+    })
 
     const statDetails = computed((): Details[] => {
       if (!props.showDetailedView) {
-        return statDetailsValue.filter(odv => !odv.detailedOnly)
+        return statDetailsValue.value.filter(odv => !odv.detailedOnly)
       } else {
-        return statDetailsValue
+        return statDetailsValue.value
       }
     })
 
@@ -341,8 +343,8 @@ const AccountMonsterDetails = defineComponent({
     const onMonsterTalentUpdate = async (talents: string[]) => {
       showTalentsModal.value = false;
       showModalLoader.value = true;
+      
       try {
-        debugger
         await updateMonsterTalents(props.monster._id, talents);
         context.emit('monster-updated', props.monster._id);
       } catch (error) {
