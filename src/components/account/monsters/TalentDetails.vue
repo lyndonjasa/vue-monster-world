@@ -27,7 +27,7 @@
               class="app-generic-btn"
               v-if="!activated"
               @click="activateTalent"
-              :disabled="(talentPoints < talent.points)">Activate</button>
+              :disabled="(talentPoints < talent.points) || !unlocked">Activate</button>
             <button 
               class="app-generic-btn"
               v-if="activated"

@@ -32,8 +32,12 @@
           </div>
         </div>
         <div class="modal-actions">
-          <button class="app-generic-btn" @click="showSaveModal = true">Save</button>
-          <button class="app-generic-btn" @click="showResetModal = true">Reset</button>
+          <button class="app-generic-btn" 
+            @click="showSaveModal = true"
+            :disabled="activatedTalents.length === 0">Save</button>
+          <button class="app-generic-btn" 
+            @click="showResetModal = true"
+            :disabled="monster.talents.length === 0">Reset</button>
           <button class="app-generic-btn" @click="onModalClose">Close</button>
         </div>
       </div>
@@ -43,12 +47,14 @@
     :message="saveMessage"
     acceptText="Proceed"
     closeText="Cancel"
-    @close="showSaveModal = false" />
+    @close="showSaveModal = false"
+    @accept="onTalentUpdate" />
   <base-modal v-if="showResetModal"
     :message="resetMessage"
     acceptText="Proceed"
     closeText="Cancel"
     @close="showResetModal = false" />
+  <base-modal-loader v-if="showLoader" />
 </template>
 
 <script lang="ts">
@@ -61,6 +67,7 @@ import { faAnglesDown } from '@fortawesome/free-solid-svg-icons'
 import TalentIcon from './TalentIcon.vue';
 import { TalentEnum } from '@/models/talents/talent.enum';
 import TalentDetails from './TalentDetails.vue';
+
 interface Emits {
   'onClose': any,
   'onTalent-updated': any
@@ -154,8 +161,10 @@ const MonsterTalentsModal = defineComponent({
       return props.monster.talentPoints - activatedTalents.value.map(at => at.points).reduce((a, b) => a + b, 0);
     })
 
-    const onTalentUpdate = () => {
-      // TODO: add monster talent update here
+    const showLoader = ref<boolean>(false);
+
+    const onTalentUpdate = async () => {
+      showSaveModal.value = false;
 
       context.emit('talent-updated');
     }
@@ -175,7 +184,9 @@ const MonsterTalentsModal = defineComponent({
       saveMessage,
       showSaveModal,
       resetMessage,
-      showResetModal
+      showResetModal,
+      showLoader,
+      activatedTalents
     }
   },
 })
