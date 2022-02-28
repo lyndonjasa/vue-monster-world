@@ -352,8 +352,17 @@ const AccountMonsterDetails = defineComponent({
       }
     }
 
-    const onMonsterTalentReset = () => {
+    const onMonsterTalentReset = async () => {
       showTalentsModal.value = false;
+      showModalLoader.value = true;
+      try {
+        await resetMonsterTalents(props.monster._id)
+        context.emit('monster-updated', props.monster._id);
+      } catch (error) {
+        throwMessage(error.response.data)
+      } finally {
+        showModalLoader.value = false;
+      }
     }
 
     return {
