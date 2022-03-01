@@ -13,7 +13,6 @@
 <script lang="ts">
 import { ItemResponse } from '@/http/responses/item-response';
 import { defineComponent, ref } from 'vue'
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import useItems from '@/hooks/http-hooks/useItems';
 import ItemDetails from './ItemDetails.vue';
 
@@ -37,7 +36,6 @@ const ItemList = defineComponent({
 
     return {
       showLoader,
-      faCartPlus,
       items
     }
   }
