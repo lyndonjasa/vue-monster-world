@@ -9,7 +9,7 @@
       <div class="w-45">Monsters Unlocked:</div>
       <div class="w-55"><span class="monsters-unlocked">{{ account.unlockedMonsters.length }}</span></div>
       <div class="w-45">Tamer Rank:</div>
-      <div class="w-55">Bronze Tamer</div>
+      <div class="w-55">{{ tamerRank }}</div>
     </div>
     <div class="account-party">
       <p>PARTY COMPOSITION:</p>
@@ -30,14 +30,24 @@
 <script lang="ts">
 import { getMonsterThumbnail } from '@/helpers/monster.helper'
 import { AccountDetails as Account } from '@/models/account/account-details'
-import { defineComponent, Prop } from 'vue'
+import { computed, defineComponent, Prop } from 'vue'
+import { getTamerRank } from '@/helpers/tamer-rank.helper';
+
+interface Props {
+  account: Account
+}
 
 const AccountDetails = defineComponent({
   props: {
     account: { required: true } as Prop<Account>
   },
-  setup() {
+  setup(props: Props) {
+    const tamerRank = computed(() => {
+      return getTamerRank(props.account.unlockedMonsters.length)
+    })
+
     return {
+      tamerRank,
       getMonsterThumbnail
     }
   }
