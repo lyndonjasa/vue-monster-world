@@ -1,21 +1,22 @@
 <template>
-  <div class="item-details">
-    <div class="item-actions">
-      <div class="item-name">
-        <fa-icon :icon="itemIcon" />
-        {{ item.name }}
+  <div class="item-details app-transluscent-div">
+    <template v-if="item">
+      <div class="item-actions">
+        <div class="item-name">
+          <fa-icon :icon="itemIcon" />
+          {{ item.name }}
+        </div>
+        <div class="cart-icon">
+          <fa-icon :icon="faCartPlus" @click="addToCart" />
+        </div>
       </div>
-      <div class="add-item">
-        <fa-icon class="cart-icon" :icon="faCartPlus" @click="itemSelected" />
+      <div class="item-description">
+        <p>{{ item.description }}</p>
+        <p class="item-catch-rate" v-if="catchRates">
+          Addtl Catch Rates: {{ catchRates }}
+        </p>
       </div>
-    </div>
-    <div class="item-description">
-      <p>Cost: {{ item.cost }}</p>
-      <p>{{ item.description }}</p>
-      <p class="item-catch-rate" v-if="catchRates">
-        Addtl Catch Rates: {{ catchRates }}
-      </p>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -26,7 +27,7 @@ import { faHeart, faScroll, faCartPlus } from '@fortawesome/free-solid-svg-icons
 import { startCase } from 'lodash';
 
 interface Emits {
-  'onItem-selected': any
+  'onAdd-to-cart': any
 }
 
 interface Props extends Emits {
@@ -38,12 +39,13 @@ const ItemDetails = defineComponent({
     item: { required: true } as Prop<ItemResponse>
   },
   emits: {
-    'item-selected': null
+    'add-to-cart': null
   },
   setup(props: Props, context) {
     const itemIcon = computed(() => {
       return props.item.type === 'taming' ? faHeart : faScroll
     });
+
     const catchRates = computed(() => {
       if (props.item.type !== 'taming') return undefined;
 
@@ -62,15 +64,15 @@ const ItemDetails = defineComponent({
       }
     });
 
-    const itemSelected = () => {
-      context.emit('item-selected');
-    };
+    const addToCart = () => {
+      context.emit('add-to-cart')
+    }
 
     return {
       itemIcon,
-      faCartPlus,
       catchRates,
-      itemSelected
+      faCartPlus,
+      addToCart
     }
   },
 })
@@ -81,6 +83,8 @@ export default ItemDetails;
 <style lang="scss" scoped>
 .item-details {
   padding: 15px 20px;
+  border: 1px solid white;
+  height: 93px;
 
   .item-actions {
     font-size: 18px;
@@ -88,8 +92,8 @@ export default ItemDetails;
     justify-content: space-between;
 
     .cart-icon {
-      filter: brightness(0.5);
       cursor: pointer;
+      filter: brightness(0.5);
 
       &:hover {
         filter: brightness(1);
@@ -100,7 +104,6 @@ export default ItemDetails;
   .item-description {
     font-size: 16px;
     padding: 10px 0px;
-    border-bottom: 1px solid white;
   }
 
   .item-catch-rate {
