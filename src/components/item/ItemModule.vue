@@ -8,15 +8,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, provide, ref } from 'vue'
 import ItemList from './ItemList.vue'
 import PurchasedItemList from './PurchasedItemList.vue'
+import { Item } from '@/models/items/item';
+import { CartItemsKey } from '@/injections/item.injection';
 
 const ItemModule = defineComponent({
   components: {
     ItemList,
     PurchasedItemList
-  }
+  },
+  setup() {
+    const cartItems = ref<Item[]>([]);
+    provide(CartItemsKey, cartItems);
+  },
 })
 
 export default ItemModule
