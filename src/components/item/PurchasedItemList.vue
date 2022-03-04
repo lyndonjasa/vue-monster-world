@@ -17,23 +17,37 @@
         <div class="currency-key">Owned Currency:</div>
         <div class="currency-value">{{ ownedCurrency }}</div>
       </div>
-      <div class="app-ingame-btn" v-if="enablePurchase">Purchase</div>
+      <div class="app-ingame-btn" v-if="enablePurchase" @click="showConfirmationModal = true">Purchase</div>
     </div>
   </div>
+  <base-modal v-if="showConfirmationModal"
+    message="Proceed Item Purchase?"
+    @close="showConfirmationModal = false"
+    @accept="onItemPurchase"
+    closeText="Cancel"
+    acceptText="Proceed" />
 </template>
 
 <script lang="ts">
+import useErrors from '@/hooks/store-hooks/useErrors';
 import useGlobaData from '@/hooks/store-hooks/useGlobalData';
+import useLoaders from '@/hooks/store-hooks/useLoaders';
 import { CartItemsKey } from '@/injections/item.injection';
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, ref } from 'vue'
+import { PurchaseItem } from '@/http/requests/purchase-items.request';
 import CartItem from './CartItem.vue';
+import useItems from '@/hooks/http-hooks/useItems';
 
 const PurchasedItemList = defineComponent({
   components: {
     CartItem
   },
   setup() {
-    const { accountDetails } = useGlobaData();
+    const { accountDetails, reloadAccount } = useGlobaData();
+    const { buyItems } = useItems();
+    const { throwMessage } = useErrors();
+    const { showModalLoader } = useLoaders();
+    const showConfirmationModal = ref<boolean>(false);
 
     const ownedCurrency = computed(() => {
       if (accountDetails.value) {
@@ -57,12 +71,38 @@ const PurchasedItemList = defineComponent({
       cartItems.value = cartItems.value.filter(ci => ci.itemId !== itemId);
     }
 
+    const onItemPurchase = async () => {
+      showConfirmationModal.value = false;
+      showModalLoader.value = true;
+
+      try {
+        const items: PurchaseItem[] = cartItems.value.map(ci => { 
+          return {
+            itemId: ci.itemId,
+            quantity: ci.quantity
+          }
+         });
+
+         await buyItems(items);
+         await reloadAccount();
+
+         cartItems.value = [];
+      } catch (error) {
+        console.log(error);
+        throwMessage(error.response.data);
+      } finally {
+        showModalLoader.value = false;
+      }
+    }
+
     return {
       cartItems,
       ownedCurrency,
       totalRequiredAmount,
       enablePurchase,
-      removeItemFromCart
+      showConfirmationModal,
+      removeItemFromCart,
+      onItemPurchase
     }
   }
 })
