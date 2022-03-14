@@ -1,5 +1,5 @@
 <template>
-  <div class="monster-thumbnail">
+  <div class="monster-thumbnail" @click="onThumbnailClick">
     <img :src="src" :title="title" />
   </div>
 </template>
@@ -12,6 +12,18 @@ const BaseMonsterThumnbnail = defineComponent({
     src: { required: true } as Prop<any>,
     title: String
   },
+  emits: {
+    'click': null
+  },
+  setup(_, context) {
+    const onThumbnailClick = () => {
+      context.emit('click');
+    }
+
+    return {
+      onThumbnailClick
+    }
+  }
 })
 
 export default BaseMonsterThumnbnail

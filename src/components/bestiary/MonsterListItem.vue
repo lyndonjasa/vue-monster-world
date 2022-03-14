@@ -5,9 +5,10 @@
       <div class="monster-list-container">
         <div class="monster-item" v-for="monster in sortedMonsters" :key="monster._id">
           <div class="thumbs">
-            <base-monster-thumbnail 
+            <base-monster-thumbnail
               :src="getMonsterThumbnail(monster.name)"
-              :title="monster.name" v-if="isUnlocked(monster.name)" />
+              :title="monster.name" v-if="isUnlocked(monster.name)"
+              @click="onMonsterSelect(monster)" />
             <fa-icon v-else class="locked-monsters" 
               :icon="faQuestion"
               title="Unknown Monster" />
@@ -24,9 +25,13 @@ import { computed, defineComponent } from 'vue'
 import { cloneDeep } from 'lodash';
 import { getMonsterThumbnail } from '@/helpers/monster.helper';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { IBaseMonster } from '@/state-management/monsters/base-monster.interface';
 
 const MonsterListItem = defineComponent({
-  setup() {
+  emits: {
+    'select-monster': (monster: IBaseMonster) => monster !== undefined
+  },
+  setup(_, context) {
     const { baseMonsters, accountDetails } = useGlobaData();
 
     const sortedMonsters = computed(() => {
@@ -37,10 +42,15 @@ const MonsterListItem = defineComponent({
       return accountDetails.value.unlockedMonsters.includes(name);
     };
 
+    const onMonsterSelect = (monster: IBaseMonster) => {
+      context.emit('select-monster', monster);
+    }
+
     return {
       sortedMonsters,
       getMonsterThumbnail,
       isUnlocked,
+      onMonsterSelect,
       faQuestion
     }
   }

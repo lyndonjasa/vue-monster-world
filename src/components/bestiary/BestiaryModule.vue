@@ -1,12 +1,13 @@
 <template>
   <div class="bestiary-module-wrapper">
-    <monster-list-item />
-    <monster-details />
+    <monster-list-item @select-monster="selectedMonster = $event" />
+    <monster-details :monster="selectedMonster" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { IBaseMonster } from '@/state-management/monsters/base-monster.interface'
+import { defineComponent, ref } from 'vue'
 import MonsterDetails from './MonsterDetails.vue'
 import MonsterListItem from './MonsterListItem.vue'
 
@@ -14,6 +15,13 @@ const BestiaryModule = defineComponent({
   components: {
     MonsterListItem,
     MonsterDetails
+  },
+  setup() {
+    const selectedMonster = ref<IBaseMonster>(undefined);
+
+    return {
+      selectedMonster
+    }
   }
 })
 
