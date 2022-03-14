@@ -39,10 +39,13 @@ const MonsterListItem = defineComponent({
     });
 
     const isUnlocked = (name: string) => {
-      return accountDetails.value.unlockedMonsters.includes(name);
+      // return accountDetails.value.unlockedMonsters.includes(name);
+      return true;
     };
 
     const onMonsterSelect = (monster: IBaseMonster) => {
+      console.log(monster);
+
       context.emit('select-monster', monster);
     }
 

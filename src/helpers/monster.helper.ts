@@ -73,3 +73,26 @@ export const convertToModelForBattle = (model: DetailedMonster[], team: MonsterT
 export const getMonsterThumbnail = (name: string) => {
   return require(`@/assets/thumbs/${name.replace(/\s+/g, '')}.jpg`);
 }
+
+export const descriptionDictionary: { name: string, description: string }[] = [
+  {
+    name: 'AeroVeedramon',
+    description: `a Holy Dragon Digimon. Veedramon digivolved further, and as AeroVeedramon, 
+      it became able to move through the sky. Among the rare species of Veedramon, it is said 
+      that only veteran warriors that have come through frequent battles are able to digivolve, 
+      so its existence is already becoming a legend.`
+  },
+  {
+    name: 'Agumon',
+    description: `a Reptile Digimon. It has grown up and become able to walk on two legs, and has an 
+    appearance like a tiny dinosaur. Because it is still on the way to adulthood, its power is low, but as 
+    its personality is quite ferocious, it doesn't understand fear.`
+  },
+  {
+    name: 'Alphamon',
+    description: `a Warrior Digimon and a carrier of the X-Antibody. While it is one of the "Royal Knights", 
+    it is said that, to the Holy Knights, it is a being similar to a deterrent force, and as it doesn't appear 
+    in normal times, it is also called the "Aloof Hermit" who flutters a blue mantle, and is the Royal Knight 
+    assigned to the place called the "Empty Seat".`
+  }
+];

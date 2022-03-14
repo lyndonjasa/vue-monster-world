@@ -31,6 +31,7 @@ export default BestiaryModule
 <style lang="scss" scoped>
 .bestiary-module-wrapper {
   display: flex;
+  width: 1200px;
   justify-content: space-between;
 }
 </style>
