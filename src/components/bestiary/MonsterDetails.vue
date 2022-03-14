@@ -24,13 +24,13 @@
           <div class="monster-stats">
             <div class="stat-header">Stat</div>
             <div class="lvl-1-header">Lvl. 1</div>
-            <div class="lvl-25-header">Lvl. 25</div>
-            <div class="lvl-50-header">Lvl. 50</div>
+            <div class="lvl-half-header">Lvl. {{ levelCap / 2 }}</div>
+            <div class="lvl-full-header">Lvl. {{ levelCap }}</div>
             <template v-for="key in keys" :key="key">
               <div class="stat-name">{{ key.toUpperCase() }}</div>
               <div class="lvl-1-stat-value">{{ baseStats[key] }}</div>
-              <div class="lvl-25-stat-value">{{ lvl25Stats[key] }}</div>
-              <div class="lvl-50-stat-value">{{ lvl50Stats[key] }}</div>
+              <div class="lvl-half-stat-value">{{ halfLevel[key] }}</div>
+              <div class="lvl-full-stat-value">{{ fullLevel[key] }}</div>
             </template>
           </div>
         </div>
@@ -42,6 +42,7 @@
 <script lang="ts">
 import { toElementString } from '@/helpers/element.helper';
 import { descriptionDictionary } from '@/helpers/monster.helper';
+import useGlobaData from '@/hooks/store-hooks/useGlobalData';
 import { IBaseMonster } from '@/state-management/monsters/base-monster.interface'
 import { computed, defineComponent, Prop } from 'vue'
 
@@ -54,6 +55,8 @@ const MonsterDetails = defineComponent({
     monster: { required: false } as Prop<IBaseMonster>
   },
   setup(props: Props) {
+    const { evolutions } = useGlobaData(); 
+
     const imagePath = computed(() => {
       const monsterName = props.monster.name.replaceAll(' ', '');
 
@@ -81,17 +84,22 @@ const MonsterDetails = defineComponent({
       }
     }
 
+    const levelCap = computed(() => {
+      if (!evolutions) return 0;
+      else return evolutions.value.find(e => e.name === props.monster.stage).levelCap;
+    })
+
     const baseStats = computed(() => {
       if (props.monster) return realignStats(1)
       else return {}
     });
 
-    const lvl25Stats = computed(() => {
-      if (props.monster) return realignStats(25)
+    const halfLevel = computed(() => {
+      if (props.monster) return realignStats(levelCap.value / 2)
       else return {}
     });
-    const lvl50Stats = computed(() => {
-      if (props.monster) return realignStats(50)
+    const fullLevel = computed(() => {
+      if (props.monster) return realignStats(levelCap.value)
       else return {}
     });
 
@@ -102,8 +110,9 @@ const MonsterDetails = defineComponent({
       profileDescription,
       elementString,
       baseStats,
-      lvl25Stats,
-      lvl50Stats,
+      halfLevel,
+      fullLevel,
+      levelCap,
       keys
     }
   }
