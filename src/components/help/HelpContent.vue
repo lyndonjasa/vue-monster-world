@@ -22,6 +22,7 @@ export default HelpContent;
 
   .ps {
     height: 100%;
+    background-color: transparent;
   }
 }
 </style>

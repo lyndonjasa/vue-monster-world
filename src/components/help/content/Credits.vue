@@ -140,6 +140,7 @@ export default Credits;
 .credits-table {
   display: flex;
   flex-wrap: wrap;
+  font-size: 16px;
 
   > * {
     border: 1px solid white;
