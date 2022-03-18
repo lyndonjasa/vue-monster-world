@@ -1,6 +1,8 @@
 <template>
   <div class="help-content-wrapper app-transluscent-div">
-    <router-view></router-view>
+    <perfect-scrollbar>
+      <router-view></router-view>
+    </perfect-scrollbar>
   </div>
 </template>
 
@@ -17,5 +19,9 @@ export default HelpContent;
 .help-content-wrapper {
   width: calc(100% - 390px);
   padding: 20px;
+
+  .ps {
+    height: 100%;
+  }
 }
 </style>

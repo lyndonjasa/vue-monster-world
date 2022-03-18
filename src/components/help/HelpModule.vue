@@ -24,5 +24,6 @@ export default HelpModule
 .help-module-wrapper {
   display: flex;
   justify-content: space-between;
+  max-width: 1200px;
 }
 </style>
