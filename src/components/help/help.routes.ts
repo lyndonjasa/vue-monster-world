@@ -11,6 +11,10 @@ export const HelpRoutes: RouteRecordRaw[] = [
         component: () => import('./content/Elements.vue')
       },
       {
+        path: 'status',
+        component: () => import('./content/Status.vue')
+      },
+      {
         path: 'talents',
         component: () => import('./content/Talents.vue')
       },

@@ -3,6 +3,9 @@
     <div class="app-ingame-btn btn-elements" 
       :class="{ active: isActive('elements') }"
       @click="reRoute('elements')">Elements</div>
+    <div class="app-ingame-btn btn-status" 
+      :class="{ active: isActive('status') }"
+      @click="reRoute('status')">Status</div>
     <div class="app-ingame-btn btn-talents" 
       :class="{ active: isActive('talents') }"
       @click="reRoute('talents')">Talents</div>
