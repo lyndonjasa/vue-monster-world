@@ -32,7 +32,7 @@
       <p>If the skill's element is Rock, Ikkakumon will receive an approximate damage of 150</p>
       <p>If the skill's element is Fire, Ikkakumon will receive an approximate damage of 50</p>
       <p>If the skill's element is Water, Ikkakumon will receive an approximate damage of 75</p>
-      <p>Do note the term "approximate" because skill damage takes other factors into account such as defense.</p>
+      <p>Do note of the term "approximate" because skill damage takes other factors into account such as defense.</p>
       <p>Non-Elemental Monsters/Skills will always resort to the default multiplier</p>
     </div>
   </div>
