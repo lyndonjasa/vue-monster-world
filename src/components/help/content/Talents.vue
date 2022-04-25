@@ -70,11 +70,6 @@ export default Talents;
     flex-wrap: wrap;
     margin-bottom: 20px;
 
-    .capitalize {
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-
     > * {
       border: 1px solid white;
       padding: 10px 15px; 

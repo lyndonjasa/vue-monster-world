@@ -80,6 +80,11 @@
   font-size: 20px;
 }
 
+.capitalize {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 @font-face {
   font-family: Plaguard;
   src: url('./fonts/Plaguard-ZVnjx.otf') format('opentype');
